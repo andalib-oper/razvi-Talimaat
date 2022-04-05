@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import Calendar from '../src/Calendar/Calendar'
 import Home from '../src/mainTabs/Home'
 import Ramzan from '../src/Ramzan/Ramzan'
+import Quran from '../src/Quran/Quran';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,9 +16,9 @@ const mainNavigator = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        headerStyle: {
-          backgroundColor: '#023c54',
-        },
+        // headerStyle: {
+        //   backgroundColor: '#668521',
+        // },
         headerTitleAlign: 'center',
         tabBarStyle: {
           backgroundColor: 'white',
@@ -73,6 +74,23 @@ const mainNavigator = () => {
           tabBarIcon: ({ color }) => (
             <FontAwesome5
               name='clock'
+              size={23} />
+          ),
+          tabBarLabelStyle: {
+            fontSize: 15,
+            fontFamily: 'poppins',
+            fontWeight:"bold"
+          }
+        }}
+      />
+      <Tab.Screen
+        name="quran"
+        component={Quran}
+        options={{
+          tabBarLabel: 'Quran',
+          tabBarIcon: ({ color }) => (
+            <FontAwesome5
+              name='quran'
               size={23} />
           ),
           tabBarLabelStyle: {

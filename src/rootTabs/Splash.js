@@ -28,7 +28,7 @@ return (
     <View style={styles.container}>
             <Image 
              style={styles.imagerizvi}
-            source={require('../../images/rizvi.png')}/>
+            source={require('../../images/RAZVI.png')}/>
             <ImageBackground 
             style={styles.image}
             source={require('../../images/madina.png')}/> 

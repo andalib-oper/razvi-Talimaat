@@ -1,37 +1,47 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground } from 'react-native'
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 const Home = () => {
     return (
         <View style={styles.container}>
-            <View style={styles.topContainer}>
-                {/* <ImageBackground
+            <View 
+            // style={styles.topContainer}
+            >
+                <ImageBackground
                     style={styles.image}
-                    source={require('../../images/madina.png')}> */}
-<Text style={{
-    marginTop: 20,
-    alignSelf: 'center',
-    fontSize: 20,
-    color: 'white'
-}}>Home</Text>
+                    source={require('../../images/2.png')}>
+                        <View>
+                        <Text style={{
+                        textAlign: 'center',
+                        alignSelf: 'center',
+                        fontSize: 22,
+                        color: 'white',
+                        fontWeight: '600',
+                        marginTop: -100,
+                        marginBottom: 10,
+                    }}>Home</Text>
+                        </View>
                     <Text style={{
-                        marginLeft: 50,
+                        textAlign: 'left',
+                        marginLeft: -340,
                         fontSize: 16,
                         // color: '#023c54',
                         color: 'white',
                         fontWeight: '600',
-                        marginTop: 40,
+                        marginTop: -60,
                     }}>Now</Text>
                     <Text style={{
-                        marginLeft: 50,
-                        fontSize: 22,
-                        fontWeight: '600',
-                        color: 'white',
-                        marginTop: 5,
+                         textAlign: 'left',
+                         marginLeft: -330,
+                         fontSize: 20,
+                         // color: '#023c54',
+                         color: 'white',
+                         fontWeight: '600',
+                         marginTop: 5,
                     }}>ISHA</Text>
-                    <Ionicons name="moon" size={30} color='black'
+                    <FontAwesome name="moon-o" size={30} color='black'
                         style={{
-                            marginLeft: 300,
+                            marginLeft: 250,
                             marginTop: -55
                         }} />
                     <Text style={{
@@ -58,8 +68,7 @@ const Home = () => {
                         color: 'white',
                         marginTop: 5,
                     }}>Monday</Text>
-                {/* </ImageBackground> */}
-
+                </ImageBackground>
             </View>
         </View>
     )
@@ -78,14 +87,14 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 30,
     },
     image: {
-        marginTop: -100,
-        height: 350,
-        width: 415,
+        marginTop: 0,
+        height: 270,
+        width: 425,
         alignContent: 'center',
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
-        borderRadius: 30,
+        borderBottomLeftRadius: 30,
     },
 })
 export default Home;
