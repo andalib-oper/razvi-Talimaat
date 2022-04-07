@@ -3,11 +3,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { View, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons'
 import Calendar from '../src/Calendar/Calendar'
 import Home from '../src/mainTabs/Home'
 import Ramzan from '../src/Ramzan/Ramzan'
 import Quran from '../src/Quran/Quran';
+import HomeNavigator from './HomeNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,20 +27,21 @@ const mainNavigator = () => {
           paddingBottom: 10,
           elevation: 10,
         },
+        
         tabBarBackground: () => (
-          <View />
-
+          <View/>
         ),
       }}
       initialRouteName="home">
       <Tab.Screen
-        name="Home"
-        component={Home}
+        name="homeNavigator"
+        component={HomeNavigator}
         options={{
           tabBarLabel: 'Home',
-          tabBarIcon: ({ color }) => (
+          tabBarIcon: ({ color, focused } ) => (
             <FontAwesome5
               name='home'
+              color={focused ? "#090979" : "#808080"}
               size={23} />
           ),
           tabBarLabelStyle: {
@@ -49,13 +50,32 @@ const mainNavigator = () => {
             fontWeight:"bold"
           }
         }} />
+        <Tab.Screen
+          name="quran"
+          component={Quran}
+          options={{
+            tabBarLabel: 'Quran',
+            tabBarIcon: ({ color, focused }) => (
+              <FontAwesome5
+              color={focused ? "#090979" : "#808080"}
+                name='quran'
+                size={23} />
+            ),
+            tabBarLabelStyle: {
+              fontSize: 15,
+              fontFamily: 'poppins',
+              fontWeight:"bold"
+            }
+          }}
+        />
       <Tab.Screen
         name="calendar"
         component={Calendar}
         options={{
           tabBarLabel: 'Calendar',
-          tabBarIcon: ({ color }) => (
+          tabBarIcon: ({ color, focused }) => (
             <FontAwesome5
+            color={focused ? "#090979" : "#808080"}
               name='calendar-alt'
               size={23} />
           ),
@@ -71,26 +91,10 @@ const mainNavigator = () => {
         component={Ramzan}
         options={{
           tabBarLabel: 'Ramzan',
-          tabBarIcon: ({ color }) => (
+          tabBarIcon: ({ color, focused }) => (
             <FontAwesome5
+            color={focused ? "#090979" : "#808080"}
               name='clock'
-              size={23} />
-          ),
-          tabBarLabelStyle: {
-            fontSize: 15,
-            fontFamily: 'poppins',
-            fontWeight:"bold"
-          }
-        }}
-      />
-      <Tab.Screen
-        name="quran"
-        component={Quran}
-        options={{
-          tabBarLabel: 'Quran',
-          tabBarIcon: ({ color }) => (
-            <FontAwesome5
-              name='quran'
               size={23} />
           ),
           tabBarLabelStyle: {
@@ -102,9 +106,9 @@ const mainNavigator = () => {
       />
     </Tab.Navigator>
   );
-};
+      }
 
-const styles=StyleSheet.create({
+const styles = StyleSheet.create({
   iconContainer: {
     flexDirection: "row",
     justifyContent: "space-evenly",
