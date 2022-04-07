@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, FlatList,ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, ImageBackground, ScrollView, FlatList, ActivityIndicator } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import SwitchSelector from "react-native-switch-selector";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
@@ -127,39 +127,27 @@ const Quran = () => {
         {isLoading ? (
           <ActivityIndicator />
         ) : (
-          //  {data
-          //   .map((item) => { 
           <ScrollView >
-            {/* <View style={styles.surah}>
-              <Text style={styles.surahArabic}>
-                {item.nameArabic}</Text> */}
-              {/* فتح</Text> */}
-              {/* <Text style={styles.surahEnglish}>
-                {item.nameEnglish}</Text> */}
-              {/* Surat-Ul-Fateha</Text> */}
-              {/* <Text style={styles.verses}>
-                {item.verses}</Text> */}
-              {/* Verses 7</Text> */}
-              {/* <FontAwesome
-                name='heart-o'
-                size={30}
-                color={focused ? "black" : "#808080"}
-                style={styles.iconheart} /> */}
-            {/* </View> */}
             <FlatList
               data={data}
               keyExtractor={({ id }, index) => id}
               renderItem={({ item }) => (
-                <Text>
-                  {item.number}, {item.name}, {item.englishName},{' '}
-                  {item.englishNameTranslation}, {item.numberOfAyahs},{' '}
-                  {item.revelationType}
-                </Text>
+                <View style={styles.surah}>
+                  <Text style={styles.number}>{item.number}.</Text>
+                  <Text style={styles.surahArabic}>{item.name}</Text>
+                  <Text style={styles.surahEnglish}>{item.englishName},{item.englishNameTranslation}</Text>
+                  <Text style={styles.verses}>Verses {item.numberOfAyahs}</Text>
+                  <Text style={styles.revelation}>{item.revelationType}</Text>
+                  {/* <FontAwesome
+                name='heart-o'
+                size={30}
+                color={focused ? "black" : "#808080"}
+                style={styles.iconheart} /> */}
+                </View>
               )}
             />
           </ScrollView>
         )}
-      {/* )} */}
       </ScrollView >
     </View >
   )
@@ -189,99 +177,52 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
-    height: 100,
+    height: 130,
     width: 390,
     backgroundColor: 'white',
     elevation: 20,
     borderRadius: 20,
   },
+  number: {
+    marginTop: 22,
+    marginLeft: 10,
+  },
   surahArabic: {
-    marginTop: 10,
-    marginRight: 340,
-    fontSize: 20,
+    marginTop: -24,
+    marginRight: 220,
+    marginLeft: 0,
+    fontSize: 22,
     fontWeight: '600',
   },
   surahEnglish: {
     marginTop: 2,
-    marginLeft: 20,
+    marginLeft: 40,
     fontSize: 16,
     fontWeight: '700'
   },
   verses: {
     marginTop: 2,
     fontSize: 14,
-    marginLeft: 20,
+    marginLeft: 40,
+  },
+  revelation: {
+    marginTop: 2,
+    fontSize: 14,
+    marginLeft: 40,
   },
   iconheart: {
     marginLeft: 330,
     marginTop: -51,
   },
+  item: {
+    backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 32,
+  },
 })
 
 export default Quran;
-
-// import React from 'react';
-// import {View,Text, StyleSheet} from 'react-native'
-
-// const Quran = () =>{
-//     return(
-//         <View style={styles.container}>
-//             <Text>
-//                 Quran
-//             </Text>
-//         </View>
-//     )
-// }
-
-// const styles=StyleSheet.create({
-//     container: {
-//         flex: 1,
-//     },
-// })
-
-// export default Quran;
-
-// import React, {useEffect, useState} from 'react';
-// import {ActivityIndicator, FlatList, Text, View} from 'react-native';
-
-// export default Quran = () => {
-//   const [isLoading, setLoading] = useState(true);
-//   const [data, setData] = useState([]);
-
-//   const getSurahs = async () => {
-//     try {
-//       const response = await fetch('http://api.alquran.cloud/v1/surah');
-//       const json = await response.json();
-//       setData(json.data);
-//     } catch (error) {
-//       console.error(error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     getSurahs();
-//   }, []);
-
-//   return (
-//     <View style={{flex: 1, padding: 24}}>
-//       {isLoading ? (
-//         <ActivityIndicator />
-//       ) : (
-//         <FlatList
-//           data={data}
-//           keyExtractor={({id}, index) => id}
-//           renderItem={({item}) => (
-//             <Text>
-//               {item.number}, {item.name}, {item.englishName},{' '}
-//               {item.englishNameTranslation}, {item.numberOfAyahs},{' '}
-//               {item.revelationType}
-//             </Text>
-//           )}
-//         />
-//       )}
-//     </View>
-//   );
-// };
-
