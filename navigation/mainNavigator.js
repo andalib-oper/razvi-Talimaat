@@ -31,6 +31,7 @@ const mainNavigator = () => {
         tabBarBackground: () => (
           <View/>
         ),
+
       }}
       initialRouteName="home">
       <Tab.Screen
@@ -89,7 +90,7 @@ const mainNavigator = () => {
       <Tab.Screen
         name="ramzan"
         component={Ramzan}
-        options={{
+        options={{ 
           tabBarLabel: 'Ramzan',
           tabBarIcon: ({ color, focused }) => (
             <FontAwesome5

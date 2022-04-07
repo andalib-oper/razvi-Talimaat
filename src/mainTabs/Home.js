@@ -91,7 +91,7 @@ const Home = ({ navigation }) => {
                         size={30}
                         color={focused ? "black" : "#808080"}
                         style={styles.iconQuran}
-                        onPress={() => navigation.navigate('quran')} />
+                        onPress={() => navigation.navigate('about')} />
                     <FontAwesome5
                         name='calendar-alt'
                         size={30}
