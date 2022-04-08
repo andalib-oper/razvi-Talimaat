@@ -31,14 +31,9 @@ const INITIAL_DATE = '2020-02-02';
 
 const CalendarScreen = () => {
   const [selected, setSelected] = useState(INITIAL_DATE);
-
-//   const onDayPress: CalendarProps['onDayPress'] = useCallback(day => {
-//     setSelected(day.dateString);
-//   }, []);
 const onDayPress = (day)=> {
     setSelected(day.dateString)
 }
-
   const marked = useMemo(() => {
     return {
       [selected]: {
@@ -51,9 +46,8 @@ const onDayPress = (day)=> {
   }, [selected]);
   return(
     <Fragment>
-    <Text style={styles.text}>Calendar with selectable date</Text>
+    <Text style={styles.text}>Calendar </Text>
     <Calendar
-      
       enableSwipeMonths
       current={INITIAL_DATE}
       style={styles.calendar}
