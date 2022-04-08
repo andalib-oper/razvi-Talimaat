@@ -1,14 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, 
-  FlatList, 
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  ScrollView,
+  FlatList,
   ActivityIndicator,
-TouchableOpacity } from 'react-native'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import SwitchSelector from "react-native-switch-selector";
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import { setGestureState } from 'react-native-reanimated/src/reanimated2/NativeMethods';
+  TouchableOpacity,
+} from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import SwitchSelector from 'react-native-switch-selector';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {setGestureState} from 'react-native-reanimated/src/reanimated2/NativeMethods';
 
-const Hindi = ({navigation}) => {
+const English = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
@@ -27,11 +33,10 @@ const Hindi = ({navigation}) => {
   useEffect(() => {
     getSurahs();
   }, []);
-  const [focused, setFocused] = useState('')
+  const [focused, setFocused] = useState('');
   return (
     <View style={styles.container}>
       <ScrollView>
-
         <View
         // style={styles.topContainer}
         >
@@ -39,77 +44,102 @@ const Hindi = ({navigation}) => {
             style={styles.image}
             source={require('../../images/background3.jpeg')}>
             <View>
-              <Text style={{
-                textAlign: 'center',
-                alignSelf: 'center',
-                fontSize: 22,
+              <Text
+                style={{
+                  textAlign: 'center',
+                  alignSelf: 'center',
+                  fontSize: 22,
+                  color: 'white',
+                  fontWeight: '600',
+                  marginTop: -40,
+                  marginBottom: -60,
+                }}>
+                Quran
+              </Text>
+            </View>
+            <Text
+              style={{
+                textAlign: 'left',
+                marginLeft: -340,
+                fontSize: 16,
+                // color: '#023c54',
                 color: 'white',
                 fontWeight: '600',
-                marginTop: -40,
-                marginBottom: -60,
-              }}>Quran</Text>
-            </View>
-            <Text style={{
-              textAlign: 'left',
-              marginLeft: -340,
-              fontSize: 16,
-              // color: '#023c54',
-              color: 'white',
-              fontWeight: '600',
-              marginTop: 20,
-            }}>Now</Text>
-            <Text style={{
-              textAlign: 'left',
-              marginLeft: -330,
-              fontSize: 20,
-              // color: '#023c54',
-              color: 'white',
-              fontWeight: '600',
-              marginTop: 5,
-            }}>ISHA</Text>
-            <Text style={{
-              textAlign: 'left',
-              marginLeft: -300,
-              fontSize: 16,
-              // color: '#023c54',
-              color: 'white',
-              fontWeight: '600',
-              marginTop: 5,
-            }}>Upcoming</Text>
+                marginTop: 20,
+              }}>
+              Now
+            </Text>
+            <Text
+              style={{
+                textAlign: 'left',
+                marginLeft: -330,
+                fontSize: 20,
+                // color: '#023c54',
+                color: 'white',
+                fontWeight: '600',
+                marginTop: 5,
+              }}>
+              ISHA
+            </Text>
+            <Text
+              style={{
+                textAlign: 'left',
+                marginLeft: -300,
+                fontSize: 16,
+                // color: '#023c54',
+                color: 'white',
+                fontWeight: '600',
+                marginTop: 5,
+              }}>
+              Upcoming
+            </Text>
             <View>
-              <FontAwesome name="moon-o" size={30} color='white'
+              <FontAwesome
+                name="moon-o"
+                size={30}
+                color="white"
                 style={{
                   marginLeft: 330,
-                  marginTop: -100
-                }} />
+                  marginTop: -100,
+                }}
+              />
             </View>
-            <Text style={{
-              marginLeft: 370,
-              fontSize: 22,
-              marginRight: 10,
-              fontWeight: '600',
-              color: 'white',
-              marginTop: -70,
-            }}>3</Text>
-            <Text style={{
-              marginLeft: 260,
-              marginRight: 10,
-              fontSize: 18,
-              fontWeight: '600',
-              color: 'white',
-              marginTop: 10,
-            }}>Ramadan, 1443</Text>
-            <Text style={{
-              marginLeft: 320,
-              marginRight: 10,
-              fontSize: 18,
-              fontWeight: '600',
-              color: 'white',
-              marginTop: 5,
-            }}>Monday</Text>
+            <Text
+              style={{
+                marginLeft: 370,
+                fontSize: 22,
+                marginRight: 10,
+                fontWeight: '600',
+                color: 'white',
+                marginTop: -70,
+              }}>
+              3
+            </Text>
+            <Text
+              style={{
+                marginLeft: 260,
+                marginRight: 10,
+                fontSize: 18,
+                fontWeight: '600',
+                color: 'white',
+                marginTop: 10,
+              }}>
+              Ramadan, 1443
+            </Text>
+            <Text
+              style={{
+                marginLeft: 320,
+                marginRight: 10,
+                fontSize: 18,
+                fontWeight: '600',
+                color: 'white',
+                marginTop: 5,
+              }}>
+              Monday
+            </Text>
           </ImageBackground>
         </View>
-        <View >
+        <View>
           {/* <SwitchSelector
             initial={0}
             style={styles.switchselector}
@@ -128,43 +158,21 @@ const Hindi = ({navigation}) => {
             testID="gender-switch-selector"
             accessibilityLabel="gender-switch-selector"
           /> */}
-      <TouchableOpacity style={styles.English} onPress={()=>navigation.navigate('quran')}>
-        <Text style={{
-          alignSelf: 'center',
-          fontSize: 14,
-          color: 'white',
-          marginTop: 5
-        }}>English</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.Hindi} onPress={()=>navigation.navigate('hindi')}>
-        <Text style={{
-          alignSelf: 'center',
-          fontSize: 14,
-          color: 'blue',
-          marginTop: 5
-        }}>Hindi</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.Urdu} onPress={()=>navigation.navigate('urdu')}>
-        <Text style={{
-          alignSelf: 'center',
-          fontSize: 14,
-          color: 'blue',
-          marginTop: 5
-        }}>Urdu</Text>
-      </TouchableOpacity>
         </View>
         {isLoading ? (
           <ActivityIndicator />
         ) : (
-          <ScrollView >
+          <ScrollView>
             <FlatList
               data={data}
-              keyExtractor={({ id }, index) => id}
-              renderItem={({ item }) => (
+              keyExtractor={({id}, index) => id}
+              renderItem={({item}) => (
                 <View style={styles.surah}>
                   <Text style={styles.number}>{item.number}.</Text>
-                  <Text style={styles.surahArabic}>{item.name}</Text>
-                  <Text style={styles.surahEnglish}>{item.englishName},{item.englishNameTranslation}</Text>
+                  {/* <Text style={styles.surahArabic}>{item.name}</Text> */}
+                  <Text style={styles.surahEnglish}>
+                    {item.englishName},{item.englishNameTranslation}
+                  </Text>
                   <Text style={styles.verses}>Verses {item.numberOfAyahs}</Text>
                   <Text style={styles.revelation}>{item.revelationType}</Text>
                   {/* <FontAwesome
@@ -177,10 +185,10 @@ const Hindi = ({navigation}) => {
             />
           </ScrollView>
         )}
-      </ScrollView >
-    </View >
-  )
-}
+      </ScrollView>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -218,16 +226,16 @@ const styles = StyleSheet.create({
   },
   surahArabic: {
     marginTop: -24,
-    marginRight: 220,
+    marginRight: 20,
     marginLeft: 0,
     fontSize: 22,
     fontWeight: '600',
   },
   surahEnglish: {
-    marginTop: 2,
+    marginTop: -20,
     marginLeft: 40,
     fontSize: 16,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   verses: {
     marginTop: 2,
@@ -260,7 +268,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
     borderRadius: 20,
     borderColor: 'blue',
-    borderWidth: 1
+    borderWidth: 1,
   },
   Hindi: {
     marginTop: -29,
@@ -270,7 +278,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     borderColor: 'blue',
-    borderWidth: 1
+    borderWidth: 1,
   },
   Urdu: {
     marginTop: -31,
@@ -280,9 +288,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     borderColor: 'blue',
-    borderWidth: 1
+    borderWidth: 1,
   },
+});
 
-})
-
-export default Hindi;
+export default English;
