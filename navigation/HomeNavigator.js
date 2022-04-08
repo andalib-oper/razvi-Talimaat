@@ -3,6 +3,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Quran from '../src/Quran/Quran';
 import Home from '../src/mainTabs/Home';
 import About from '../src/About/About';
+import Urdu from '../src/Quran/Urdu';
+import Hindi from '../src/Quran/Hindi'
 
 const Stack = createStackNavigator();
 
@@ -12,12 +14,11 @@ const HomeNavigator = () => {
       <Stack.Navigator headerMode="false" initialRouteName="splash">
           <Stack.Screen name="home" component={Home} />
         <Stack.Screen name="quran" component={Quran} />
-        <Stack.Screen 
-         options={{
-          tabBarVisible: false
-        }}
-        name="about" component={About}/>
+        <Stack.Screen name="about" component={About}/>
+        <Stack.Screen name="hindi" component={Hindi}/>
+        <Stack.Screen name="urdu" component={Urdu}/>
       </Stack.Navigator>
+
     );
   };
   

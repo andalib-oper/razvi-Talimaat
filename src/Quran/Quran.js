@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, FlatList, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, ImageBackground, ScrollView, 
+  FlatList, 
+  ActivityIndicator,
+TouchableOpacity } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import SwitchSelector from "react-native-switch-selector";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import { setGestureState } from 'react-native-reanimated/src/reanimated2/NativeMethods';
 
-const Quran = () => {
+const Quran = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
@@ -105,24 +109,49 @@ const Quran = () => {
             }}>Monday</Text>
           </ImageBackground>
         </View>
-        <View>
-          <SwitchSelector
+        <View >
+          {/* <SwitchSelector
             initial={0}
             style={styles.switchselector}
             // onPress={value => this.setState({ gender: value })}
+            onPress={value => navigation.navigate(`home${value}`)}
             textColor="#0303e0" //'#7a44cf'
             selectedColor="white"
             buttonColor="#0303e0"
             borderColor="#0303e0"
             hasPadding
             options={[
-              { label: "English", }, //images.feminino = require('./path_to/assets/img/feminino.png')
-              { label: "Hindi", },
-              { label: "Urdu", } //images.masculino = require('./path_to/assets/img/masculino.png')
+              { label: "English", value:'' }, //images.feminino = require('./path_to/assets/img/feminino.png')
+              { label: "Hindi", value: ''},
+              { label: "Urdu", value: '' } //images.masculino = require('./path_to/assets/img/masculino.png')
             ]}
             testID="gender-switch-selector"
             accessibilityLabel="gender-switch-selector"
-          />
+          /> */}
+      <TouchableOpacity style={styles.English} onPress={()=>navigation.navigate('quran')}>
+        <Text style={{
+          alignSelf: 'center',
+          fontSize: 14,
+          color: 'white',
+          marginTop: 5
+        }}>English</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.Hindi} onPress={()=>navigation.navigate('hindi')}>
+        <Text style={{
+          alignSelf: 'center',
+          fontSize: 14,
+          color: 'blue',
+          marginTop: 5
+        }}>Hindi</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.Urdu} onPress={()=>navigation.navigate('urdu')}>
+        <Text style={{
+          alignSelf: 'center',
+          fontSize: 14,
+          color: 'blue',
+          marginTop: 5
+        }}>Urdu</Text>
+      </TouchableOpacity>
         </View>
         {isLoading ? (
           <ActivityIndicator />
@@ -223,6 +252,37 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
   },
+  English: {
+    marginTop: 20,
+    marginLeft: 15,
+    height: 30,
+    width: 100,
+    backgroundColor: 'blue',
+    borderRadius: 20,
+    borderColor: 'blue',
+    borderWidth: 1
+  },
+  Hindi: {
+    marginTop: -29,
+    marginLeft: 155,
+    height: 30,
+    width: 100,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    borderColor: 'blue',
+    borderWidth: 1
+  },
+  Urdu: {
+    marginTop: -31,
+    marginLeft: 295,
+    height: 30,
+    width: 100,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    borderColor: 'blue',
+    borderWidth: 1
+  },
+
 })
 
 export default Quran;
