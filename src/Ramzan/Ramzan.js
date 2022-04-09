@@ -1,11 +1,11 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {DataTable} from 'react-native-paper';
+import { View, Text, StyleSheet } from 'react-native';
+import { DataTable } from 'react-native-paper';
 
 const Ramzan = () => {
   return (
     <View style={styles.container}>
-<Text>Ramzan</Text>
+      <Text>Ramzan</Text>
     </View>
   );
 };
