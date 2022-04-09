@@ -3,11 +3,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { View, StyleSheet } from 'react-native';
-import Calendar from '../src/Calendar/Calendar'
-import Home from '../src/mainTabs/Home'
 import Ramzan from '../src/Ramzan/Ramzan'
 import Quran from '../src/Quran/Quran';
 import HomeNavigator from './HomeNavigator';
+import CalendarScreen from '../src/Calendar/Calendar';
 
 const Tab = createBottomTabNavigator();
 
@@ -71,7 +70,7 @@ const mainNavigator = () => {
         />
       <Tab.Screen
         name="calendar"
-        component={Calendar}
+        component={CalendarScreen}
         options={{
           tabBarLabel: 'Calendar',
           tabBarIcon: ({ color, focused }) => (

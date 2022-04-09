@@ -27,7 +27,7 @@ import {StyleSheet, View, ScrollView, Text, TouchableOpacity} from 'react-native
 import {Calendar, CalendarProps} from 'react-native-calendars';
 
 
-const INITIAL_DATE = '2020-02-02';
+const INITIAL_DATE = '2022-04-12';
 
 const CalendarScreen = () => {
   const [selected, setSelected] = useState(INITIAL_DATE);

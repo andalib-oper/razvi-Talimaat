@@ -10,6 +10,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.config.ReactFeatureFlags;
 import com.facebook.soloader.SoLoader;
 import com.rizvitalukaat.newarchitecture.MainApplicationReactNativeHost;
+import com.reactnativecommunity.geolocation.GeolocationPackage;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
