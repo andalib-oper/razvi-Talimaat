@@ -8,6 +8,7 @@ import Hindi from '../src/Quran/Hindi';
 import Arabic from '../src/Quran/Arabic';
 import English from '../src/Quran/English';
 import ArabicAyahs from '../src/Quran/ArabicAyahs';
+import EnglishAyahs from '../src/Quran/EnglishAyahs'
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ const HomeNavigator = () => {
       <Stack.Screen name="arabic" component={Arabic} />
       <Stack.Screen name="english" component={English} />
       <Stack.Screen name="arabicAyahs" component={ArabicAyahs} />
+      <Stack.Screen name="englishAyahs" component={EnglishAyahs} />
     </Stack.Navigator>
   );
 };
