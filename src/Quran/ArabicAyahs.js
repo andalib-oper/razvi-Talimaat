@@ -53,13 +53,13 @@ const ArabicAyahs = ({route}) => {
                 <Text style={styles.surahArabic}>{item.text}</Text>
                 <Text
                   style={{
-                    marginLeft: 250,
+                    marginLeft: 200,
                   }}>
                   Number in Surah: {item.numberInSurah}
                 </Text>
                 <Text
                   style={{
-                    marginLeft: 250,
+                    marginLeft: 200,
                   }}>
                   Ruku: {item.ruku}
                 </Text>
@@ -116,8 +116,8 @@ const styles = StyleSheet.create({
     padding: 10
   },
   number: {
-    marginTop: 22,
-    marginLeft: 10,
+    marginTop: 18,
+    marginLeft: 5,
   },
   surahArabic: {
     marginTop: -24,
