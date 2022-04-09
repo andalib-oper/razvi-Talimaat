@@ -167,20 +167,29 @@ const English = ({navigation}) => {
               data={data}
               keyExtractor={({id}, index) => id}
               renderItem={({item}) => (
-                <View style={styles.surah}>
-                  <Text style={styles.number}>{item.number}.</Text>
-                  {/* <Text style={styles.surahArabic}>{item.name}</Text> */}
-                  <Text style={styles.surahEnglish}>
-                    {item.englishName},{item.englishNameTranslation}
-                  </Text>
-                  <Text style={styles.verses}>Verses {item.numberOfAyahs}</Text>
-                  <Text style={styles.revelation}>{item.revelationType}</Text>
-                  {/* <FontAwesome
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('englishAyahs', {
+                      code: item.number,
+                    })
+                  }>
+                  <View style={styles.surah}>
+                    <Text style={styles.number}>{item.number}.</Text>
+                    {/* <Text style={styles.surahArabic}>{item.name}</Text> */}
+                    <Text style={styles.surahEnglish}>
+                      {item.englishName},{item.englishNameTranslation}
+                    </Text>
+                    <Text style={styles.verses}>
+                      Verses {item.numberOfAyahs}
+                    </Text>
+                    <Text style={styles.revelation}>{item.revelationType}</Text>
+                    {/* <FontAwesome
                 name='heart-o'
                 size={30}
                 color={focused ? "black" : "#808080"}
                 style={styles.iconheart} /> */}
-                </View>
+                  </View>
+                </TouchableOpacity>
               )}
             />
           </ScrollView>
