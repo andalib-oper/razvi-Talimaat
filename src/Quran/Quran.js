@@ -24,7 +24,7 @@ const Quran = ({navigation}) => {
               margin: 10,
             }}
             source={{
-              uri: 'https://cdn-icons.flaticon.com/png/512/6152/premium/6152981.png?token=exp=1649427241~hmac=755a6b61e248d21fdd7c7abbeea6763c',
+              uri: 'https://www.linkpicture.com/q/quran.png',
             }}
           />
           <Text style={styles.translate}>Arabic Version</Text>
@@ -42,7 +42,7 @@ const Quran = ({navigation}) => {
               margin: 10,
             }}
             source={{
-              uri: 'https://cdn-icons.flaticon.com/png/512/6152/premium/6152981.png?token=exp=1649427241~hmac=755a6b61e248d21fdd7c7abbeea6763c',
+              uri: 'https://www.linkpicture.com/q/quran.png',
             }}
           />
           <Text style={styles.translate}>English Version</Text>
@@ -60,7 +60,7 @@ const Quran = ({navigation}) => {
               margin: 10,
             }}
             source={{
-              uri: 'https://cdn-icons.flaticon.com/png/512/6152/premium/6152981.png?token=exp=1649427241~hmac=755a6b61e248d21fdd7c7abbeea6763c',
+              uri: 'https://www.linkpicture.com/q/quran.png',
             }}
           />
           <Text style={styles.translate}>Urdu Version</Text>
