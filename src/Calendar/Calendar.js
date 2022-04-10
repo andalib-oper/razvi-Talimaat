@@ -1,73 +1,73 @@
-// import React, { useState } from 'react';
-// import { View, Text, StyleSheet } from 'react-native'
-// import { Calendar } from 'react-native-calendars';
 
-// const CalendarScreen = () => {
-
-//     return (
-//         <View style={styles.container}>
-//             <Text>
-//                 Calendar
-//             </Text>
-           
-//         </View>
-//     )
-// }
-
-// const styles=StyleSheet.create({
-//     container: {
-//         flex:1,
-//     }
-// })
-
-// export default CalendarScreen;
-
-import React, {useState, Fragment, useCallback, useMemo} from 'react';
-import {StyleSheet, View, ScrollView, Text, TouchableOpacity} from 'react-native';
-import {Calendar, CalendarProps} from 'react-native-calendars';
-
-
-const INITIAL_DATE = '2022-04-12';
+import React, {useState} from 'react';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import CalendarPicker from 'react-native-calendar-picker';
+import moment from "moment";
 
 const CalendarScreen = () => {
-  const [selected, setSelected] = useState(INITIAL_DATE);
-const onDayPress = (day)=> {
-    setSelected(day.dateString)
-}
-  const marked = useMemo(() => {
-    return {
-      [selected]: {
-        selected: true,
-        disableTouchEvent: true,
-        selectedColor: 'blue',
-        selectedTextColor: 'white'
-      }
-    };
-  }, [selected]);
+  const [selectedStartDate, setSelectedStartDate] = useState(moment(new Date()).format("DD-MM-YYYY"));
+  const maxDate = moment(selectedStartDate).format('DD-MM-YYYY');
+  // const minDate = moment(setSelectedStartDate).format('DD-MM-YYYY');
+  // const [selected, setelected] = useState(INITIAL_DATE);
+  const onDateChange = (date, type) => {
+    setSelectedStartDate(date);
+   };
   return(
-    <Fragment>
-    <Text style={styles.text}>Calendar </Text>
-    <Calendar
-      enableSwipeMonths
-      current={INITIAL_DATE}
-      style={styles.calendar}
-      onDayPress={onDayPress}
-      markedDates={marked}
-    />
-  </Fragment>
+    <View style={styles.container}>
+    <CalendarPicker
+    startFromMonday={true}
+    allowRangeSelection={false}
+    minDate={moment(new Date()).format("DD-MM-YYYY")}
+    maxDate={moment(new Date()).format("DD-MM-YYYY")}
+    weekdays={
+      [
+        'Mon', 
+        'Tue', 
+        'Wed', 
+        'Thur', 
+        'Fri', 
+        'Sat', 
+        'Sun'
+      ]}
+    months={[
+      'January',
+      'Febraury',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ]}
+    previousTitle="Previous"
+    nextTitle="Next"
+    todayBackgroundColor="#e6ffe6"
+    selectedDayColor="#66ff33"
+    selectedDayTextColor="#000000"
+    scaleFactor={375}
+    textStyle={{
+      fontFamily: 'Cochin',
+      color: '#000000',
+    }}
+    onDateChange={onDateChange}
+  />
+   <View>
+    <Text>
+      Selected Start Date : {maxDate}
+    </Text>
+    </View> 
+    </View>
   )
 }
 
 export default CalendarScreen;
 
 const styles = StyleSheet.create({
-  calendar: {
-    marginBottom: 10
-  },
-  text: {
-    textAlign: 'center',
-    padding: 10,
-    backgroundColor: 'lightgrey',
-    fontSize: 16
-  },
+ container: {
+   flex: 1
+ },
 });
