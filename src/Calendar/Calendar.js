@@ -7,8 +7,6 @@ import moment from "moment";
 const CalendarScreen = () => {
   const [selectedStartDate, setSelectedStartDate] = useState(moment(new Date()).format("DD-MM-YYYY"));
   const maxDate = moment(selectedStartDate).format('DD-MM-YYYY');
-  // const minDate = moment(setSelectedStartDate).format('DD-MM-YYYY');
-  // const [selected, setelected] = useState(INITIAL_DATE);
   const onDateChange = (date, type) => {
     setSelectedStartDate(date);
    };
