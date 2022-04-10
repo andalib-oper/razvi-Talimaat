@@ -43,9 +43,9 @@ const CalendarScreen = () => {
     ]}
     previousTitle="Previous"
     nextTitle="Next"
-    todayBackgroundColor="#e6ffe6"
-    selectedDayColor="#66ff33"
-    selectedDayTextColor="#000000"
+    todayBackgroundColor="#a5ecfa"
+    selectedDayColor="#4b7bf2"
+    selectedDayTextColor="#ffffff"
     scaleFactor={375}
     textStyle={{
       fontFamily: 'Cochin',
@@ -54,8 +54,8 @@ const CalendarScreen = () => {
     onDateChange={onDateChange}
   />
    <View>
-    <Text>
-      Selected Start Date : {maxDate}
+    <Text style={styles.date}>
+      Select a Start Date : {maxDate}
     </Text>
     </View> 
     </View>
@@ -68,4 +68,10 @@ const styles = StyleSheet.create({
  container: {
    flex: 1
  },
+ date:{
+   marginTop: 20,
+   fontSize: 18,
+   color: 'black',
+   alignSelf: 'center'
+ }
 });

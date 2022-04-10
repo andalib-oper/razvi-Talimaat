@@ -169,14 +169,14 @@ const Home = ({navigation}) => {
             size={30}
             color={focused ? 'black' : '#808080'}
             style={styles.iconCalendar}
-            onPress={() => navigation.navigate('quran')}
+            onPress={() => navigation.navigate('calendar')}
           />
           <FontAwesome5
-            name="calendar-alt"
+            name="clock"
             size={30}
             color={focused ? 'black' : '#808080'}
             style={styles.iconRamzan}
-            onPress={() => navigation.navigate('quran')}
+            onPress={() => navigation.navigate('ramzan')}
           />
         </View>
         <View style={styles.verses}>
