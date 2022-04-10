@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   Text,
@@ -7,27 +7,53 @@ import {
   ScrollView,
   ActivityIndicator,
   Image,
+  RefreshControl,
+  ToastAndroid,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+const NUM_OF_LINES = 4;
 
 const Home = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const [refreshing, setRefreshing] = React.useState(false);
   //   console.log(data);
-  
+
   useEffect(() => {
     fetch('http://10.0.2.2:5000/api/content')
       .then(response => response.json())
       .then(json => setData(json))
       .catch(error => console.error(error))
       .finally(() => setLoading(false));
-    }, []);
-    
-    const [focused, setFocused] = useState('');
-    return (
-      <View style={styles.container}>
-      <ScrollView>
+  }, []);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await fetch('http://10.0.2.2:5000/api/content')
+        .then(response => response.json())
+        .then(json => setData(json))
+        .catch(error => console.error(error))
+        .finally(() => setLoading(false), setRefreshing(false));
+    } catch (error) {
+      console.error(error);
+    }
+  }, [refreshing]);
+
+  const [focused, setFocused] = useState('');
+
+  const [showMore, setShowMore] = useState(false);
+  const onTextLayout = useCallback(e => {
+    setShowMore(e.nativeEvent.lines.length > NUM_OF_LINES);
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View
         // style={styles.topContainer}
         >
@@ -93,7 +119,7 @@ const Home = ({navigation}) => {
                   marginLeft: 330,
                   marginTop: -100,
                 }}
-                />
+              />
             </View>
             <Text
               style={{
@@ -170,7 +196,7 @@ const Home = ({navigation}) => {
             <View>
               {data.map(item => {
                 return (
-                  <View style={styles.umrah}>
+                  <View style={styles.umrah} key={item.number}>
                     <Image
                       style={{
                         height: 130,
@@ -205,7 +231,9 @@ const Home = ({navigation}) => {
                           fontSize: 14,
                           fontWeight: '400',
                           color: 'black',
-                        }}>
+                        }}
+                        numberOfLines={NUM_OF_LINES}
+                        onTextLayout={onTextLayout}>
                         {item.content}
                       </Text>
                     </View>
@@ -333,4 +361,4 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 });
-export default Home ;
+export default Home;
