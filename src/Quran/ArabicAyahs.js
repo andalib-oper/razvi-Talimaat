@@ -3,19 +3,17 @@ import {
   View,
   Text,
   StyleSheet,
+  Image,
   ImageBackground,
   ScrollView,
   FlatList,
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import SwitchSelector from 'react-native-switch-selector';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {setGestureState} from 'react-native-reanimated/src/reanimated2/NativeMethods';
-// import ArabicAyahs from './ArabicAyahs';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
-const ArabicAyahs = ({route}) => {
+
+const ArabicAyahs = ({route,navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const getSurahsAyahs = async () => {
@@ -39,7 +37,15 @@ const ArabicAyahs = ({route}) => {
   console.log(data);
   const [focused, setFocused] = useState('');
   return (
-    <View style={{flex: 1, padding: 2}}>
+    <View style={{flex: 1, padding: 0}}>
+       <View style={styles.topnav}>
+        <MaterialIcons name="arrow-back"
+                    size={40}
+                    color='white'
+                    style={styles.icon}
+                    onPress={() => navigation.goBack()} />
+          <Text style={styles.topnavtext}>Ayahs</Text>
+        </View>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
@@ -51,15 +57,24 @@ const ArabicAyahs = ({route}) => {
               <View style={styles.surah}>
                 <Text style={styles.number}>{item.number}.</Text>
                 <Text style={styles.surahArabic}>{item.text}</Text>
+                {/* <Image
+                style={styles.image}
+                source={require('../../images/quran.png')}/> */}
                 <Text
                   style={{
                     marginLeft: 200,
+                    marginTop: 10,
+                    fontSize: 14,
+                    fontWeight: '600'
                   }}>
                   Number in Surah: {item.numberInSurah}
                 </Text>
                 <Text
                   style={{
                     marginLeft: 200,
+                    marginTop: 5,
+                    fontSize: 14,
+                    fontWeight: '600'
                   }}>
                   Ruku: {item.ruku}
                 </Text>
@@ -88,21 +103,33 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  image: {
+  topnav: {
     marginTop: 0,
-    height: 250,
-    width: 425,
+    height: 60,
+    width: 412,
+    backgroundColor: '#4b7bf2',
+  },
+  topnavtext: {
+    marginTop: -35,
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontSize: 22,
+    color: 'white'
+  },
+  icon: {
+    marginLeft: 20,
+    marginTop: 10,
+},
+  image: {
+    marginTop: 50,
+    marginRight: 120,
+    height: 30,
+    width: 25,
+    backgroundColor: 'grey',
     alignContent: 'center',
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    borderBottomLeftRadius: 30,
-  },
-  switchselector: {
-    marginTop: 20,
-    alignSelf: 'center',
-    marginLeft: 20,
-    marginRight: 20,
   },
   surah: {
     marginTop: 20,
@@ -110,17 +137,17 @@ const styles = StyleSheet.create({
     marginRight: 10,
     height: 'auto',
     width: 390,
-    backgroundColor: 'white',
+    backgroundColor: '#ffffff',
     elevation: 20,
     borderRadius: 20,
     padding: 10
   },
   number: {
-    marginTop: 18,
+    marginTop: 15,
     marginLeft: 5,
   },
   surahArabic: {
-    marginTop: -24,
+    marginTop: -20,
     marginRight: 20,
     marginLeft: 10,
     fontSize: 22,

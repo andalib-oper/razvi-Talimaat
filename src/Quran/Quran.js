@@ -9,9 +9,18 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 const Quran = ({navigation}) => {
   return (
     <View style={styles.container}>
+      <View style={styles.topnav}>
+        <MaterialIcons name="arrow-back"
+                    size={40}
+                    color='white'
+                    style={styles.icon}
+                    onPress={() => navigation.goBack()} />
+          <Text style={styles.topnavtext}>Quran</Text>
+        </View>
       <TouchableOpacity
         style={styles.English}
         onPress={() => navigation.navigate('arabic')}>
@@ -74,6 +83,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  topnav: {
+    height: 60,
+    width: 412,
+    backgroundColor: '#4b7bf2',
+  },
+  topnavtext: {
+    marginTop: -35,
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontSize: 22,
+    color: 'white'
+  },
+  icon: {
+    marginLeft: 20,
+    marginTop: 10,
+},
   verses: {
     marginTop: 20,
     marginLeft: 10,

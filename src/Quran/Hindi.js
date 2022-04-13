@@ -4,9 +4,6 @@ import { View, Text, StyleSheet, ImageBackground, ScrollView,
   ActivityIndicator,
 TouchableOpacity } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import SwitchSelector from "react-native-switch-selector";
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import { setGestureState } from 'react-native-reanimated/src/reanimated2/NativeMethods';
 
 const Hindi = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);

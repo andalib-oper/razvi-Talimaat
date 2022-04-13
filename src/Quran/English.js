@@ -9,10 +9,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import SwitchSelector from 'react-native-switch-selector';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {setGestureState} from 'react-native-reanimated/src/reanimated2/NativeMethods';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 const English = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
@@ -36,128 +33,16 @@ const English = ({navigation}) => {
   const [focused, setFocused] = useState('');
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <View
-        // style={styles.topContainer}
-        >
-          <ImageBackground
-            style={styles.image}
-            source={require('../../images/background3.jpeg')}>
-            <View>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  alignSelf: 'center',
-                  fontSize: 22,
-                  color: 'white',
-                  fontWeight: '600',
-                  marginTop: -40,
-                  marginBottom: -60,
-                }}>
-                Quran
-              </Text>
-            </View>
-            <Text
-              style={{
-                textAlign: 'left',
-                marginLeft: -340,
-                fontSize: 16,
-                // color: '#023c54',
-                color: 'white',
-                fontWeight: '600',
-                marginTop: 20,
-              }}>
-              Now
-            </Text>
-            <Text
-              style={{
-                textAlign: 'left',
-                marginLeft: -330,
-                fontSize: 20,
-                // color: '#023c54',
-                color: 'white',
-                fontWeight: '600',
-                marginTop: 5,
-              }}>
-              ISHA
-            </Text>
-            <Text
-              style={{
-                textAlign: 'left',
-                marginLeft: -300,
-                fontSize: 16,
-                // color: '#023c54',
-                color: 'white',
-                fontWeight: '600',
-                marginTop: 5,
-              }}>
-              Upcoming
-            </Text>
-            <View>
-              <FontAwesome
-                name="moon-o"
-                size={30}
-                color="white"
-                style={{
-                  marginLeft: 330,
-                  marginTop: -100,
-                }}
-              />
-            </View>
-            <Text
-              style={{
-                marginLeft: 370,
-                fontSize: 22,
-                marginRight: 10,
-                fontWeight: '600',
-                color: 'white',
-                marginTop: -70,
-              }}>
-              3
-            </Text>
-            <Text
-              style={{
-                marginLeft: 260,
-                marginRight: 10,
-                fontSize: 18,
-                fontWeight: '600',
-                color: 'white',
-                marginTop: 10,
-              }}>
-              Ramadan, 1443
-            </Text>
-            <Text
-              style={{
-                marginLeft: 320,
-                marginRight: 10,
-                fontSize: 18,
-                fontWeight: '600',
-                color: 'white',
-                marginTop: 5,
-              }}>
-              Monday
-            </Text>
-          </ImageBackground>
+       <View style={styles.topnav}>
+        <MaterialIcons name="arrow-back"
+                    size={40}
+                    color='white'
+                    style={styles.icon}
+                    onPress={() => navigation.goBack()} />
+          <Text style={styles.topnavtext}>English Version</Text>
         </View>
+      <ScrollView>
         <View>
-          {/* <SwitchSelector
-            initial={0}
-            style={styles.switchselector}
-            // onPress={value => this.setState({ gender: value })}
-            onPress={value => navigation.navigate(`home${value}`)}
-            textColor="#0303e0" //'#7a44cf'
-            selectedColor="white"
-            buttonColor="#0303e0"
-            borderColor="#0303e0"
-            hasPadding
-            options={[
-              { label: "English", value:'' }, //images.feminino = require('./path_to/assets/img/feminino.png')
-              { label: "Hindi", value: ''},
-              { label: "Urdu", value: '' } //images.masculino = require('./path_to/assets/img/masculino.png')
-            ]}
-            testID="gender-switch-selector"
-            accessibilityLabel="gender-switch-selector"
-          /> */}
         </View>
         {isLoading ? (
           <ActivityIndicator />
@@ -203,27 +88,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  image: {
-    marginTop: 0,
-    height: 250,
-    width: 425,
-    alignContent: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    borderBottomLeftRadius: 30,
+  topnav: {
+    height: 60,
+    width: 412,
+    backgroundColor: '#4b7bf2',
   },
-  switchselector: {
-    marginTop: 20,
+  topnavtext: {
+    marginTop: -35,
     alignSelf: 'center',
+    textAlign: 'center',
+    fontSize: 22,
+    color: 'white'
+  },
+  icon: {
     marginLeft: 20,
-    marginRight: 20,
-  },
+    marginTop: 10,
+},
   surah: {
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
-    height: 130,
+    height: 100,
     width: 390,
     backgroundColor: 'white',
     elevation: 20,
@@ -275,26 +160,6 @@ const styles = StyleSheet.create({
     height: 30,
     width: 100,
     backgroundColor: 'blue',
-    borderRadius: 20,
-    borderColor: 'blue',
-    borderWidth: 1,
-  },
-  Hindi: {
-    marginTop: -29,
-    marginLeft: 155,
-    height: 30,
-    width: 100,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    borderColor: 'blue',
-    borderWidth: 1,
-  },
-  Urdu: {
-    marginTop: -31,
-    marginLeft: 295,
-    height: 30,
-    width: 100,
-    backgroundColor: 'white',
     borderRadius: 20,
     borderColor: 'blue',
     borderWidth: 1,
