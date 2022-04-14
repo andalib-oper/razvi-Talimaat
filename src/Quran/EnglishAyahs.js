@@ -9,13 +9,10 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import SwitchSelector from 'react-native-switch-selector';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {setGestureState} from 'react-native-reanimated/src/reanimated2/NativeMethods';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 // import ArabicAyahs from './ArabicAyahs';
 
-const ArabicAyahs = ({route}) => {
+const ArabicAyahs = ({route, navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const getSurahsAyahs = async () => {
@@ -39,7 +36,15 @@ const ArabicAyahs = ({route}) => {
 //   console.log(data);
   const [focused, setFocused] = useState('');
   return (
-    <View style={{flex: 1, padding: 2}}>
+    <View style={{flex: 1, padding: 0}}>
+        <View style={styles.topnav}>
+        <MaterialIcons name="arrow-back"
+                    size={40}
+                    color='white'
+                    style={styles.icon}
+                    onPress={() => navigation.goBack()} />
+          <Text style={styles.topnavtext}>Ayahs</Text>
+        </View>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
@@ -54,6 +59,9 @@ const ArabicAyahs = ({route}) => {
                 <Text
                   style={{
                     marginLeft: 40,
+                    fontSize: 14,
+                    fontWeight: '600',
+                    marginTop: 10,
                   }}>
                   Number in Surah: {item.numberInSurah}
                 </Text>
@@ -88,6 +96,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  topnav: {
+    height: 60,
+    width: 412,
+    backgroundColor: '#4b7bf2',
+  },
+  topnavtext: {
+    marginTop: -35,
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontSize: 22,
+    color: 'white'
+  },
+  icon: {
+    marginLeft: 20,
+    marginTop: 10,
+},
   image: {
     marginTop: 0,
     height: 250,
@@ -123,7 +147,7 @@ const styles = StyleSheet.create({
     marginTop: -24,
     // marginRight: 20,
     marginLeft: 40,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '600',
     // width: 200
   },
