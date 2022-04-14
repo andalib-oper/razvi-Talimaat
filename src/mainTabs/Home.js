@@ -13,10 +13,15 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 const NUM_OF_LINES = 4;
+import Geolocation from '@react-native-community/geolocation';
+
+// Geolocation.setRNConfiguration(config);
 
 const Home = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const [info, setInfo] = useState(0);
+  const [prayersTime, setPrayersTime] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
   //   console.log(data);
 
@@ -44,9 +49,39 @@ const Home = ({navigation}) => {
   const [focused, setFocused] = useState('');
 
   const [showMore, setShowMore] = useState(false);
+  const [time, setTime] = useState(0);
+  const [lagitude, setLagitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
+
   const onTextLayout = useCallback(e => {
     setShowMore(e.nativeEvent.lines.length > NUM_OF_LINES);
   }, []);
+
+  Geolocation.getCurrentPosition(data => {
+    setLagitude(data.coords.latitude);
+    setLongitude(data.coords.longitude);
+    // setInfo(data)
+  });
+
+  // // console.log(info);
+  // // console.log(time);
+  // console.log('lagitude', lagitude);
+  // console.log('longitude', longitude);
+
+  const lat = lagitude;
+  const log = longitude;
+  useEffect(() => {
+    fetch(
+      `https://api.pray.zone/v2/times/today.json?longitude=${log}&latitude=${lat}&elevation=333`,
+    )
+      .then(response => response.json())
+      .then(json => setPrayersTime(json.results.datetime))
+      .catch(error => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
+
+  console.log('object', prayersTime);
+  // console.log(lat)
 
   return (
     <View style={styles.container}>
@@ -74,86 +109,92 @@ const Home = ({navigation}) => {
                 Home
               </Text>
             </View>
-            <Text
-              style={{
-                textAlign: 'left',
-                marginLeft: -340,
-                fontSize: 16,
-                // color: '#023c54',
-                color: 'white',
-                fontWeight: '600',
-                marginTop: 20,
-              }}>
-              Now
-            </Text>
-            <Text
-              style={{
-                textAlign: 'left',
-                marginLeft: -330,
-                fontSize: 20,
-                // color: '#023c54',
-                color: 'white',
-                fontWeight: '600',
-                marginTop: 5,
-              }}>
-              ISHA
-            </Text>
-            <Text
-              style={{
-                textAlign: 'left',
-                marginLeft: -300,
-                fontSize: 16,
-                // color: '#023c54',
-                color: 'white',
-                fontWeight: '600',
-                marginTop: 5,
-              }}>
-              Upcoming
-            </Text>
-            <View>
-              <FontAwesome
-                name="moon-o"
-                size={30}
-                color="white"
+            {/* {prayersTime.map(item => { */}
+          {/* return ( */}
+            {/* <View> */}
+              <Text
                 style={{
-                  marginLeft: 330,
-                  marginTop: -100,
-                }}
-              />
-            </View>
-            <Text
-              style={{
-                marginLeft: 370,
-                fontSize: 22,
-                marginRight: 10,
-                fontWeight: '600',
-                color: 'white',
-                marginTop: -70,
-              }}>
-              3
-            </Text>
-            <Text
-              style={{
-                marginLeft: 260,
-                marginRight: 10,
-                fontSize: 18,
-                fontWeight: '600',
-                color: 'white',
-                marginTop: 10,
-              }}>
-              Ramadan, 1443
-            </Text>
-            <Text
-              style={{
-                marginLeft: 320,
-                marginRight: 10,
-                fontSize: 18,
-                fontWeight: '600',
-                color: 'white',
-                marginTop: 5,
-              }}>
-              Monday
-            </Text>
+                  textAlign: 'left',
+                  marginLeft: -340,
+                  fontSize: 16,
+                  // color: '#023c54',
+                  color: 'white',
+                  fontWeight: '600',
+                  marginTop: 20,
+                }}>
+                Now
+              </Text>
+              <Text
+                style={{
+                  textAlign: 'left',
+                  marginLeft: -330,
+                  fontSize: 20,
+                  // color: '#023c54',
+                  color: 'white',
+                  fontWeight: '600',
+                  marginTop: 5,
+                }}>
+                ISHA
+              </Text>
+              <Text
+                style={{
+                  textAlign: 'left',
+                  marginLeft: -300,
+                  fontSize: 16,
+                  // color: '#023c54',
+                  color: 'white',
+                  fontWeight: '600',
+                  marginTop: 5,
+                }}>
+                Upcoming
+              </Text>
+              <View>
+                <FontAwesome
+                  name="moon-o"
+                  size={30}
+                  color="white"
+                  style={{
+                    marginLeft: 330,
+                    marginTop: -100,
+                  }}
+                />
+              </View>
+              <Text
+                style={{
+                  marginLeft: 370,
+                  fontSize: 22,
+                  marginRight: 10,
+                  fontWeight: '600',
+                  color: 'white',
+                  marginTop: -70,
+                }}>
+                3
+              </Text>
+              <Text
+                style={{
+                  marginLeft: 260,
+                  marginRight: 10,
+                  fontSize: 18,
+                  fontWeight: '600',
+                  color: 'white',
+                  marginTop: 10,
+                }}>
+                Ramadan, 1443
+              </Text>
+              <Text
+                style={{
+                  marginLeft: 320,
+                  marginRight: 10,
+                  fontSize: 18,
+                  fontWeight: '600',
+                  color: 'white',
+                  marginTop: 5,
+                }}>
+                Monday
+              </Text>
+            {/* </View> */}
+              {/* ); */}
+        {/* })} */}
           </ImageBackground>
         </View>
         <View style={styles.topbar}>
@@ -188,6 +229,19 @@ const Home = ({navigation}) => {
             My Lord, grant me [a child] from among the righteous.
           </Text>
         </View>
+        {prayersTime.map(item => {
+          return (
+            <View>
+              <Text
+                style={{
+                  color: 'red',
+                }}>
+                {item.times.Fajr}
+                h3
+              </Text>
+            </View>
+          );
+        })}
 
         <View style={{flex: 1, padding: 2}}>
           {isLoading ? (
