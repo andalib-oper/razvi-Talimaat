@@ -63,6 +63,7 @@ const Home = ({navigation}) => {
   Geolocation.getCurrentPosition(data => {
     setLagitude(data.coords.latitude);
     setLongitude(data.coords.longitude);
+    console.log(data);
     // setInfo(data)
   });
 
