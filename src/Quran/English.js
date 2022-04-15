@@ -6,10 +6,33 @@ import {
   ImageBackground,
   ScrollView,
   FlatList,
+  Dimensions,
+  PixelRatio,
+  Platform,
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { PacmanIndicator } from 'react-native-indicators';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+const scale = windowWidth / 320;
+
+function normalize(size) {
+ 
+  const newSize = size * scale 
+ 
+ if (Platform.OS === 'ios' && 'android') {
+ 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize))
+ 
+  } else {
+ 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+ 
+  }
+ 
+}
 
 const English = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
@@ -35,7 +58,7 @@ const English = ({navigation}) => {
     <View style={styles.container}>
        <View style={styles.topnav}>
         <MaterialIcons name="arrow-back"
-                    size={40}
+                    size={30}
                     color='white'
                     style={styles.icon}
                     onPress={() => navigation.goBack()} />
@@ -45,7 +68,9 @@ const English = ({navigation}) => {
         <View>
         </View>
         {isLoading ? (
-          <ActivityIndicator />
+            <View style={{alignSelf: 'center', marginTop: 300,}}>
+            <PacmanIndicator color='blue'/>
+          </View>
         ) : (
           <ScrollView>
             <FlatList
@@ -90,26 +115,27 @@ const styles = StyleSheet.create({
   },
   topnav: {
     height: 60,
-    width: 412,
+    width: windowWidth /1,
     backgroundColor: '#4b7bf2',
   },
   topnavtext: {
     marginTop: -35,
     alignSelf: 'center',
     textAlign: 'center',
-    fontSize: 22,
+    fontSize: normalize(22),
     color: 'white'
   },
   icon: {
     marginLeft: 20,
-    marginTop: 10,
+    marginTop: 15,
 },
   surah: {
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
-    height: 100,
-    width: 390,
+    height: windowHeight/7,
+    width:  windowWidth /1.1,
+    alignSelf: 'center',
     backgroundColor: 'white',
     elevation: 20,
     borderRadius: 20,

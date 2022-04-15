@@ -1,12 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, ActivityIndicator, Pressable,
-  FlatList, Modal, Dimensions
+  FlatList, Modal, Dimensions, Platform,PixelRatio,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-
+import { PacmanIndicator } from 'react-native-indicators';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+const scale = windowWidth / 320;
+
+function normalize(size) {
+ 
+  const newSize = size * scale 
+ 
+ if (Platform.OS === 'ios' && 'android') {
+ 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize))
+ 
+  } else {
+ 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+ 
+  }
+ 
+}
 
 const CalendarScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -231,14 +248,16 @@ const CalendarScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.topnav}>
         <MaterialIcons name="arrow-back"
-          size={40}
+          size={30}
           color='white'
           style={styles.icon}
           onPress={() => navigation.goBack()} />
         <Text style={styles.topnavtext}>Calendar</Text>
       </View>
       {isLoading ? (
-        <ActivityIndicator />
+         <View style={{alignSelf: 'center', marginTop: 70,}}>
+         <PacmanIndicator color='blue'/>
+       </View>
       ) : (
         <ScrollView scrollEventThrottle={false}>
           {/* JANUARY */}
@@ -246,7 +265,7 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: windowWidth /1.1,
+              width: windowWidth /1.1 ,
               alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
@@ -256,7 +275,7 @@ const CalendarScreen = ({ navigation }) => {
             <Text style={{
               alignSelf: 'center',
               marginTop: 10,
-              fontSize: 22,
+              fontSize: normalize(20),
               fontWeight: '600',
               color: '#090979'
             }}>January </Text>
@@ -264,21 +283,21 @@ const CalendarScreen = ({ navigation }) => {
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>WeekDays</Text>
             <Text style={{
               textAlign: 'left',
-              marginLeft: 170,
+              marginLeft: 150,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Date</Text>
             <Text style={{
               textAlign: 'left',
-              marginLeft: 285,
+              marginLeft: 260,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Islamic Year</Text>
             <ScrollView scrollEventThrottle={false}>
@@ -290,6 +309,7 @@ const CalendarScreen = ({ navigation }) => {
                       fontWeight: '600',
                       marginTop: 20,
                       marginRight: 10,
+                      // alignSelf: 'flex-end',
                       color: 'black'
                     }}>{item.hijri.month.ar}</Text>
                     <View style={{
@@ -305,15 +325,17 @@ const CalendarScreen = ({ navigation }) => {
                       fontWeight: '600',
                       marginBottom: 20,
                       marginLeft: 10,
-                      color: 'black'
+                      color: 'black',
+                      // alignSelf: 'flex-start',
                     }}>{item.gregorian.weekday.en}</Text>
                     <Text style={{
                       marginTop: -43,
                       fontSize: 16,
                       fontWeight: '600',
                       marginBottom: 20,
-                      marginLeft: 150,
-                      color: 'black'
+                      marginLeft: 130,
+                      color: 'black',
+                      // alignSelf: 'center'
                     }}>{item.hijri.date}</Text>
                   </View>
                 )
@@ -325,7 +347,8 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: 390,
+              width: windowWidth /1.1,
+              alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
               // marginRight: 10,
@@ -334,7 +357,7 @@ const CalendarScreen = ({ navigation }) => {
             <Text style={{
               alignSelf: 'center',
               marginTop: 10,
-              fontSize: 22,
+              fontSize: normalize(20),
               fontWeight: '600',
               color: '#090979'
             }}>February </Text>
@@ -342,21 +365,21 @@ const CalendarScreen = ({ navigation }) => {
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>WeekDays</Text>
             <Text style={{
               textAlign: 'left',
-              marginLeft: 170,
+              marginLeft: 150,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Date</Text>
             <Text style={{
               textAlign: 'left',
-              marginLeft: 285,
+              marginLeft: 260,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Islamic Year</Text>
             <ScrollView scrollEventThrottle={false}>
@@ -390,7 +413,7 @@ const CalendarScreen = ({ navigation }) => {
                       fontSize: 16,
                       fontWeight: '600',
                       marginBottom: 20,
-                      marginLeft: 150,
+                      marginLeft: 130,
                       color: 'black'
                     }}>{item.hijri.date}</Text>
                   </View>
@@ -403,7 +426,8 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: 390,
+              width: windowWidth /1.1,
+              alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
             }}
@@ -411,7 +435,7 @@ const CalendarScreen = ({ navigation }) => {
             <Text style={{
               alignSelf: 'center',
               marginTop: 10,
-              fontSize: 22,
+              fontSize: normalize(20),
               fontWeight: '600',
               color: '#090979'
             }}>March </Text>
@@ -419,21 +443,21 @@ const CalendarScreen = ({ navigation }) => {
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>WeekDays</Text>
             <Text style={{
               textAlign: 'left',
               marginLeft: 170,
               marginTop: -22,
-              fontSize: 16,
+              fontSize:normalize(14),
               color: '#4b7bf2'
             }}>Date</Text>
             <Text style={{
               textAlign: 'left',
-              marginLeft: 285,
+              marginLeft: 260,
               marginTop: -22,
-              fontSize: 16,
+              fontSize:normalize(14),
               color: '#4b7bf2'
             }}>Islamic Year</Text>
             <ScrollView>
@@ -467,7 +491,7 @@ const CalendarScreen = ({ navigation }) => {
                     fontSize: 16,
                     fontWeight: '600',
                     marginBottom: 20,
-                    marginLeft: 150,
+                    marginLeft: 130,
                     color: 'black'
                   }}>{item.hijri.date}</Text>
                 </View>
@@ -480,7 +504,8 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: 390,
+              width: windowWidth /1.1,
+              alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
             }}
@@ -488,7 +513,7 @@ const CalendarScreen = ({ navigation }) => {
             <Text style={{
               alignSelf: 'center',
               marginTop: 10,
-              fontSize: 22,
+              fontSize: normalize(20),
               fontWeight: '600',
               color: '#090979'
             }}>April </Text>
@@ -496,21 +521,21 @@ const CalendarScreen = ({ navigation }) => {
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>WeekDays</Text>
             <Text style={{
               textAlign: 'left',
               marginLeft: 170,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Date</Text>
             <Text style={{
               textAlign: 'left',
-              marginLeft: 285,
+              marginLeft: 260,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Islamic Year</Text>
             <ScrollView>
@@ -544,7 +569,7 @@ const CalendarScreen = ({ navigation }) => {
                     fontSize: 16,
                     fontWeight: '600',
                     marginBottom: 20,
-                    marginLeft: 150,
+                    marginLeft: 130,
                     color: 'black'
                   }}>{item.hijri.date}</Text>
                 </View>
@@ -557,7 +582,8 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: 390,
+              width: windowWidth /1.1,
+              alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
             }}
@@ -565,7 +591,7 @@ const CalendarScreen = ({ navigation }) => {
             <Text style={{
               alignSelf: 'center',
               marginTop: 10,
-              fontSize: 22,
+              fontSize: normalize(20),
               fontWeight: '600',
               color: '#090979'
             }}>May </Text>
@@ -573,21 +599,21 @@ const CalendarScreen = ({ navigation }) => {
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>WeekDays</Text>
             <Text style={{
               textAlign: 'left',
               marginLeft: 170,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Date</Text>
             <Text style={{
               textAlign: 'left',
-              marginLeft: 285,
+              marginLeft: 260,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Islamic Year</Text>
             <ScrollView>
@@ -621,7 +647,7 @@ const CalendarScreen = ({ navigation }) => {
                     fontSize: 16,
                     fontWeight: '600',
                     marginBottom: 20,
-                    marginLeft: 150,
+                    marginLeft: 130,
                     color: 'black'
                   }}>{item.hijri.date}</Text>
                 </View>
@@ -634,7 +660,8 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: 390,
+              width: windowWidth/1.1,
+              alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
             }}
@@ -642,7 +669,7 @@ const CalendarScreen = ({ navigation }) => {
             <Text style={{
               alignSelf: 'center',
               marginTop: 10,
-              fontSize: 22,
+              fontSize: normalize(20),
               fontWeight: '600',
               color: '#090979'
             }}>June </Text>
@@ -650,21 +677,21 @@ const CalendarScreen = ({ navigation }) => {
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>WeekDays</Text>
             <Text style={{
               textAlign: 'left',
               marginLeft: 170,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Date</Text>
             <Text style={{
               textAlign: 'left',
-              marginLeft: 285,
+              marginLeft: 260,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Islamic Year</Text>
             <ScrollView>
@@ -698,7 +725,7 @@ const CalendarScreen = ({ navigation }) => {
                     fontSize: 16,
                     fontWeight: '600',
                     marginBottom: 20,
-                    marginLeft: 150,
+                    marginLeft: 130,
                     color: 'black'
                   }}>{item.hijri.date}</Text>
                 </View>
@@ -711,7 +738,8 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: 390,
+              width: windowWidth/1.1,
+              alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
             }}
@@ -719,7 +747,7 @@ const CalendarScreen = ({ navigation }) => {
             <Text style={{
               alignSelf: 'center',
               marginTop: 10,
-              fontSize: 22,
+              fontSize: normalize(20),
               fontWeight: '600',
               color: '#090979'
             }}>July </Text>
@@ -727,21 +755,21 @@ const CalendarScreen = ({ navigation }) => {
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>WeekDays</Text>
             <Text style={{
               textAlign: 'left',
               marginLeft: 170,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Date</Text>
             <Text style={{
               textAlign: 'left',
-              marginLeft: 285,
+              marginLeft: 260,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Islamic Year</Text>
             <ScrollView>
@@ -775,7 +803,7 @@ const CalendarScreen = ({ navigation }) => {
                     fontSize: 16,
                     fontWeight: '600',
                     marginBottom: 20,
-                    marginLeft: 150,
+                    marginLeft: 130,
                     color: 'black'
                   }}>{item.hijri.date}</Text>
                 </View>
@@ -788,7 +816,8 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: 390,
+              width: windowWidth/1.1,
+              alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
             }}
@@ -796,7 +825,7 @@ const CalendarScreen = ({ navigation }) => {
             <Text style={{
               alignSelf: 'center',
               marginTop: 10,
-              fontSize: 22,
+              fontSize: normalize(20),
               fontWeight: '600',
               color: '#090979'
             }}>August </Text>
@@ -804,21 +833,21 @@ const CalendarScreen = ({ navigation }) => {
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>WeekDays</Text>
             <Text style={{
               textAlign: 'left',
               marginLeft: 170,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Date</Text>
             <Text style={{
               textAlign: 'left',
-              marginLeft: 285,
+              marginLeft: 260,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Islamic Year</Text>
             <ScrollView>
@@ -852,7 +881,7 @@ const CalendarScreen = ({ navigation }) => {
                     fontSize: 16,
                     fontWeight: '600',
                     marginBottom: 20,
-                    marginLeft: 150,
+                    marginLeft: 130,
                     color: 'black'
                   }}>{item.hijri.date}</Text>
                 </View>
@@ -865,7 +894,8 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: 390,
+              width: windowWidth/1.1,
+              alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
             }}
@@ -873,7 +903,7 @@ const CalendarScreen = ({ navigation }) => {
             <Text style={{
               alignSelf: 'center',
               marginTop: 10,
-              fontSize: 22,
+              fontSize: normalize(20),
               fontWeight: '600',
               color: '#090979'
             }}>September </Text>
@@ -881,21 +911,21 @@ const CalendarScreen = ({ navigation }) => {
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>WeekDays</Text>
             <Text style={{
               textAlign: 'left',
               marginLeft: 170,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Date</Text>
             <Text style={{
               textAlign: 'left',
-              marginLeft: 285,
+              marginLeft: 260,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Islamic Year</Text>
             <ScrollView>
@@ -929,7 +959,7 @@ const CalendarScreen = ({ navigation }) => {
                     fontSize: 16,
                     fontWeight: '600',
                     marginBottom: 20,
-                    marginLeft: 150,
+                    marginLeft: 130,
                     color: 'black'
                   }}>{item.hijri.date}</Text>
                 </View>
@@ -942,7 +972,8 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: 390,
+              width: windowWidth/1.1,
+              alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
             }}
@@ -950,7 +981,7 @@ const CalendarScreen = ({ navigation }) => {
             <Text style={{
               alignSelf: 'center',
               marginTop: 10,
-              fontSize: 22,
+              fontSize: normalize(20),
               fontWeight: '600',
               color: '#090979'
             }}>October </Text>
@@ -958,21 +989,21 @@ const CalendarScreen = ({ navigation }) => {
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>WeekDays</Text>
             <Text style={{
               textAlign: 'left',
               marginLeft: 170,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Date</Text>
             <Text style={{
               textAlign: 'left',
-              marginLeft: 285,
+              marginLeft: 260,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Islamic Year</Text>
             <ScrollView>
@@ -1006,7 +1037,7 @@ const CalendarScreen = ({ navigation }) => {
                     fontSize: 16,
                     fontWeight: '600',
                     marginBottom: 20,
-                    marginLeft: 150,
+                    marginLeft: 130,
                     color: 'black'
                   }}>{item.hijri.date}</Text>
                 </View>
@@ -1019,7 +1050,8 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: 390,
+              width: windowWidth/1.1,
+              alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
             }}
@@ -1027,7 +1059,7 @@ const CalendarScreen = ({ navigation }) => {
             <Text style={{
               alignSelf: 'center',
               marginTop: 10,
-              fontSize: 22,
+              fontSize: normalize(20),
               fontWeight: '600',
               color: '#090979'
             }}>November </Text>
@@ -1035,21 +1067,21 @@ const CalendarScreen = ({ navigation }) => {
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>WeekDays</Text>
             <Text style={{
               textAlign: 'left',
               marginLeft: 170,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Date</Text>
             <Text style={{
               textAlign: 'left',
-              marginLeft: 285,
+              marginLeft: 260,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Islamic Year</Text>
             <ScrollView>
@@ -1083,7 +1115,7 @@ const CalendarScreen = ({ navigation }) => {
                     fontSize: 16,
                     fontWeight: '600',
                     marginBottom: 20,
-                    marginLeft: 150,
+                    marginLeft: 130,
                     color: 'black'
                   }}>{item.hijri.date}</Text>
                 </View>
@@ -1096,7 +1128,8 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: 390,
+              width: windowWidth/1.1,
+              alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
             }}
@@ -1104,7 +1137,7 @@ const CalendarScreen = ({ navigation }) => {
             <Text style={{
               alignSelf: 'center',
               marginTop: 10,
-              fontSize: 22,
+              fontSize: normalize(20),
               fontWeight: '600',
               color: '#090979'
             }}>December </Text>
@@ -1112,21 +1145,21 @@ const CalendarScreen = ({ navigation }) => {
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>WeekDays</Text>
             <Text style={{
               textAlign: 'left',
               marginLeft: 170,
               marginTop: -22,
-              fontSize: 16,
+              fontSize:normalize(14),
               color: '#4b7bf2'
             }}>Date</Text>
             <Text style={{
               textAlign: 'left',
-              marginLeft: 285,
+              marginLeft: 260,
               marginTop: -22,
-              fontSize: 16,
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Islamic Year</Text>
             <ScrollView>
@@ -1160,7 +1193,7 @@ const CalendarScreen = ({ navigation }) => {
                     fontSize: 16,
                     fontWeight: '600',
                     marginBottom: 20,
-                    marginLeft: 150,
+                    marginLeft: 130,
                     color: 'black'
                   }}>{item.hijri.date}</Text>
                 </View>
@@ -1193,7 +1226,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginLeft: 20,
-    marginTop: 10,
+    marginTop: 15,
   },
   umrah: {
     marginTop: 20,

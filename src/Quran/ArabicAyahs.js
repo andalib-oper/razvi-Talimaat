@@ -7,11 +7,33 @@ import {
   ImageBackground,
   ScrollView,
   FlatList,
+  Dimensions,
+  Platform,
+  PixelRatio,
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+const scale = windowWidth / 320;
+
+function normalize(size) {
+ 
+  const newSize = size * scale 
+ 
+ if (Platform.OS === 'ios' && 'android') {
+ 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize))
+ 
+  } else {
+ 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+ 
+  }
+ 
+}
 
 const ArabicAyahs = ({route,navigation}) => {
   const [isLoading, setLoading] = useState(true);
@@ -40,7 +62,7 @@ const ArabicAyahs = ({route,navigation}) => {
     <View style={{flex: 1, padding: 0}}>
        <View style={styles.topnav}>
         <MaterialIcons name="arrow-back"
-                    size={40}
+                    size={30}
                     color='white'
                     style={styles.icon}
                     onPress={() => navigation.goBack()} />
@@ -64,7 +86,7 @@ const ArabicAyahs = ({route,navigation}) => {
                   style={{
                     marginLeft: 200,
                     marginTop: 10,
-                    fontSize: 14,
+                    fontSize: normalize(14),
                     fontWeight: '600'
                   }}>
                   Number in Surah: {item.numberInSurah}
@@ -73,7 +95,7 @@ const ArabicAyahs = ({route,navigation}) => {
                   style={{
                     marginLeft: 200,
                     marginTop: 5,
-                    fontSize: 14,
+                    fontSize: normalize(14),
                     fontWeight: '600'
                   }}>
                   Ruku: {item.ruku}
@@ -106,14 +128,14 @@ const styles = StyleSheet.create({
   topnav: {
     marginTop: 0,
     height: 60,
-    width: 412,
+    width: windowWidth/1,
     backgroundColor: '#4b7bf2',
   },
   topnavtext: {
     marginTop: -35,
     alignSelf: 'center',
     textAlign: 'center',
-    fontSize: 22,
+    fontSize: normalize(22),
     color: 'white'
   },
   icon: {
@@ -135,8 +157,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
+    alignSelf: 'center',
     height: 'auto',
-    width: 390,
+    width:  windowWidth /1.1,
     backgroundColor: '#ffffff',
     elevation: 20,
     borderRadius: 20,
@@ -150,7 +173,7 @@ const styles = StyleSheet.create({
     marginTop: -20,
     marginRight: 20,
     marginLeft: 10,
-    fontSize: 22,
+    fontSize: normalize(18),
     fontWeight: '600',
     // width: 200
   },
