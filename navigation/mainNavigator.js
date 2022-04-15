@@ -4,9 +4,9 @@ import 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { View, StyleSheet } from 'react-native';
 import Ramzan from '../src/Ramzan/Ramzan'
-import Quran from '../src/Quran/Quran';
 import HomeNavigator from './HomeNavigator';
 import CalendarScreen from '../src/Calendar/Calendar';
+import QuranNavigator from './QuranNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -52,7 +52,7 @@ const mainNavigator = () => {
         }} />
         <Tab.Screen
           name="quran"
-          component={Quran}
+          component={QuranNavigator}
           options={{
             tabBarLabel: 'Quran',
             tabBarIcon: ({ color, focused }) => (

@@ -9,15 +9,37 @@ import {
   Image,
   RefreshControl,
   Dimensions,
+  Platform, PixelRatio,
   ToastAndroid,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 const NUM_OF_LINES = 4;
 import Geolocation from '@react-native-community/geolocation';
+import {
+  PacmanIndicator,
+} from 'react-native-indicators';
+
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+const scale = windowWidth / 320;
+
+ function normalize(size) {
+ 
+  const newSize = size * scale 
+ 
+ if (Platform.OS === 'ios' && 'android') {
+ 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize))
+ 
+  } else {
+ 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+ 
+  }
+ 
+}
 
 // Geolocation.setRNConfiguration(config);
 const Home = ({navigation}) => {
@@ -99,16 +121,17 @@ const Home = ({navigation}) => {
           <ImageBackground
             style={styles.image}
             source={require('../../images/background3.jpeg')}>
-            <View>
+            <View style={{backgroundColor: 'grey'}}>
               <Text
                 style={{
                   textAlign: 'center',
                   alignSelf: 'center',
-                  fontSize: 22,
+                  fontSize: normalize(18),
                   color: 'white',
                   fontWeight: '600',
-                  marginTop: -40,
+                  marginTop: -50,
                   marginBottom: -60,
+                  numberOfLines: 1,
                 }}>
                 Home
               </Text>
@@ -116,86 +139,94 @@ const Home = ({navigation}) => {
             {/* {prayersTime.map(item => { */}
             {/* return ( */}
             {/* <View> */}
-            <Text
-              style={{
-                textAlign: 'left',
-                marginLeft: -340,
-                fontSize: 16,
-                // color: '#023c54',
-                color: 'white',
-                fontWeight: '600',
-                marginTop: 20,
+            <View style={{
+              // backgroundColor: 'pink'
               }}>
-              Now
-            </Text>
-            <Text
-              style={{
-                textAlign: 'left',
-                marginLeft: -330,
-                fontSize: 20,
-                // color: '#023c54',
-                color: 'white',
-                fontWeight: '600',
-                marginTop: 5,
-              }}>
-              ISHA
-            </Text>
-            <Text
-              style={{
-                textAlign: 'left',
-                marginLeft: -300,
-                fontSize: 16,
-                // color: '#023c54',
-                color: 'white',
-                fontWeight: '600',
-                marginTop: 5,
-              }}>
-              Upcoming
-            </Text>
-            <View>
-              <FontAwesome
-                name="moon-o"
-                size={30}
-                color="white"
+                <View style={{
+                  // backgroundColor: 'black'
+                }}>
+              <Text
                 style={{
-                  marginLeft: 330,
-                  marginTop: -100,
-                }}
-              />
+                  textAlign: 'left',
+                  marginLeft: 10,
+                  fontSize: normalize(16),
+                  // color: '#023c54',
+                  color: 'white',
+                  fontWeight: '600',
+                  marginTop: 20,
+                }}>
+                Now
+              </Text>
+                </View>
+              <Text
+                style={{
+                  textAlign: 'left',
+                  marginLeft: 10,
+                  fontSize: normalize(20),
+                  // color: '#023c54',
+                  color: 'white',
+                  fontWeight: '600',
+                  marginTop: 5,
+                }}>
+                ISHA
+              </Text>
+              <Text
+                style={{
+                  textAlign: 'left',
+                  marginLeft: 10,
+                  fontSize: normalize(14),
+                  // color: '#023c54',
+                  color: 'white',
+                  fontWeight: '600',
+                  marginTop: 5,
+                }}>
+                Upcoming
+              </Text>
+              <View>
+                <FontAwesome
+                  name="moon-o"
+                  size={30}
+                  color="white"
+                  style={{
+                    marginLeft: 330,
+                    marginTop: -100,
+                  }}
+                />
+              </View>
+              <Text
+                style={{
+                  marginLeft: 340,
+                  fontSize: normalize(16),
+                  marginRight: 10,
+                  fontWeight: '600',
+                  color: 'white',
+                  marginTop: -70,
+                }}>
+                3
+              </Text>
+              <Text
+                style={{
+                  marginLeft: 225,
+                  marginRight: 10,
+                  fontSize: 18,
+                  fontWeight: '600',
+                  color: 'white',
+                  marginTop: 10,
+                }}>
+                Ramadan, 1443
+              </Text>
+              <Text
+                style={{
+                  marginLeft: 285,
+                  marginRight: 10,
+                  fontSize: 18,
+                  fontWeight: '600',
+                  color: 'white',
+                  marginTop: 5,
+                }}>
+                Monday
+              </Text>
             </View>
-            <Text
-              style={{
-                marginLeft: 370,
-                fontSize: 22,
-                marginRight: 10,
-                fontWeight: '600',
-                color: 'white',
-                marginTop: -70,
-              }}>
-              3
-            </Text>
-            <Text
-              style={{
-                marginLeft: 260,
-                marginRight: 10,
-                fontSize: 18,
-                fontWeight: '600',
-                color: 'white',
-                marginTop: 10,
-              }}>
-              Ramadan, 1443
-            </Text>
-            <Text
-              style={{
-                marginLeft: 320,
-                marginRight: 10,
-                fontSize: 18,
-                fontWeight: '600',
-                color: 'white',
-                marginTop: 5,
-              }}>
-              Monday
-            </Text>
             {/* </View> */}
             {/* ); */}
             {/* })} */}
@@ -249,7 +280,9 @@ const Home = ({navigation}) => {
 
         <View style={{flex: 1, padding: 2}}>
           {isLoading ? (
-            <ActivityIndicator />
+            <View style={{alignSelf: 'center', marginTop: 30,}}>
+            <PacmanIndicator color='blue'/>
+          </View>
           ) : (
             <View>
               {data.map(item => {
@@ -278,7 +311,7 @@ const Home = ({navigation}) => {
                       }}>
                       <Text
                         style={{
-                          fontSize: 18,
+                          fontSize: normalize(18),
                           fontWeight: '600',
                           color: 'black',
                         }}>
@@ -286,7 +319,7 @@ const Home = ({navigation}) => {
                       </Text>
                       <Text
                         style={{
-                          fontSize: 14,
+                          fontSize: normalize(14),
                           fontWeight: '400',
                           color: 'black',
                         }}
@@ -320,7 +353,7 @@ const styles = StyleSheet.create({
   },
   image: {
     marginTop: 0,
-    height: windowHeight / 3,
+    height: windowHeight / 2.6,
     width: windowWidth / 1,
     alignContent: 'center',
     alignItems: 'center',
@@ -331,7 +364,7 @@ const styles = StyleSheet.create({
   topbar: {
     // backgroundColor: 'pink',
     height: 50,
-    width: 411,
+    width:  windowWidth /1,
     marginTop: 10,
   },
   iconQuran: {
@@ -351,6 +384,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     alignSelf: 'center',
+    // height: windowHeight/3.8,
+    // width:  windowWidth /1.1,
     height: windowHeight / 4,
     width: windowWidth / 1.1,
     backgroundColor: 'white',
@@ -394,7 +429,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     margin: 10,
     marginRight: 10,
-    height: windowHeight / 5,
+    // height: windowHeight/4,
     width: windowWidth / 1.1,
     backgroundColor: 'white',
     elevation: 20,

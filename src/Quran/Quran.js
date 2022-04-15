@@ -4,18 +4,54 @@ import {
   Text,
   StyleSheet,
   Image,
+  Dimensions,
+  PixelRatio,
+  Platform,
   ScrollView,
   FlatList,
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import {
+  BallIndicator,
+  BarIndicator,
+  DotIndicator,
+  MaterialIndicator,
+  PacmanIndicator,
+  PulseIndicator,
+  SkypeIndicator,
+  UIActivityIndicator,
+  WaveIndicator,
+} from 'react-native-indicators';
+
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+const scale = windowWidth / 320;
+
+function normalize(size) {
+ 
+  const newSize = size * scale 
+ 
+ if (Platform.OS === 'ios' && 'android') {
+ 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize))
+ 
+  } else {
+ 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+ 
+  }
+ 
+}
+
 const Quran = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.topnav}>
         <MaterialIcons name="arrow-back"
-                    size={40}
+                    size={30}
                     color='white'
                     style={styles.icon}
                     onPress={() => navigation.goBack()} />
@@ -85,26 +121,27 @@ const styles = StyleSheet.create({
   },
   topnav: {
     height: 60,
-    width: 412,
+    width: windowWidth /1,
     backgroundColor: '#4b7bf2',
   },
   topnavtext: {
     marginTop: -35,
     alignSelf: 'center',
     textAlign: 'center',
-    fontSize: 22,
+    fontSize: normalize(22),
     color: 'white'
   },
   icon: {
     marginLeft: 20,
-    marginTop: 10,
+    marginTop: 15,
 },
   verses: {
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
-    height: 200,
-    width: 390,
+    alignSelf: 'center',
+    height: windowHeight/3.8,
+    width:  windowWidth /1.1,
     backgroundColor: 'white',
     elevation: 20,
     borderRadius: 20,

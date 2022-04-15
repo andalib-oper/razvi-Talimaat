@@ -6,11 +6,33 @@ import {
   ImageBackground,
   ScrollView,
   FlatList,
+  Dimensions,PixelRatio,Platform,
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 // import ArabicAyahs from './ArabicAyahs';
+
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+const scale = windowWidth / 320;
+
+function normalize(size) {
+ 
+  const newSize = size * scale 
+ 
+ if (Platform.OS === 'ios' && 'android') {
+ 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize))
+ 
+  } else {
+ 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+ 
+  }
+ 
+}
 
 const ArabicAyahs = ({route, navigation}) => {
   const [isLoading, setLoading] = useState(true);
@@ -39,7 +61,7 @@ const ArabicAyahs = ({route, navigation}) => {
     <View style={{flex: 1, padding: 0}}>
         <View style={styles.topnav}>
         <MaterialIcons name="arrow-back"
-                    size={40}
+                    size={30}
                     color='white'
                     style={styles.icon}
                     onPress={() => navigation.goBack()} />
@@ -98,19 +120,19 @@ const styles = StyleSheet.create({
   },
   topnav: {
     height: 60,
-    width: 412,
+    width: windowWidth /1,
     backgroundColor: '#4b7bf2',
   },
   topnavtext: {
     marginTop: -35,
     alignSelf: 'center',
     textAlign: 'center',
-    fontSize: 22,
+    fontSize: normalize(22),
     color: 'white'
   },
   icon: {
     marginLeft: 20,
-    marginTop: 10,
+    marginTop: 15,
 },
   image: {
     marginTop: 0,
@@ -122,18 +144,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderBottomLeftRadius: 30,
   },
-  switchselector: {
-    marginTop: 20,
-    alignSelf: 'center',
-    marginLeft: 20,
-    marginRight: 20,
-  },
   surah: {
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
+    alignSelf: 'center',
     height: 'auto',
-    width: 390,
+    width:  windowWidth /1.1,
     backgroundColor: 'white',
     elevation: 20,
     borderRadius: 20,
