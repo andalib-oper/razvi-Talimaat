@@ -27,7 +27,7 @@ const CalendarScreen = ({ navigation }) => {
   const getHijriCalendar = async () => {
     try {
       const response = await fetch('http://api.aladhan.com/v1/gToHCalendar/1/2022');
-      const json = await response.json();
+      const json = await response.json();              
       // console.log(json.data)
       setData(json.data);
     } catch (error) {

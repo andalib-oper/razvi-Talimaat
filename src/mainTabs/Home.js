@@ -29,7 +29,7 @@ const Home = ({navigation}) => {
   //   console.log(data);
 
   useEffect(() => {
-    fetch('http://10.0.2.2:5000/api/content')
+    fetch('https://razvitalimat.herokuapp.com/api/content')
       .then(response => response.json())
       .then(json => setData(json))
       .catch(error => console.error(error))
@@ -39,7 +39,7 @@ const Home = ({navigation}) => {
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     try {
-      await fetch('http://10.0.2.2:5000/api/content')
+      await fetch('https://razvitalimat.herokuapp.com/api/content')
         .then(response => response.json())
         .then(json => setData(json))
         .catch(error => console.error(error))
@@ -113,91 +113,91 @@ const Home = ({navigation}) => {
               </Text>
             </View>
             {/* {prayersTime.map(item => { */}
-          {/* return ( */}
+            {/* return ( */}
             {/* <View> */}
-              <Text
+            <Text
+              style={{
+                textAlign: 'left',
+                marginLeft: -340,
+                fontSize: 16,
+                // color: '#023c54',
+                color: 'white',
+                fontWeight: '600',
+                marginTop: 20,
+              }}>
+              Now
+            </Text>
+            <Text
+              style={{
+                textAlign: 'left',
+                marginLeft: -330,
+                fontSize: 20,
+                // color: '#023c54',
+                color: 'white',
+                fontWeight: '600',
+                marginTop: 5,
+              }}>
+              ISHA
+            </Text>
+            <Text
+              style={{
+                textAlign: 'left',
+                marginLeft: -300,
+                fontSize: 16,
+                // color: '#023c54',
+                color: 'white',
+                fontWeight: '600',
+                marginTop: 5,
+              }}>
+              Upcoming
+            </Text>
+            <View>
+              <FontAwesome
+                name="moon-o"
+                size={30}
+                color="white"
                 style={{
-                  textAlign: 'left',
-                  marginLeft: -340,
-                  fontSize: 16,
-                  // color: '#023c54',
-                  color: 'white',
-                  fontWeight: '600',
-                  marginTop: 20,
-                }}>
-                Now
-              </Text>
-              <Text
-                style={{
-                  textAlign: 'left',
-                  marginLeft: -330,
-                  fontSize: 20,
-                  // color: '#023c54',
-                  color: 'white',
-                  fontWeight: '600',
-                  marginTop: 5,
-                }}>
-                ISHA
-              </Text>
-              <Text
-                style={{
-                  textAlign: 'left',
-                  marginLeft: -300,
-                  fontSize: 16,
-                  // color: '#023c54',
-                  color: 'white',
-                  fontWeight: '600',
-                  marginTop: 5,
-                }}>
-                Upcoming
-              </Text>
-              <View>
-                <FontAwesome
-                  name="moon-o"
-                  size={30}
-                  color="white"
-                  style={{
-                    marginLeft: 330,
-                    marginTop: -100,
-                  }}
-                />
-              </View>
-              <Text
-                style={{
-                  marginLeft: 370,
-                  fontSize: 22,
-                  marginRight: 10,
-                  fontWeight: '600',
-                  color: 'white',
-                  marginTop: -70,
-                }}>
-                3
-              </Text>
-              <Text
-                style={{
-                  marginLeft: 260,
-                  marginRight: 10,
-                  fontSize: 18,
-                  fontWeight: '600',
-                  color: 'white',
-                  marginTop: 10,
-                }}>
-                Ramadan, 1443
-              </Text>
-              <Text
-                style={{
-                  marginLeft: 320,
-                  marginRight: 10,
-                  fontSize: 18,
-                  fontWeight: '600',
-                  color: 'white',
-                  marginTop: 5,
-                }}>
-                Monday
-              </Text>
+                  marginLeft: 330,
+                  marginTop: -100,
+                }}
+              />
+            </View>
+            <Text
+              style={{
+                marginLeft: 370,
+                fontSize: 22,
+                marginRight: 10,
+                fontWeight: '600',
+                color: 'white',
+                marginTop: -70,
+              }}>
+              3
+            </Text>
+            <Text
+              style={{
+                marginLeft: 260,
+                marginRight: 10,
+                fontSize: 18,
+                fontWeight: '600',
+                color: 'white',
+                marginTop: 10,
+              }}>
+              Ramadan, 1443
+            </Text>
+            <Text
+              style={{
+                marginLeft: 320,
+                marginRight: 10,
+                fontSize: 18,
+                fontWeight: '600',
+                color: 'white',
+                marginTop: 5,
+              }}>
+              Monday
+            </Text>
             {/* </View> */}
-              {/* ); */}
-        {/* })} */}
+            {/* ); */}
+            {/* })} */}
           </ImageBackground>
         </View>
         <View style={styles.topbar}>
@@ -313,14 +313,14 @@ const styles = StyleSheet.create({
     // backgroundColor: '#ade0f5',
     backgroundColor: '#035173',
     // height: 200,
-    width: windowWidth /0.5,
+    width: windowWidth / 0.5,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
   },
   image: {
     marginTop: 0,
-    height: windowHeight/3,
-    width:  windowWidth /1,
+    height: windowHeight / 3,
+    width: windowWidth / 1,
     alignContent: 'center',
     alignItems: 'center',
     justifyContent: 'center',
@@ -350,8 +350,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     alignSelf: 'center',
-    height: windowHeight/4,
-    width:  windowWidth /1.1,
+    height: windowHeight / 4,
+    width: windowWidth / 1.1,
     backgroundColor: 'white',
     elevation: 20,
     borderRadius: 20,
@@ -393,8 +393,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     margin: 10,
     marginRight: 10,
-    height: windowHeight/5,
-    width:  windowWidth /1.1,
+    height: windowHeight / 5,
+    width: windowWidth / 1.1,
     backgroundColor: 'white',
     elevation: 20,
     borderRadius: 20,
