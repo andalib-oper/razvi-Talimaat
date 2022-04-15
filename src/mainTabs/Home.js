@@ -51,7 +51,7 @@ const Home = ({navigation}) => {
   //   console.log(data);
 
   useEffect(() => {
-    fetch('http://10.0.2.2:5000/api/content')
+    fetch('https://razvitalimat.herokuapp.com/api/content')
       .then(response => response.json())
       .then(json => setData(json))
       .catch(error => console.error(error))
@@ -61,7 +61,7 @@ const Home = ({navigation}) => {
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     try {
-      await fetch('http://10.0.2.2:5000/api/content')
+      await fetch('https://razvitalimat.herokuapp.com/api/content')
         .then(response => response.json())
         .then(json => setData(json))
         .catch(error => console.error(error))
@@ -136,7 +136,7 @@ const Home = ({navigation}) => {
               </Text>
             </View>
             {/* {prayersTime.map(item => { */}
-          {/* return ( */}
+            {/* return ( */}
             {/* <View> */}
             <View style={{
               // backgroundColor: 'pink'
@@ -227,8 +227,8 @@ const Home = ({navigation}) => {
               </Text>
             </View>
             {/* </View> */}
-              {/* ); */}
-        {/* })} */}
+            {/* ); */}
+            {/* })} */}
           </ImageBackground>
         </View>
         <View style={styles.topbar}>
@@ -346,14 +346,14 @@ const styles = StyleSheet.create({
     // backgroundColor: '#ade0f5',
     backgroundColor: '#035173',
     // height: 200,
-    width: windowWidth /0.5,
+    width: windowWidth / 0.5,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
   },
   image: {
     marginTop: 0,
-    height: windowHeight/2.6,
-    width:  windowWidth /1,
+    height: windowHeight / 2.6,
+    width: windowWidth / 1,
     alignContent: 'center',
     alignItems: 'center',
     justifyContent: 'center',
@@ -383,8 +383,10 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     alignSelf: 'center',
-    height: windowHeight/3.8,
-    width:  windowWidth /1.1,
+    // height: windowHeight/3.8,
+    // width:  windowWidth /1.1,
+    height: windowHeight / 4,
+    width: windowWidth / 1.1,
     backgroundColor: 'white',
     elevation: 20,
     borderRadius: 20,
@@ -427,7 +429,7 @@ const styles = StyleSheet.create({
     margin: 10,
     marginRight: 10,
     // height: windowHeight/4,
-    width:  windowWidth /1.1,
+    width: windowWidth / 1.1,
     backgroundColor: 'white',
     elevation: 20,
     borderRadius: 20,
