@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, ActivityIndicator, Pressable,
-  FlatList, Modal
+  FlatList, Modal, Dimensions
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const CalendarScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -243,7 +246,8 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: 390,
+              width: windowWidth /1.1,
+              alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
               // marginRight: 10,

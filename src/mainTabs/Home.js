@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Image,
   RefreshControl,
+  Dimensions,
   ToastAndroid,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -15,8 +16,10 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 const NUM_OF_LINES = 4;
 import Geolocation from '@react-native-community/geolocation';
 
-// Geolocation.setRNConfiguration(config);
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
+// Geolocation.setRNConfiguration(config);
 const Home = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -309,15 +312,15 @@ const styles = StyleSheet.create({
   topContainer: {
     // backgroundColor: '#ade0f5',
     backgroundColor: '#035173',
-    height: 230,
-    width: 420,
+    // height: 200,
+    width: windowWidth /0.5,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
   },
   image: {
     marginTop: 0,
-    height: 250,
-    width: 425,
+    height: windowHeight/3,
+    width:  windowWidth /1,
     alignContent: 'center',
     alignItems: 'center',
     justifyContent: 'center',
@@ -346,8 +349,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
-    height: 200,
-    width: 390,
+    alignSelf: 'center',
+    height: windowHeight/4,
+    width:  windowWidth /1.1,
     backgroundColor: 'white',
     elevation: 20,
     borderRadius: 20,
@@ -386,10 +390,11 @@ const styles = StyleSheet.create({
   },
   umrah: {
     marginTop: 20,
-    marginLeft: 10,
+    alignSelf: 'center',
+    margin: 10,
     marginRight: 10,
-    // height: 150,
-    width: 390,
+    height: windowHeight/5,
+    width:  windowWidth /1.1,
     backgroundColor: 'white',
     elevation: 20,
     borderRadius: 20,
