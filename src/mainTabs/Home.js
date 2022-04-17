@@ -277,6 +277,7 @@ const Home = ({ navigation }) => {
                           fontSize: normalize(14),
                           fontWeight: '400',
                           color: 'black',
+                          flexWrap: 'wrap'
                         }}
                         numberOfLines={NUM_OF_LINES}
                         onTextLayout={onTextLayout}>

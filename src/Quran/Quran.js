@@ -50,60 +50,48 @@ const Quran = ({ navigation }) => {
         // marginBottom: 20,
       }}>
         <ScrollView>
-          <TouchableOpacity
-            style={styles.English}
-            onPress={() => navigation.navigate('arabic')}>
-            <View style={styles.verses}>
-              <Image
-                style={{
-                  height: 130,
-                  width: 140,
-                  borderRadius: 10,
-                  margin: 10,
-                }}
-                source={{
-                  uri: 'https://www.linkpicture.com/q/quran.png',
-                }}
-              />
-              <Text style={styles.translate}>Arabic Version</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.English}
-            onPress={() => navigation.navigate('english')}>
-            <View style={styles.verses}>
-              <Image
-                style={{
-                  height: 130,
-                  width: 140,
-                  borderRadius: 10,
-                  margin: 10,
-                }}
-                source={{
-                  uri: 'https://www.linkpicture.com/q/quran.png',
-                }}
-              />
-              <Text style={styles.translate}>English Version</Text>
-            </View>
-          </TouchableOpacity>
-          {/* <TouchableOpacity
-        style={styles.English}
-        onPress={() => navigation.navigate('urdu')}>
-        <View style={styles.verses}>
-          <Image
-            style={{
-              height: 130,
-              width: 140,
-              borderRadius: 10,
-              margin: 10,
-            }}
-            source={{
-              uri: 'https://www.linkpicture.com/q/quran.png',
-            }}
-          />
-          <Text style={styles.translate}>Urdu Version</Text>
-        </View>
-      </TouchableOpacity> */}
+          <View style={{
+            flexDirection: 'row',
+            // backgroundColor: 'pink',
+            alignSelf: 'center'
+          }}>
+            <TouchableOpacity
+              // style={styles.English}
+              onPress={() => navigation.navigate('arabic')}>
+              <View style={styles.verses}>
+                <Image
+                  style={{
+                    height: 60,
+                    width: 60,
+                    borderRadius: 10,
+                    marginRight: 80,
+                    // marginLeft: 10,
+                    marginTop: 10,
+                  }}
+                  source={require('../../images/quran.png')}
+                />
+                <Text style={styles.translate}>Arabic</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.English}
+              onPress={() => navigation.navigate('english')}>
+              <View style={styles.verses}>
+                <Image
+                  style={{
+                    height: 60,
+                    width: 60,
+                    borderRadius: 10,
+                    marginRight: 80,
+                    // marginLeft: 10,
+                    marginTop: 10,
+                  }}
+                  source={require('../../images/abc.png')}
+                />
+                <Text style={styles.translate}>English</Text>
+              </View>
+            </TouchableOpacity>
+          </View >
         </ScrollView>
       </View>
     </View>
@@ -136,9 +124,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginBottom: 20,
     alignSelf: 'center',
-    height: windowHeight / 3.8,
-    width: windowWidth / 1.1,
+    height: windowHeight / 9,
+    width: windowWidth / 2.5,
     backgroundColor: 'white',
+    flexDirection: 'column',
     elevation: 5,
     shadowColor: "#000",
     shadowOffset: {
@@ -180,9 +169,9 @@ const styles = StyleSheet.create({
   },
 
   translate: {
-    // marginTop: 10,
-    fontSize: normalize(16),
-    // marginLeft: 15,
+    marginTop: -40,
+    fontSize: normalize(14),
+    marginLeft: 65,
     fontWeight: '600',
     color: 'black',
   },
