@@ -9,36 +9,27 @@ import {
   Image,
   RefreshControl,
   Dimensions,
-  Platform, PixelRatio,
+  Platform,
+  PixelRatio,
   ToastAndroid,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 const NUM_OF_LINES = 4;
 import Geolocation from '@react-native-community/geolocation';
-import {
-  PacmanIndicator,
-} from 'react-native-indicators';
-
+import {PacmanIndicator} from 'react-native-indicators';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const scale = windowWidth / 320;
 
- function normalize(size) {
- 
-  const newSize = size * scale 
- 
- if (Platform.OS === 'ios' && 'android') {
- 
-    return Math.round(PixelRatio.roundToNearestPixel(newSize))
- 
+function normalize(size) {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios' && 'android') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
   } else {
- 
-    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
- 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
   }
- 
 }
 
 // Geolocation.setRNConfiguration(config);
@@ -82,12 +73,32 @@ const Home = ({navigation}) => {
     setShowMore(e.nativeEvent.lines.length > NUM_OF_LINES);
   }, []);
 
-  Geolocation.getCurrentPosition(data => {
-    setLagitude(data.coords.latitude);
-    setLongitude(data.coords.longitude);
-    console.log(data);
-    // setInfo(data)
-  });
+  // Geolocation.getCurrentPosition(
+  //   data => {
+  //     setLagitude(data.coords.latitude);
+  //     setLongitude(data.coords.longitude);
+  //     console.log(data);
+  //     // setInfo(data)
+  //   },
+  //   err => {
+  //     console.log(err);
+  //   },
+  //   {
+  //     enableHighAccuracy: true,
+  //   },
+  // );
+
+  Geolocation.watchPosition(
+    data => {
+      console.log('Data', data);
+    },
+    err => {
+      console.log(err);
+    },
+    {
+      enableHighAccuracy: true,
+    },
+  );
 
   // // console.log(info);
   // // console.log(time);
@@ -101,7 +112,10 @@ const Home = ({navigation}) => {
       `https://api.pray.zone/v2/times/today.json?longitude=${log}&latitude=${lat}&elevation=333`,
     )
       .then(response => response.json())
-      .then(json => setPrayersTime(json.results.datetime))
+      .then(json => {
+        console.log(json);
+        setPrayersTime(json.results.datetime);
+      })
       .catch(error => console.error(error))
       .finally(() => setLoading(false));
   }, []);
@@ -139,25 +153,31 @@ const Home = ({navigation}) => {
             {/* {prayersTime.map(item => { */}
             {/* return ( */}
             {/* <View> */}
-            <View style={{
-              // backgroundColor: 'pink'
-              }}>
-                <View style={{
-                  // backgroundColor: 'black'
-                }}>
-              <Text
-                style={{
-                  textAlign: 'left',
-                  marginLeft: 10,
-                  fontSize: normalize(16),
-                  // color: '#023c54',
-                  color: 'white',
-                  fontWeight: '600',
-                  marginTop: 20,
-                }}>
-                Now
-              </Text>
-                </View>
+            <View
+              style={
+                {
+                  // backgroundColor: 'pink'
+                }
+              }>
+              <View
+                style={
+                  {
+                    // backgroundColor: 'black'
+                  }
+                }>
+                <Text
+                  style={{
+                    textAlign: 'left',
+                    marginLeft: 10,
+                    fontSize: normalize(16),
+                    // color: '#023c54',
+                    color: 'white',
+                    fontWeight: '600',
+                    marginTop: 20,
+                  }}>
+                  Now
+                </Text>
+              </View>
               <Text
                 style={{
                   textAlign: 'left',
@@ -280,9 +300,9 @@ const Home = ({navigation}) => {
 
         <View style={{flex: 1, padding: 2}}>
           {isLoading ? (
-            <View style={{alignSelf: 'center', marginTop: 30,}}>
-            <PacmanIndicator color='blue'/>
-          </View>
+            <View style={{alignSelf: 'center', marginTop: 30}}>
+              <PacmanIndicator color="blue" />
+            </View>
           ) : (
             <View>
               {data.map(item => {
@@ -364,7 +384,7 @@ const styles = StyleSheet.create({
   topbar: {
     // backgroundColor: 'pink',
     height: 50,
-    width:  windowWidth /1,
+    width: windowWidth / 1,
     marginTop: 10,
   },
   iconQuran: {
