@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
+import { PacmanIndicator } from 'react-native-indicators';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 const windowWidth = Dimensions.get('window').width;
@@ -69,7 +70,9 @@ const ArabicAyahs = ({route,navigation}) => {
           <Text style={styles.topnavtext}>Ayahs</Text>
         </View>
       {isLoading ? (
-        <ActivityIndicator />
+       <View style={{alignSelf: 'center', marginTop: 30,}}>
+       <PacmanIndicator color='blue'/>
+     </View>
       ) : (
         <ScrollView>
           <FlatList
@@ -166,14 +169,15 @@ const styles = StyleSheet.create({
     padding: 10
   },
   number: {
-    marginTop: 15,
+    marginTop: 10,
     marginLeft: 5,
+    fontSize: normalize(12)
   },
   surahArabic: {
     marginTop: -20,
     marginRight: 20,
-    marginLeft: 10,
-    fontSize: normalize(18),
+    marginLeft: 40,
+    fontSize: normalize(16),
     fontWeight: '600',
     // width: 200
   },

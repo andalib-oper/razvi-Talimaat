@@ -162,13 +162,15 @@ const Home = ({navigation}) => {
               <View
                 style={
                   {
-                    // backgroundColor: 'black'
+                    // backgroundColor: 'black',
+                    // width: windowWidth/1,
+                    // height: windowHeight/1,
                   }
                 }>
                 <Text
                   style={{
                     textAlign: 'left',
-                    marginLeft: 10,
+                    marginLeft: 15,
                     fontSize: normalize(16),
                     // color: '#023c54',
                     color: 'white',
@@ -181,7 +183,7 @@ const Home = ({navigation}) => {
               <Text
                 style={{
                   textAlign: 'left',
-                  marginLeft: 10,
+                  marginLeft: 15,
                   fontSize: normalize(20),
                   // color: '#023c54',
                   color: 'white',
@@ -193,7 +195,7 @@ const Home = ({navigation}) => {
               <Text
                 style={{
                   textAlign: 'left',
-                  marginLeft: 10,
+                  marginLeft: 15,
                   fontSize: normalize(14),
                   // color: '#023c54',
                   color: 'white',
@@ -202,87 +204,62 @@ const Home = ({navigation}) => {
                 }}>
                 Upcoming
               </Text>
-              <View>
+              <View></View>
+              <View
+                style={
+                  {
+                    // backgroundColor: 'pink',
+                    // width: windowWidth/1,
+                  }
+                }>
                 <FontAwesome
                   name="moon-o"
-                  size={30}
+                  size={normalize(30)}
                   color="white"
                   style={{
-                    marginLeft: 330,
+                    marginLeft: 315,
                     marginTop: -100,
                   }}
                 />
+                <Text
+                  style={{
+                    marginLeft: 330,
+                    fontSize: normalize(16),
+                    marginRight: 10,
+                    fontWeight: '600',
+                    color: 'white',
+                    marginTop: 10,
+                  }}>
+                  3
+                </Text>
+                <Text
+                  style={{
+                    marginLeft: 210,
+                    marginRight: 10,
+                    fontSize: normalize(16),
+                    fontWeight: '600',
+                    color: 'white',
+                    marginTop: 10,
+                  }}>
+                  Ramadan, 1443
+                </Text>
+                <Text
+                  style={{
+                    marginLeft: 270,
+                    marginRight: 10,
+                    fontSize: normalize(18),
+                    fontWeight: '600',
+                    color: 'white',
+                    marginTop: 5,
+                  }}>
+                  Monday
+                </Text>
               </View>
-              <Text
-                style={{
-                  marginLeft: 340,
-                  fontSize: normalize(16),
-                  marginRight: 10,
-                  fontWeight: '600',
-                  color: 'white',
-                  marginTop: -70,
-                }}>
-                3
-              </Text>
-              <Text
-                style={{
-                  marginLeft: 225,
-                  marginRight: 10,
-                  fontSize: 18,
-                  fontWeight: '600',
-                  color: 'white',
-                  marginTop: 10,
-                }}>
-                Ramadan, 1443
-              </Text>
-              <Text
-                style={{
-                  marginLeft: 285,
-                  marginRight: 10,
-                  fontSize: 18,
-                  fontWeight: '600',
-                  color: 'white',
-                  marginTop: 5,
-                }}>
-                Monday
-              </Text>
             </View>
             {/* </View> */}
             {/* ); */}
             {/* })} */}
           </ImageBackground>
-        </View>
-        <View style={styles.topbar}>
-          <FontAwesome5
-            name="quran"
-            size={30}
-            color={focused ? 'black' : '#808080'}
-            style={styles.iconQuran}
-            onPress={() => navigation.navigate('quran')}
-          />
-          <FontAwesome5
-            name="calendar-alt"
-            size={30}
-            color={focused ? 'black' : '#808080'}
-            style={styles.iconCalendar}
-            onPress={() => navigation.navigate('calendar')}
-          />
-          <FontAwesome5
-            name="clock"
-            size={30}
-            color={focused ? 'black' : '#808080'}
-            style={styles.iconRamzan}
-            onPress={() => navigation.navigate('ramzan')}
-          />
-        </View>
-        <View style={styles.verses}>
-          <Text style={styles.verseheader}> Verse</Text>
-          <Text style={styles.verseby}> By Cool & Cool</Text>
-          <Text style={styles.versesurat}> Surat-us-Saaffaat</Text>
-          <Text style={styles.ayat}> رَبِّ هَبْ لِى مِنَ ٱلصَّـٰلِحِينَ</Text>
-          <Text style={styles.translate}>
-            My Lord, grant me [a child] from among the righteous.
-          </Text>
         </View>
         {prayersTime.map(item => {
           return (
@@ -324,7 +301,7 @@ const Home = ({navigation}) => {
                       style={{
                         margin: 10,
                         height: 130,
-                        width: 215,
+                        width: windowWidth / 2,
                         marginTop: -140,
                         marginLeft: 160,
                         borderRadius: 10,

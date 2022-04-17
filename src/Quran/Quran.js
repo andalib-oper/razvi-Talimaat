@@ -57,6 +57,11 @@ const Quran = ({navigation}) => {
                     onPress={() => navigation.goBack()} />
           <Text style={styles.topnavtext}>Quran</Text>
         </View>
+        <View style={{
+          // backgroundColor: 'pink',
+          // marginBottom: 20,
+        }}>
+        <ScrollView>
       <TouchableOpacity
         style={styles.English}
         onPress={() => navigation.navigate('arabic')}>
@@ -93,7 +98,7 @@ const Quran = ({navigation}) => {
           <Text style={styles.translate}>English Version</Text>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.English}
         onPress={() => navigation.navigate('urdu')}>
         <View style={styles.verses}>
@@ -110,7 +115,9 @@ const Quran = ({navigation}) => {
           />
           <Text style={styles.translate}>Urdu Version</Text>
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
+        </ScrollView>
+        </View>
     </View>
   );
 };
@@ -139,6 +146,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
+    marginBottom: 20,
     alignSelf: 'center',
     height: windowHeight/3.8,
     width:  windowWidth /1.1,
