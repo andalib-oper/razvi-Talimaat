@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, ActivityIndicator, Pressable,
-  FlatList, Modal, Dimensions, Platform,PixelRatio,
+  FlatList, Modal, Dimensions, Platform, PixelRatio,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { PacmanIndicator } from 'react-native-indicators';
@@ -10,19 +10,19 @@ const windowHeight = Dimensions.get('window').height;
 const scale = windowWidth / 320;
 
 function normalize(size) {
- 
-  const newSize = size * scale 
- 
- if (Platform.OS === 'ios' && 'android') {
- 
+
+  const newSize = size * scale
+
+  if (Platform.OS === 'ios' && 'android') {
+
     return Math.round(PixelRatio.roundToNearestPixel(newSize))
- 
+
   } else {
- 
+
     return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
- 
+
   }
- 
+
 }
 
 const CalendarScreen = ({ navigation }) => {
@@ -44,7 +44,7 @@ const CalendarScreen = ({ navigation }) => {
   const getHijriCalendar = async () => {
     try {
       const response = await fetch('http://api.aladhan.com/v1/gToHCalendar/1/2022');
-      const json = await response.json();              
+      const json = await response.json();
       // console.log(json.data)
       setData(json.data);
     } catch (error) {
@@ -255,9 +255,9 @@ const CalendarScreen = ({ navigation }) => {
         <Text style={styles.topnavtext}>Calendar</Text>
       </View>
       {isLoading ? (
-         <View style={{alignSelf: 'center', marginTop: 70,}}>
-         <PacmanIndicator color='blue'/>
-       </View>
+        <View style={{ alignSelf: 'center', marginTop: 70, }}>
+          <PacmanIndicator color='blue' />
+        </View>
       ) : (
         <ScrollView scrollEventThrottle={false}>
           {/* JANUARY */}
@@ -265,10 +265,17 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: windowWidth /1.1 ,
+              width: windowWidth / 1.1,
               alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 3,
+              },
+              shadowOpacity: 0.27,
+              shadowRadius: 4.65,
               // marginRight: 10,
             }}
           >
@@ -305,7 +312,7 @@ const CalendarScreen = ({ navigation }) => {
                 return (
                   <View>
                     <Text style={{
-                      fontSize: 16,
+                      fontSize: normalize(14),
                       fontWeight: '600',
                       marginTop: 20,
                       marginRight: 10,
@@ -321,7 +328,7 @@ const CalendarScreen = ({ navigation }) => {
                     }}></View>
                     <Text style={{
                       marginTop: -25,
-                      fontSize: 16,
+                      fontSize: normalize(14),
                       fontWeight: '600',
                       marginBottom: 20,
                       marginLeft: 10,
@@ -330,7 +337,7 @@ const CalendarScreen = ({ navigation }) => {
                     }}>{item.gregorian.weekday.en}</Text>
                     <Text style={{
                       marginTop: -43,
-                      fontSize: 16,
+                      fontSize: normalize(14),
                       fontWeight: '600',
                       marginBottom: 20,
                       marginLeft: 130,
@@ -347,7 +354,7 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: windowWidth /1.1,
+              width: windowWidth / 1.1,
               alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
@@ -387,7 +394,7 @@ const CalendarScreen = ({ navigation }) => {
                 return (
                   <View>
                     <Text style={{
-                      fontSize: 16,
+                      fontSize: normalize(14),
                       fontWeight: '600',
                       marginTop: 20,
                       marginRight: 10,
@@ -402,7 +409,7 @@ const CalendarScreen = ({ navigation }) => {
                     }}></View>
                     <Text style={{
                       marginTop: -25,
-                      fontSize: 16,
+                      fontSize: normalize(14),
                       fontWeight: '600',
                       marginBottom: 20,
                       marginLeft: 10,
@@ -410,7 +417,7 @@ const CalendarScreen = ({ navigation }) => {
                     }}>{item.gregorian.weekday.en}</Text>
                     <Text style={{
                       marginTop: -43,
-                      fontSize: 16,
+                      fontSize: normalize(14),
                       fontWeight: '600',
                       marginBottom: 20,
                       marginLeft: 130,
@@ -426,7 +433,7 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: windowWidth /1.1,
+              width: windowWidth / 1.1,
               alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
@@ -439,7 +446,7 @@ const CalendarScreen = ({ navigation }) => {
               fontWeight: '600',
               color: '#090979'
             }}>March </Text>
-             <Text style={{
+            <Text style={{
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
@@ -450,51 +457,51 @@ const CalendarScreen = ({ navigation }) => {
               textAlign: 'left',
               marginLeft: 170,
               marginTop: -22,
-              fontSize:normalize(14),
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Date</Text>
             <Text style={{
               textAlign: 'left',
               marginLeft: 260,
               marginTop: -22,
-              fontSize:normalize(14),
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Islamic Year</Text>
             <ScrollView>
               {march.map(item => {
                 return (
                   <View>
-                  <Text style={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginTop: 20,
-                    marginRight: 10,
-                    color: 'black'
-                  }}>{item.hijri.month.ar}</Text>
-                   <View style={{
+                    <Text style={{
+                     fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginTop: 20,
+                      marginRight: 10,
+                      color: 'black'
+                    }}>{item.hijri.month.ar}</Text>
+                    <View style={{
                       borderWidth: 1,
                       borderColor: '#090979',
                       width: 360,
                       marginLeft: 15,
                       // marginTop: 10,
                     }}></View>
-                  <Text style={{
-                    marginTop: -25,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 10,
-                    color: 'black'
-                  }}>{item.gregorian.weekday.en}</Text>
-                  <Text style={{
-                    marginTop: -43,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 130,
-                    color: 'black'
-                  }}>{item.hijri.date}</Text>
-                </View>
+                    <Text style={{
+                      marginTop: -25,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 10,
+                      color: 'black'
+                    }}>{item.gregorian.weekday.en}</Text>
+                    <Text style={{
+                      marginTop: -43,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 130,
+                      color: 'black'
+                    }}>{item.hijri.date}</Text>
+                  </View>
                 )
               })}
             </ScrollView>
@@ -504,7 +511,7 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: windowWidth /1.1,
+              width: windowWidth / 1.1,
               alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
@@ -517,7 +524,7 @@ const CalendarScreen = ({ navigation }) => {
               fontWeight: '600',
               color: '#090979'
             }}>April </Text>
-             <Text style={{
+            <Text style={{
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
@@ -542,37 +549,37 @@ const CalendarScreen = ({ navigation }) => {
               {april.map(item => {
                 return (
                   <View>
-                  <Text style={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginTop: 20,
-                    marginRight: 10,
-                    color: 'black'
-                  }}>{item.hijri.month.ar}</Text>
-                   <View style={{
+                    <Text style={{
+                     fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginTop: 20,
+                      marginRight: 10,
+                      color: 'black'
+                    }}>{item.hijri.month.ar}</Text>
+                    <View style={{
                       borderWidth: 1,
                       borderColor: '#090979',
                       width: 360,
                       marginLeft: 15,
                       // marginTop: 10,
                     }}></View>
-                  <Text style={{
-                    marginTop: -25,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 10,
-                    color: 'black'
-                  }}>{item.gregorian.weekday.en}</Text>
-                  <Text style={{
-                    marginTop: -43,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 130,
-                    color: 'black'
-                  }}>{item.hijri.date}</Text>
-                </View>
+                    <Text style={{
+                      marginTop: -25,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 10,
+                      color: 'black'
+                    }}>{item.gregorian.weekday.en}</Text>
+                    <Text style={{
+                      marginTop: -43,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 130,
+                      color: 'black'
+                    }}>{item.hijri.date}</Text>
+                  </View>
                 )
               })}
             </ScrollView>
@@ -582,7 +589,7 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: windowWidth /1.1,
+              width: windowWidth / 1.1,
               alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
@@ -595,7 +602,7 @@ const CalendarScreen = ({ navigation }) => {
               fontWeight: '600',
               color: '#090979'
             }}>May </Text>
-             <Text style={{
+            <Text style={{
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
@@ -620,37 +627,37 @@ const CalendarScreen = ({ navigation }) => {
               {may.map(item => {
                 return (
                   <View>
-                  <Text style={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginTop: 20,
-                    marginRight: 10,
-                    color: 'black'
-                  }}>{item.hijri.month.ar}</Text>
-                   <View style={{
+                    <Text style={{
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginTop: 20,
+                      marginRight: 10,
+                      color: 'black'
+                    }}>{item.hijri.month.ar}</Text>
+                    <View style={{
                       borderWidth: 1,
                       borderColor: '#090979',
                       width: 360,
                       marginLeft: 15,
                       // marginTop: 10,
                     }}></View>
-                  <Text style={{
-                    marginTop: -25,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 10,
-                    color: 'black'
-                  }}>{item.gregorian.weekday.en}</Text>
-                  <Text style={{
-                    marginTop: -43,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 130,
-                    color: 'black'
-                  }}>{item.hijri.date}</Text>
-                </View>
+                    <Text style={{
+                      marginTop: -25,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 10,
+                      color: 'black'
+                    }}>{item.gregorian.weekday.en}</Text>
+                    <Text style={{
+                      marginTop: -43,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 130,
+                      color: 'black'
+                    }}>{item.hijri.date}</Text>
+                  </View>
                 )
               })}
             </ScrollView>
@@ -660,7 +667,7 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: windowWidth/1.1,
+              width: windowWidth / 1.1,
               alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
@@ -673,7 +680,7 @@ const CalendarScreen = ({ navigation }) => {
               fontWeight: '600',
               color: '#090979'
             }}>June </Text>
-             <Text style={{
+            <Text style={{
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
@@ -698,37 +705,37 @@ const CalendarScreen = ({ navigation }) => {
               {june.map(item => {
                 return (
                   <View>
-                  <Text style={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginTop: 20,
-                    marginRight: 10,
-                    color: 'black'
-                  }}>{item.hijri.month.ar}</Text>
-                   <View style={{
+                    <Text style={{
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginTop: 20,
+                      marginRight: 10,
+                      color: 'black'
+                    }}>{item.hijri.month.ar}</Text>
+                    <View style={{
                       borderWidth: 1,
                       borderColor: '#090979',
                       width: 360,
                       marginLeft: 15,
                       // marginTop: 10,
                     }}></View>
-                  <Text style={{
-                    marginTop: -25,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 10,
-                    color: 'black'
-                  }}>{item.gregorian.weekday.en}</Text>
-                  <Text style={{
-                    marginTop: -43,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 130,
-                    color: 'black'
-                  }}>{item.hijri.date}</Text>
-                </View>
+                    <Text style={{
+                      marginTop: -25,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 10,
+                      color: 'black'
+                    }}>{item.gregorian.weekday.en}</Text>
+                    <Text style={{
+                      marginTop: -43,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 130,
+                      color: 'black'
+                    }}>{item.hijri.date}</Text>
+                  </View>
                 )
               })}
             </ScrollView>
@@ -738,7 +745,7 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: windowWidth/1.1,
+              width: windowWidth / 1.1,
               alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
@@ -751,7 +758,7 @@ const CalendarScreen = ({ navigation }) => {
               fontWeight: '600',
               color: '#090979'
             }}>July </Text>
-             <Text style={{
+            <Text style={{
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
@@ -776,37 +783,37 @@ const CalendarScreen = ({ navigation }) => {
               {july.map(item => {
                 return (
                   <View>
-                  <Text style={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginTop: 20,
-                    marginRight: 10,
-                    color: 'black'
-                  }}>{item.hijri.month.ar}</Text>
-                   <View style={{
+                    <Text style={{
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginTop: 20,
+                      marginRight: 10,
+                      color: 'black'
+                    }}>{item.hijri.month.ar}</Text>
+                    <View style={{
                       borderWidth: 1,
                       borderColor: '#090979',
                       width: 360,
                       marginLeft: 15,
                       // marginTop: 10,
                     }}></View>
-                  <Text style={{
-                    marginTop: -25,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 10,
-                    color: 'black'
-                  }}>{item.gregorian.weekday.en}</Text>
-                  <Text style={{
-                    marginTop: -43,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 130,
-                    color: 'black'
-                  }}>{item.hijri.date}</Text>
-                </View>
+                    <Text style={{
+                      marginTop: -25,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 10,
+                      color: 'black'
+                    }}>{item.gregorian.weekday.en}</Text>
+                    <Text style={{
+                      marginTop: -43,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 130,
+                      color: 'black'
+                    }}>{item.hijri.date}</Text>
+                  </View>
                 )
               })}
             </ScrollView>
@@ -816,7 +823,7 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: windowWidth/1.1,
+              width: windowWidth / 1.1,
               alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
@@ -829,7 +836,7 @@ const CalendarScreen = ({ navigation }) => {
               fontWeight: '600',
               color: '#090979'
             }}>August </Text>
-             <Text style={{
+            <Text style={{
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
@@ -854,37 +861,37 @@ const CalendarScreen = ({ navigation }) => {
               {august.map(item => {
                 return (
                   <View>
-                  <Text style={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginTop: 20,
-                    marginRight: 10,
-                    color: 'black'
-                  }}>{item.hijri.month.ar}</Text>
-                   <View style={{
+                    <Text style={{
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginTop: 20,
+                      marginRight: 10,
+                      color: 'black'
+                    }}>{item.hijri.month.ar}</Text>
+                    <View style={{
                       borderWidth: 1,
                       borderColor: '#090979',
                       width: 360,
                       marginLeft: 15,
                       // marginTop: 10,
                     }}></View>
-                  <Text style={{
-                    marginTop: -25,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 10,
-                    color: 'black'
-                  }}>{item.gregorian.weekday.en}</Text>
-                  <Text style={{
-                    marginTop: -43,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 130,
-                    color: 'black'
-                  }}>{item.hijri.date}</Text>
-                </View>
+                    <Text style={{
+                      marginTop: -25,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 10,
+                      color: 'black'
+                    }}>{item.gregorian.weekday.en}</Text>
+                    <Text style={{
+                      marginTop: -43,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 130,
+                      color: 'black'
+                    }}>{item.hijri.date}</Text>
+                  </View>
                 )
               })}
             </ScrollView>
@@ -894,7 +901,7 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: windowWidth/1.1,
+              width: windowWidth / 1.1,
               alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
@@ -907,7 +914,7 @@ const CalendarScreen = ({ navigation }) => {
               fontWeight: '600',
               color: '#090979'
             }}>September </Text>
-             <Text style={{
+            <Text style={{
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
@@ -932,37 +939,37 @@ const CalendarScreen = ({ navigation }) => {
               {sept.map(item => {
                 return (
                   <View>
-                  <Text style={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginTop: 20,
-                    marginRight: 10,
-                    color: 'black'
-                  }}>{item.hijri.month.ar}</Text>
-                   <View style={{
+                    <Text style={{
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginTop: 20,
+                      marginRight: 10,
+                      color: 'black'
+                    }}>{item.hijri.month.ar}</Text>
+                    <View style={{
                       borderWidth: 1,
                       borderColor: '#090979',
                       width: 360,
                       marginLeft: 15,
                       // marginTop: 10,
                     }}></View>
-                  <Text style={{
-                    marginTop: -25,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 10,
-                    color: 'black'
-                  }}>{item.gregorian.weekday.en}</Text>
-                  <Text style={{
-                    marginTop: -43,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 130,
-                    color: 'black'
-                  }}>{item.hijri.date}</Text>
-                </View>
+                    <Text style={{
+                      marginTop: -25,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 10,
+                      color: 'black'
+                    }}>{item.gregorian.weekday.en}</Text>
+                    <Text style={{
+                      marginTop: -43,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 130,
+                      color: 'black'
+                    }}>{item.hijri.date}</Text>
+                  </View>
                 )
               })}
             </ScrollView>
@@ -972,7 +979,7 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: windowWidth/1.1,
+              width: windowWidth / 1.1,
               alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
@@ -985,7 +992,7 @@ const CalendarScreen = ({ navigation }) => {
               fontWeight: '600',
               color: '#090979'
             }}>October </Text>
-             <Text style={{
+            <Text style={{
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
@@ -1010,37 +1017,37 @@ const CalendarScreen = ({ navigation }) => {
               {oct.map(item => {
                 return (
                   <View>
-                  <Text style={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginTop: 20,
-                    marginRight: 10,
-                    color: 'black'
-                  }}>{item.hijri.month.ar}</Text>
-                   <View style={{
+                    <Text style={{
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginTop: 20,
+                      marginRight: 10,
+                      color: 'black'
+                    }}>{item.hijri.month.ar}</Text>
+                    <View style={{
                       borderWidth: 1,
                       borderColor: '#090979',
                       width: 360,
                       marginLeft: 15,
                       // marginTop: 10,
                     }}></View>
-                  <Text style={{
-                    marginTop: -25,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 10,
-                    color: 'black'
-                  }}>{item.gregorian.weekday.en}</Text>
-                  <Text style={{
-                    marginTop: -43,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 130,
-                    color: 'black'
-                  }}>{item.hijri.date}</Text>
-                </View>
+                    <Text style={{
+                      marginTop: -25,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 10,
+                      color: 'black'
+                    }}>{item.gregorian.weekday.en}</Text>
+                    <Text style={{
+                      marginTop: -43,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 130,
+                      color: 'black'
+                    }}>{item.hijri.date}</Text>
+                  </View>
                 )
               })}
             </ScrollView>
@@ -1050,7 +1057,7 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: windowWidth/1.1,
+              width: windowWidth / 1.1,
               alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
@@ -1063,7 +1070,7 @@ const CalendarScreen = ({ navigation }) => {
               fontWeight: '600',
               color: '#090979'
             }}>November </Text>
-             <Text style={{
+            <Text style={{
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
@@ -1088,37 +1095,37 @@ const CalendarScreen = ({ navigation }) => {
               {nov.map(item => {
                 return (
                   <View>
-                  <Text style={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginTop: 20,
-                    marginRight: 10,
-                    color: 'black'
-                  }}>{item.hijri.month.ar}</Text>
-                   <View style={{
+                    <Text style={{
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginTop: 20,
+                      marginRight: 10,
+                      color: 'black'
+                    }}>{item.hijri.month.ar}</Text>
+                    <View style={{
                       borderWidth: 1,
                       borderColor: '#090979',
                       width: 360,
                       marginLeft: 15,
                       // marginTop: 10,
                     }}></View>
-                  <Text style={{
-                    marginTop: -25,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 10,
-                    color: 'black'
-                  }}>{item.gregorian.weekday.en}</Text>
-                  <Text style={{
-                    marginTop: -43,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 130,
-                    color: 'black'
-                  }}>{item.hijri.date}</Text>
-                </View>
+                    <Text style={{
+                      marginTop: -25,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 10,
+                      color: 'black'
+                    }}>{item.gregorian.weekday.en}</Text>
+                    <Text style={{
+                      marginTop: -43,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 130,
+                      color: 'black'
+                    }}>{item.hijri.date}</Text>
+                  </View>
                 )
               })}
             </ScrollView>
@@ -1128,7 +1135,7 @@ const CalendarScreen = ({ navigation }) => {
             style={{
               margin: 10,
               backgroundColor: 'white',
-              width: windowWidth/1.1,
+              width: windowWidth / 1.1,
               alignSelf: 'center',
               borderRadius: 30,
               elevation: 10,
@@ -1141,7 +1148,7 @@ const CalendarScreen = ({ navigation }) => {
               fontWeight: '600',
               color: '#090979'
             }}>December </Text>
-             <Text style={{
+            <Text style={{
               textAlign: 'left',
               marginLeft: 10,
               marginTop: 20,
@@ -1152,7 +1159,7 @@ const CalendarScreen = ({ navigation }) => {
               textAlign: 'left',
               marginLeft: 170,
               marginTop: -22,
-              fontSize:normalize(14),
+              fontSize: normalize(14),
               color: '#4b7bf2'
             }}>Date</Text>
             <Text style={{
@@ -1166,37 +1173,37 @@ const CalendarScreen = ({ navigation }) => {
               {dec.map(item => {
                 return (
                   <View>
-                  <Text style={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginTop: 20,
-                    marginRight: 10,
-                    color: 'black'
-                  }}>{item.hijri.month.ar}</Text>
-                   <View style={{
+                    <Text style={{
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginTop: 20,
+                      marginRight: 10,
+                      color: 'black'
+                    }}>{item.hijri.month.ar}</Text>
+                    <View style={{
                       borderWidth: 1,
                       borderColor: '#090979',
                       width: 360,
                       marginLeft: 15,
                       // marginTop: 10,
                     }}></View>
-                  <Text style={{
-                    marginTop: -25,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 10,
-                    color: 'black'
-                  }}>{item.gregorian.weekday.en}</Text>
-                  <Text style={{
-                    marginTop: -43,
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginBottom: 20,
-                    marginLeft: 130,
-                    color: 'black'
-                  }}>{item.hijri.date}</Text>
-                </View>
+                    <Text style={{
+                      marginTop: -25,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 10,
+                      color: 'black'
+                    }}>{item.gregorian.weekday.en}</Text>
+                    <Text style={{
+                      marginTop: -43,
+                      fontSize: normalize(14),
+                      fontWeight: '600',
+                      marginBottom: 20,
+                      marginLeft: 130,
+                      color: 'black'
+                    }}>{item.hijri.date}</Text>
+                  </View>
                 )
               })}
             </ScrollView>
@@ -1221,7 +1228,7 @@ const styles = StyleSheet.create({
     marginTop: -35,
     alignSelf: 'center',
     textAlign: 'center',
-    fontSize: 22,
+    fontSize: normalize(22),
     color: 'white'
   },
   icon: {

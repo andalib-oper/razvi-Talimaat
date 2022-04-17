@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -25,24 +25,24 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const scale = windowWidth / 320;
 
- function normalize(size) {
- 
-  const newSize = size * scale 
- 
- if (Platform.OS === 'ios' && 'android') {
- 
+function normalize(size) {
+
+  const newSize = size * scale
+
+  if (Platform.OS === 'ios' && 'android') {
+
     return Math.round(PixelRatio.roundToNearestPixel(newSize))
- 
+
   } else {
- 
+
     return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
- 
+
   }
- 
+
 }
 
 // Geolocation.setRNConfiguration(config);
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [info, setInfo] = useState(0);
@@ -120,7 +120,7 @@ const Home = ({navigation}) => {
           <ImageBackground
             style={styles.image}
             source={require('../../images/background3.jpeg')}>
-            <View style={{backgroundColor: 'grey'}}>
+            <View style={{ backgroundColor: 'pink' }}>
               <Text
                 style={{
                   textAlign: 'center',
@@ -135,17 +135,9 @@ const Home = ({navigation}) => {
                 Home
               </Text>
             </View>
-            {/* {prayersTime.map(item => { */}
-            {/* return ( */}
-            {/* <View> */}
             <View style={{
               // backgroundColor: 'pink'
-              }}>
-                <View style={{
-                  // backgroundColor: 'black',
-                  // width: windowWidth/1,
-                  // height: windowHeight/1,
-                }}>
+            }}>
               <Text
                 style={{
                   textAlign: 'left',
@@ -158,7 +150,6 @@ const Home = ({navigation}) => {
                 }}>
                 Now
               </Text>
-                </View>
               <Text
                 style={{
                   textAlign: 'left',
@@ -183,12 +174,6 @@ const Home = ({navigation}) => {
                 }}>
                 Upcoming
               </Text>
-              <View>
-              </View>
-              <View style={{
-                // backgroundColor: 'pink',
-                // width: windowWidth/1,
-              }}>
               <FontAwesome
                 name="moon-o"
                 size={normalize(30)}
@@ -216,7 +201,7 @@ const Home = ({navigation}) => {
                   fontSize: normalize(16),
                   fontWeight: '600',
                   color: 'white',
-                  marginTop: 10,
+                  marginTop: 5,
                 }}>
                 Ramadan, 1443
               </Text>
@@ -224,18 +209,14 @@ const Home = ({navigation}) => {
                 style={{
                   marginLeft: 270,
                   marginRight: 10,
-                  fontSize:normalize(18),
+                  fontSize: normalize(18),
                   fontWeight: '600',
                   color: 'white',
                   marginTop: 5,
                 }}>
                 Monday
               </Text>
-              </View>
             </View>
-            {/* </View> */}
-            {/* ); */}
-            {/* })} */}
           </ImageBackground>
         </View>
         {prayersTime.map(item => {
@@ -252,11 +233,11 @@ const Home = ({navigation}) => {
           );
         })}
 
-        <View style={{flex: 1, padding: 2}}>
+        <View style={{ flex: 1, padding: 2 }}>
           {isLoading ? (
-            <View style={{alignSelf: 'center', marginTop: 30,}}>
-            <PacmanIndicator color='blue'/>
-          </View>
+            <View style={{ alignSelf: 'center', marginTop: 30, }}>
+              <PacmanIndicator color='blue' />
+            </View>
           ) : (
             <View>
               {data.map(item => {
@@ -278,7 +259,7 @@ const Home = ({navigation}) => {
                       style={{
                         margin: 10,
                         height: 130,
-                        width: windowWidth/2,
+                        width: windowWidth / 2.5,
                         marginTop: -140,
                         marginLeft: 160,
                         borderRadius: 10,
@@ -338,7 +319,7 @@ const styles = StyleSheet.create({
   topbar: {
     // backgroundColor: 'pink',
     height: 50,
-    width:  windowWidth /1,
+    width: windowWidth / 1,
     marginTop: 10,
   },
   iconQuran: {
@@ -406,7 +387,14 @@ const styles = StyleSheet.create({
     // height: windowHeight/4,
     width: windowWidth / 1.1,
     backgroundColor: 'white',
-    elevation: 20,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
     borderRadius: 20,
   },
   hajj: {
