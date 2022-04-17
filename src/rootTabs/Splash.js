@@ -5,11 +5,15 @@ import {
     StyleSheet,
     ImageBackground,
     Image,
+    Dimensions
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {req} from '../../redux/auth/actions';
 import LinearGradient from 'react-native-linear-gradient';
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const Splash = ({navigation}) =>{
     const dispatch = useDispatch();
@@ -64,8 +68,8 @@ const styles= StyleSheet.create({
     },
     image: {
         marginTop: -100,
-        height: 350,
-        width: 415,
+        height: windowHeight/2,
+        width: windowWidth/1,
         alignContent: 'center',
         alignItems: 'center',
         justifyContent: 'center',
@@ -75,7 +79,7 @@ const styles= StyleSheet.create({
     },
     imagerizvi: {
         marginTop: 100,
-        height: 400,
+        height: windowHeight/2,
         width: 400,
         alignContent: 'center',
         alignItems: 'center',
@@ -86,7 +90,7 @@ const styles= StyleSheet.create({
     background: {
         backgroundColor: '#4B59F7',
         height: 450,
-        width: 415,
+        width: windowWidth/1,
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
