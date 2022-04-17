@@ -68,7 +68,7 @@ const Quran = ({ navigation }) => {
                     // marginLeft: 10,
                     marginTop: 10,
                   }}
-                  source={require('../../images/quran.png')}
+                  source={require('../../images/ArabicHamza.jpg')}
                 />
                 <Text style={styles.translate}>Arabic</Text>
               </View>
@@ -86,7 +86,7 @@ const Quran = ({ navigation }) => {
                     // marginLeft: 10,
                     marginTop: 10,
                   }}
-                  source={require('../../images/abc.png')}
+                  source={require('../../images/e.jpg')}
                 />
                 <Text style={styles.translate}>English</Text>
               </View>
