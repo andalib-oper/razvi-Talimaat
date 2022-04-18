@@ -144,7 +144,7 @@ const Home = ({navigation}) => {
                   fontSize: normalize(18),
                   color: 'white',
                   fontWeight: '600',
-                  marginTop: -70,
+                  marginTop: -50,
                   marginBottom: -60,
                   numberOfLines: 1,
                 }}>
