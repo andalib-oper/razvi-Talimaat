@@ -79,12 +79,12 @@ const CalendarScreen = ({navigation}) => {
     //     console.log(res);
     //     setCurrent_hijri_year(res.data.hijri.year);
     //   })
-      // .catch(err => console.log(err));
+    // .catch(err => console.log(err));
     for (var i = 1; i < 13; i++) {
       const newFunc = async () => {
         // console.log(i);
         try {
-          var [res1,res2,res3] = await Promise.all(
+          var [res1, res2, res3] = await Promise.all(
             [
               `http://api.aladhan.com/v1/gToHCalendar/${i}/${
                 new Date().getFullYear() - 1
@@ -99,7 +99,12 @@ const CalendarScreen = ({navigation}) => {
             }),
           );
           // console.log(res);
-          setAll_years([...all_years, ...res1.data, ...res2.data, ...res3.data]);
+          setAll_years([
+            ...all_years,
+            ...res1.data,
+            ...res2.data,
+            ...res3.data,
+          ]);
         } catch (err) {
           console.log(err);
           // console.log(err2);
@@ -109,18 +114,27 @@ const CalendarScreen = ({navigation}) => {
       newFunc();
     }
 
-    var calendar = {};
+    var calendar_mini = {};
 
-    all_years.forEach(day => {
-      var month = `${day.hijri.month.en}_${day.hijri.year}`;
+    for (var i = 0; i < all_years.length(); i++) {
+      var month = `${all_years[i].hijri.month.en}_${all_years[i].hijri.year}`;
       if (Object.keys(calendar).includes(month)) {
-        calendar[month] = [...calendar[month], data];
+        calendar_mini[month] = [...calendar[month], all_years[i]];
       } else {
-        calendar[month] = [day];
+        calendar_mini[month] = [all_years[i]];
       }
-    });
+    }
+
+    // all_years.forEach(day => {
+    //   var month = `${day.hijri.month.en}_${day.hijri.year}`;
+    //   if (Object.keys(calendar).includes(month)) {
+    //     calendar[month] = [...calendar[month], data];
+    //   } else {
+    //     calendar[month] = [day];
+    //   }
+    // });
     // console.log(calendar);
-    setCalendar(calendar);
+    setCalendar(calendar_mini);
     setLoading(false);
     // set
   }, []);
@@ -337,9 +351,9 @@ const CalendarScreen = ({navigation}) => {
   // useEffect(() => {
   //   getdec();
   // }, []);
- var counter = 0
- var limit = 29
- var toggler = +1
+  var counter = 0;
+  var limit = 29;
+  var toggler = +1;
 
   return (
     <View style={styles.container}>
@@ -358,64 +372,68 @@ const CalendarScreen = ({navigation}) => {
           <PacmanIndicator color="blue" />
         </View>
       ) : (
-        Object.keys(calendar).map(month=>{
-          if(month.includes(current_hijri_year)){
-            return(
-            <View>
+        Object.keys(calendar).map(month => {
+          if (month.includes(current_hijri_year)) {
+            return (
               <View>
-                <Text>{month}</Text>
-              </View>
-              <View>
-                <Text>Sun</Text>
-                <Text>Mon</Text>
-                <Text>Tue</Text>
-                <Text>Wed</Text>
-                <Text>Thu</Text>
-                <Text>Fri</Text>
-                <Text>Sat</Text>
-              </View>
-              <View>
-                {[0,1,2,3,4].map(i=>{
-                  counter = 0
-                  limit += toggler
-                  toggler *= -1
-                  return(
-                    <View>
-                      {[0,1,2,3,4,5,6].map(j=>{
-                        if (i == 0 && j >= weekdays[calendar[month][0]["gregorian"]["weekday"]['en']]){
-                          counter++
-                          return(
-                            <View>
-                              <Text>
-                                {calendar[month][counter-1]['hijri']
-                                  ['day']}
-                              </Text>
-                            </View>
-                          )
-                        }
-                        else if (i == 0 || counter >= limit)
-                        return(
-                          <View>
-                            <Text>
-
-                            </Text>
-                          </View>
-                        )
-                        else{
-                          counter++
-                          return(
-                            <View>
-                              <Text>{calendar[month][counter-1]['hijri']['day']}</Text>
-                            </View>
-                          )
-                        }
-                      })}
+                <View>
+                  <Text>{month}</Text>
+                </View>
+                <View>
+                  <Text>Sun</Text>
+                  <Text>Mon</Text>
+                  <Text>Tue</Text>
+                  <Text>Wed</Text>
+                  <Text>Thu</Text>
+                  <Text>Fri</Text>
+                  <Text>Sat</Text>
+                </View>
+                <View>
+                  {[0, 1, 2, 3, 4].map(i => {
+                    counter = 0;
+                    limit += toggler;
+                    toggler *= -1;
+                    return (
+                      <View>
+                        {[0, 1, 2, 3, 4, 5, 6].map(j => {
+                          if (
+                            i == 0 &&
+                            j >=
+                              weekdays[
+                                calendar[month][0]['gregorian']['weekday']['en']
+                              ]
+                          ) {
+                            counter++;
+                            return (
+                              <View>
+                                <Text>
+                                  {calendar[month][counter - 1]['hijri']['day']}
+                                </Text>
+                              </View>
+                            );
+                          } else if (i == 0 || counter >= limit)
+                            return (
+                              <View>
+                                <Text></Text>
+                              </View>
+                            );
+                          else {
+                            counter++;
+                            return (
+                              <View>
+                                <Text>
+                                  {calendar[month][counter - 1]['hijri']['day']}
+                                </Text>
+                              </View>
+                            );
+                          }
+                        })}
                       </View>
-                  )
-                })}
+                    );
+                  })}
+                </View>
               </View>
-            </View>
-            )
+            );
           }
         })
         // <ScrollView scrollEventThrottle={false}>
