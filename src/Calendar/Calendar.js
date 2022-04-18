@@ -35,17 +35,6 @@ const CalendarScreen = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const [feb, setFeb] = useState([]);
-  const [march, setMarch] = useState([]);
-  const [april, setApril] = useState([]);
-  const [may, setMay] = useState([]);
-  const [june, setJune] = useState([]);
-  const [july, setJuly] = useState([]);
-  const [august, setAugust] = useState([]);
-  const [sept, setSept] = useState([]);
-  const [oct, setOct] = useState([]);
-  const [nov, setNov] = useState([]);
-  const [dec, setDec] = useState([]);
   const [all_years, setAll_years] = useState([]);
   const [current_hijri_year, setCurrent_hijri_year] = useState(0);
   const weekdays = {
@@ -80,274 +69,278 @@ const CalendarScreen = ({navigation}) => {
         `http://api.aladhan.com/v1/gToH?date=${moment().format('D-MM-YYYY')}`,
       )
       .then(res => {
-        console.log(res);
-        setCurrent_hijri_year(res.data.hijri.year);
+        // console.log(res);
+        setCurrent_hijri_year(res.data.data.hijri.year);
       })
       .catch(err => console.log(err));
-    fetch(`http://api.aladhan.com/v1/gToH?date=18-04-2022`)
-      .then(res => res.json())
-      .then(res => {
-        console.log(res);
-        setCurrent_hijri_year(res.data.hijri.year);
-      })
-      .catch(err => console.log(err));
-    // for (var i = 1; i < 13; i++) {
-    //   const newFunc = async () => {
-    //     console.log(i);
-    //     try {
-    //       var res = await Promise.all(
-    //         [
-    //           `http://api.aladhan.com/v1/gToHCalendar/${i}/${
-    //             new Date().getFullYear() - 1
-    //           }`,
-    //           `http://api.aladhan.com/v1/gToHCalendar/${i}/${new Date().getFullYear()}`,
-    //           `http://api.aladhan.com/v1/gToHCalendar/${i}/${
-    //             new Date().getFullYear() + 1
-    //           }`,
-    //         ].map(async url => {
-    //           const resp = await fetch(url);
-    //           return resp.json();
-    //         }),
-    //       );
-    //       console.log(res);
-    //       // setAll_years([...all_years, ...res1.data, ...res2.data, ...res3.data]);
-    //     } catch (err) {
-    //       console.log(err);
-    //       // console.log(err2);
-    //       // console.log(err3);
-    //     }
-    //   };
-    //   newFunc();
-    // }
+    // fetch(`http://api.aladhan.com/v1/gToH?date=18-04-2022`)
+    //   .then(res => res.json())
+    //   .then(res => {
+    //     console.log(res);
+    //     setCurrent_hijri_year(res.data.hijri.year);
+    //   })
+      // .catch(err => console.log(err));
+    for (var i = 1; i < 13; i++) {
+      const newFunc = async () => {
+        // console.log(i);
+        try {
+          var [res1,res2,res3] = await Promise.all(
+            [
+              `http://api.aladhan.com/v1/gToHCalendar/${i}/${
+                new Date().getFullYear() - 1
+              }`,
+              `http://api.aladhan.com/v1/gToHCalendar/${i}/${new Date().getFullYear()}`,
+              `http://api.aladhan.com/v1/gToHCalendar/${i}/${
+                new Date().getFullYear() + 1
+              }`,
+            ].map(async url => {
+              const resp = await fetch(url);
+              return resp.json();
+            }),
+          );
+          // console.log(res);
+          setAll_years([...all_years, ...res1.data, ...res2.data, ...res3.data]);
+        } catch (err) {
+          console.log(err);
+          // console.log(err2);
+          // console.log(err3);
+        }
+      };
+      newFunc();
+    }
 
-    // var calendar = {};
+    var calendar = {};
 
-    // all_years.forEach(day => {
-    //   var month = `${day.hijri.month.en}_${day.hijri.year}`;
-    //   if (Object.keys(calendar).includes(month)) {
-    //     calendar[month] = [...calendar[month], data];
-    //   } else {
-    //     calendar[month] = [day];
-    //   }
-    // });
+    all_years.forEach(day => {
+      var month = `${day.hijri.month.en}_${day.hijri.year}`;
+      if (Object.keys(calendar).includes(month)) {
+        calendar[month] = [...calendar[month], data];
+      } else {
+        calendar[month] = [day];
+      }
+    });
     // console.log(calendar);
-    // setCalendar(calendar);
-    // setLoading(false);
+    setCalendar(calendar);
+    setLoading(false);
     // set
   }, []);
 
   useEffect(() => {
-    console.log(calendar);
+    console.log(Object.keys(calendar));
   }, [calendar]);
 
-  const getfeb = async () => {
-    try {
-      const response = await fetch(
-        'http://api.aladhan.com/v1/gToHCalendar/2/2022',
-      );
-      const json = await response.json();
-      console.log(json.data);
-      setFeb(json.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getfeb = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       'http://api.aladhan.com/v1/gToHCalendar/2/2022',
+  //     );
+  //     const json = await response.json();
+  //     console.log(json.data);
+  //     setFeb(json.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    getfeb();
-  }, []);
+  // useEffect(() => {
+  //   getfeb();
+  // }, []);
 
-  const getmarch = async () => {
-    try {
-      const response = await fetch(
-        'http://api.aladhan.com/v1/gToHCalendar/3/2022',
-      );
-      const json = await response.json();
-      console.log(json.data);
-      setMarch(json.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getmarch = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       'http://api.aladhan.com/v1/gToHCalendar/3/2022',
+  //     );
+  //     const json = await response.json();
+  //     console.log(json.data);
+  //     setMarch(json.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    getmarch();
-  }, []);
+  // useEffect(() => {
+  //   getmarch();
+  // }, []);
 
-  const getapril = async () => {
-    try {
-      const response = await fetch(
-        'http://api.aladhan.com/v1/gToHCalendar/4/2022',
-      );
-      const json = await response.json();
-      console.log(json.data);
-      setApril(json.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getapril = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       'http://api.aladhan.com/v1/gToHCalendar/4/2022',
+  //     );
+  //     const json = await response.json();
+  //     console.log(json.data);
+  //     setApril(json.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    getapril();
-  }, []);
+  // useEffect(() => {
+  //   getapril();
+  // }, []);
 
-  const getmay = async () => {
-    try {
-      const response = await fetch(
-        'http://api.aladhan.com/v1/gToHCalendar/5/2022',
-      );
-      const json = await response.json();
-      console.log(json.data);
-      setMay(json.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getmay = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       'http://api.aladhan.com/v1/gToHCalendar/5/2022',
+  //     );
+  //     const json = await response.json();
+  //     console.log(json.data);
+  //     setMay(json.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    getmay();
-  }, []);
+  // useEffect(() => {
+  //   getmay();
+  // }, []);
 
-  const getjune = async () => {
-    try {
-      const response = await fetch(
-        'http://api.aladhan.com/v1/gToHCalendar/6/2022',
-      );
-      const json = await response.json();
-      console.log(json.data);
-      setJune(json.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getjune = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       'http://api.aladhan.com/v1/gToHCalendar/6/2022',
+  //     );
+  //     const json = await response.json();
+  //     console.log(json.data);
+  //     setJune(json.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    getjune();
-  }, []);
+  // useEffect(() => {
+  //   getjune();
+  // }, []);
 
-  const getjuly = async () => {
-    try {
-      const response = await fetch(
-        'http://api.aladhan.com/v1/gToHCalendar/7/2022',
-      );
-      const json = await response.json();
-      console.log(json.data);
-      setJuly(json.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getjuly = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       'http://api.aladhan.com/v1/gToHCalendar/7/2022',
+  //     );
+  //     const json = await response.json();
+  //     console.log(json.data);
+  //     setJuly(json.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    getjuly();
-  }, []);
+  // useEffect(() => {
+  //   getjuly();
+  // }, []);
 
-  const getaugust = async () => {
-    try {
-      const response = await fetch(
-        'http://api.aladhan.com/v1/gToHCalendar/8/2022',
-      );
-      const json = await response.json();
-      console.log(json.data);
-      setAugust(json.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getaugust = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       'http://api.aladhan.com/v1/gToHCalendar/8/2022',
+  //     );
+  //     const json = await response.json();
+  //     console.log(json.data);
+  //     setAugust(json.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    getaugust();
-  }, []);
+  // useEffect(() => {
+  //   getaugust();
+  // }, []);
 
-  const getsept = async () => {
-    try {
-      const response = await fetch(
-        'http://api.aladhan.com/v1/gToHCalendar/9/2022',
-      );
-      const json = await response.json();
-      console.log(json.data);
-      setSept(json.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getsept = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       'http://api.aladhan.com/v1/gToHCalendar/9/2022',
+  //     );
+  //     const json = await response.json();
+  //     console.log(json.data);
+  //     setSept(json.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    getsept();
-  }, []);
+  // useEffect(() => {
+  //   getsept();
+  // }, []);
 
-  const getoct = async () => {
-    try {
-      const response = await fetch(
-        'http://api.aladhan.com/v1/gToHCalendar/10/2022',
-      );
-      const json = await response.json();
-      console.log(json.data);
-      setOct(json.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getoct = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       'http://api.aladhan.com/v1/gToHCalendar/10/2022',
+  //     );
+  //     const json = await response.json();
+  //     console.log(json.data);
+  //     setOct(json.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    getoct();
-  }, []);
+  // useEffect(() => {
+  //   getoct();
+  // }, []);
 
-  const getnov = async () => {
-    try {
-      const response = await fetch(
-        'http://api.aladhan.com/v1/gToHCalendar/11/2022',
-      );
-      const json = await response.json();
-      console.log(json.data);
-      setNov(json.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getnov = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       'http://api.aladhan.com/v1/gToHCalendar/11/2022',
+  //     );
+  //     const json = await response.json();
+  //     console.log(json.data);
+  //     setNov(json.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    getnov();
-  }, []);
+  // useEffect(() => {
+  //   getnov();
+  // }, []);
 
-  const getdec = async () => {
-    try {
-      const response = await fetch(
-        'http://api.aladhan.com/v1/gToHCalendar/12/2022',
-      );
-      const json = await response.json();
-      console.log(json.data);
-      setDec(json.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getdec = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       'http://api.aladhan.com/v1/gToHCalendar/12/2022',
+  //     );
+  //     const json = await response.json();
+  //     console.log(json.data);
+  //     setDec(json.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    getdec();
-  }, []);
+  // useEffect(() => {
+  //   getdec();
+  // }, []);
+ var counter = 0
+ var limit = 29
+ var toggler = +1
+
   return (
     <View style={styles.container}>
       <View style={styles.topnav}>
@@ -365,7 +358,66 @@ const CalendarScreen = ({navigation}) => {
           <PacmanIndicator color="blue" />
         </View>
       ) : (
-        <></>
+        Object.keys(calendar).map(month=>{
+          if(month.includes(current_hijri_year)){
+            return(
+            <View>
+              <View>
+                <Text>{month}</Text>
+              </View>
+              <View>
+                <Text>Sun</Text>
+                <Text>Mon</Text>
+                <Text>Tue</Text>
+                <Text>Wed</Text>
+                <Text>Thu</Text>
+                <Text>Fri</Text>
+                <Text>Sat</Text>
+              </View>
+              <View>
+                {[0,1,2,3,4].map(i=>{
+                  counter = 0
+                  limit += toggler
+                  toggler *= -1
+                  return(
+                    <View>
+                      {[0,1,2,3,4,5,6].map(j=>{
+                        if (i == 0 && j >= weekdays[calendar[month][0]["gregorian"]["weekday"]['en']]){
+                          counter++
+                          return(
+                            <View>
+                              <Text>
+                                {calendar[month][counter-1]['hijri']
+                                  ['day']}
+                              </Text>
+                            </View>
+                          )
+                        }
+                        else if (i == 0 || counter >= limit)
+                        return(
+                          <View>
+                            <Text>
+
+                            </Text>
+                          </View>
+                        )
+                        else{
+                          counter++
+                          return(
+                            <View>
+                              <Text>{calendar[month][counter-1]['hijri']['day']}</Text>
+                            </View>
+                          )
+                        }
+                      })}
+                      </View>
+                  )
+                })}
+              </View>
+            </View>
+            )
+          }
+        })
         // <ScrollView scrollEventThrottle={false}>
         //   {/* JANUARY */}
         //   <View
