@@ -14,7 +14,6 @@ import {
   ToastAndroid,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 const NUM_OF_LINES = 4;
 import Geolocation from '@react-native-community/geolocation';
 import {PacmanIndicator} from 'react-native-indicators';
@@ -33,14 +32,11 @@ function normalize(size) {
   }
 }
 
-// Geolocation.setRNConfiguration(config);
 const Home = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const [info, setInfo] = useState(0);
   const [prayersTime, setPrayersTime] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
-  //   console.log(data);
 
   useEffect(() => {
     fetch('https://razvitalimat.herokuapp.com/api/content')
@@ -63,10 +59,7 @@ const Home = ({navigation}) => {
     }
   }, [refreshing]);
 
-  const [focused, setFocused] = useState('');
-
   const [showMore, setShowMore] = useState(false);
-  const [time, setTime] = useState(0);
   const [lagitude, setLagitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
 
@@ -74,55 +67,56 @@ const Home = ({navigation}) => {
     setShowMore(e.nativeEvent.lines.length > NUM_OF_LINES);
   }, []);
 
-  // Geolocation.getCurrentPosition(
-  //   data => {
-  //     setLagitude(data.coords.latitude);
-  //     setLongitude(data.coords.longitude);
-  //     console.log(data);
-  //     // setInfo(data)
-  //   },
-  //   err => {
-  //     console.log(err);
-  //   },
-  //   {
-  //     enableHighAccuracy: true,
-  //   },
-  // );
+  Geolocation.getCurrentPosition(data => {
+    setLagitude(data.coords.latitude);
+    setLongitude(data.coords.longitude);
+  });
 
-  Geolocation.watchPosition(
-    data => {
-      console.log('Data', data);
-    },
-    err => {
-      console.log(err);
-    },
-    {
-      enableHighAccuracy: true,
-    },
+  // console.log(info);
+  // console.log(time);
+  console.log('lagitude', lagitude);
+  console.log('longitude', longitude);
+
+  const lati = lagitude;
+  const logi = longitude;
+
+  // function getCity(lati, logi) {
+  var xhr = new XMLHttpRequest();
+  var lat = lati;
+  var lng = logi;
+
+  // Paste your LocationIQ token below.
+  xhr.open(
+    'GET',
+    'https://us1.locationiq.com/v1/reverse.php?key=pk.6644ad4fb87f8a59e24b45827864b079&lat=' +
+      lat +
+      '&lon=' +
+      lng +
+      '&format=json',
+    true,
   );
+  xhr.send();
+  xhr.onreadystatechange = processRequest;
+  xhr.addEventListener('readystatechange', processRequest, false);
 
-  // // console.log(info);
-  // // console.log(time);
-  // console.log('lagitude', lagitude);
-  // console.log('longitude', longitude);
+  function processRequest(e) {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      var response = JSON.parse(xhr.responseText);
+      var city = response.address.city;
+      console.log(city);
+      return;
+    }
+  }
 
-  const lat = lagitude;
-  const log = longitude;
   useEffect(() => {
     fetch(
-      `https://api.pray.zone/v2/times/today.json?longitude=${log}&latitude=${lat}&elevation=333`,
+      `https://api.pray.zone/v2/times/today.json?longitude=${logi}&latitude=${lati}&elevation=333`,
     )
       .then(response => response.json())
-      .then(json => {
-        console.log(json);
-        setPrayersTime(json.results.datetime);
-      })
+      .then(json => setPrayersTime(json.results.datetime))
       .catch(error => console.error(error))
       .finally(() => setLoading(false));
   }, []);
-
-  console.log('object', prayersTime);
-  // console.log(lat)
 
   return (
     <View style={styles.container}>
