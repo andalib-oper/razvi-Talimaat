@@ -1,51 +1,51 @@
-import React, {useCallback, useEffect} from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
-    View, 
-    Text, 
+    View,
+    Text,
     StyleSheet,
     ImageBackground,
     Image,
     Dimensions
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {req} from '../../redux/auth/actions';
+import { req } from '../../redux/auth/actions';
 import LinearGradient from 'react-native-linear-gradient';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const Splash = ({navigation}) =>{
+const Splash = ({ navigation }) => {
     const dispatch = useDispatch();
-    const checkFirstLaunch= useCallback(()=>{
-        AsyncStorage.getItem('alreadyLaunched').then((value)=>{
-            dispatch(req());
+    const checkFirstLaunch = useCallback(() => {
+        AsyncStorage.getItem('alreadyLaunched').then((value) => {
+            navigation.navigate('city');
         });
     },[navigation]);
-    useEffect(()=>{
-        setTimeout(()=>{
+    useEffect(() => {
+        setTimeout(() => {
             checkFirstLaunch();
-        },5000);
-    },[checkFirstLaunch]);
+        }, 5000);
+    }, [checkFirstLaunch]);
     console.log("App Executed");
-return (
-    <View style={styles.container}>
-            <Image 
-             style={styles.imagerizvi}
-            source={require('../../images/RAZVI.png')}/>
-            <ImageBackground 
-            style={styles.image}
-            source={require('../../images/madina.png')}/> 
-    </View>
-)
+    return (
+        <View style={styles.container}>
+            <Image
+                style={styles.imagerizvi}
+                source={require('../../images/RAZVI.png')} />
+            <ImageBackground
+                style={styles.image}
+                source={require('../../images/madina.png')} />
+        </View>
+    )
 };
 
-const styles= StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
-        flex:1,
+        flex: 1,
         // backgroundColor: '#4CA6A8'
         backgroundColor: 'white'
-       
+
     },
     header: {
         padding: 10,
@@ -56,7 +56,7 @@ const styles= StyleSheet.create({
         fontFamily: 'Montserrat',
         fontWeight: '700',
     },
-  title: {
+    title: {
         marginTop: 5,
         padding: 10,
         alignContent: 'center',
@@ -68,8 +68,8 @@ const styles= StyleSheet.create({
     },
     image: {
         marginTop: -100,
-        height: windowHeight/2,
-        width: windowWidth/1,
+        height: windowHeight / 2,
+        width: windowWidth / 1,
         alignContent: 'center',
         alignItems: 'center',
         justifyContent: 'center',
@@ -79,7 +79,7 @@ const styles= StyleSheet.create({
     },
     imagerizvi: {
         marginTop: 100,
-        height: windowHeight/2,
+        height: windowHeight / 2,
         width: 400,
         alignContent: 'center',
         alignItems: 'center',
@@ -90,13 +90,13 @@ const styles= StyleSheet.create({
     background: {
         backgroundColor: '#4B59F7',
         height: 450,
-        width: windowWidth/1,
+        width: windowWidth / 1,
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
         borderRadius: 5,
-      },
+    },
 })
 
 export default Splash;

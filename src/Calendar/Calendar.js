@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import {
   PixelRatio,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {PacmanIndicator} from 'react-native-indicators';
+import { PacmanIndicator } from 'react-native-indicators';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -31,7 +31,7 @@ function normalize(size) {
   }
 }
 
-const CalendarScreen = ({navigation}) => {
+const CalendarScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -80,31 +80,39 @@ const CalendarScreen = ({navigation}) => {
     //     setCurrent_hijri_year(res.data.hijri.year);
     //   })
     // .catch(err => console.log(err));
+    var all_years2 = []
     for (var i = 1; i < 13; i++) {
       const newFunc = async () => {
         // console.log(i);
         try {
           var [res1, res2, res3] = await Promise.all(
             [
-              `http://api.aladhan.com/v1/gToHCalendar/${i}/${
-                new Date().getFullYear() - 1
+              `http://api.aladhan.com/v1/gToHCalendar/${i}/${new Date().getFullYear() - 1
               }`,
               `http://api.aladhan.com/v1/gToHCalendar/${i}/${new Date().getFullYear()}`,
-              `http://api.aladhan.com/v1/gToHCalendar/${i}/${
-                new Date().getFullYear() + 1
+              `http://api.aladhan.com/v1/gToHCalendar/${i}/${new Date().getFullYear() + 1
               }`,
             ].map(async url => {
               const resp = await fetch(url);
               return resp.json();
             }),
           );
-          // console.log(res);
-          setAll_years([
-            ...all_years,
-            ...res1.data,
-            ...res2.data,
-            ...res3.data,
-          ]);
+          // console.log("data", res2.data);
+          // setAll_years([
+          //   ...all_years,
+          //   ...res1.data,
+          //   ...res2.data,
+          //   ...res3.data,
+          // ]);
+          all_years2.push(
+            ...res1.data
+          )
+          all_years2.push(
+            ...res2.data
+          )
+          all_years2.push(
+            ...res3.data
+          )
         } catch (err) {
           console.log(err);
           // console.log(err2);
@@ -112,14 +120,15 @@ const CalendarScreen = ({navigation}) => {
         }
       };
       newFunc();
-    }
+    } setAll_years(all_years2)
+    console.log(all_years2)
 
     var calendar_mini = {};
-
-    for (var i = 0; i < all_years.length(); i++) {
+    console.log(all_years.length)
+    for (var i = 0; i < all_years.length; i++) {
       var month = `${all_years[i].hijri.month.en}_${all_years[i].hijri.year}`;
-      if (Object.keys(calendar).includes(month)) {
-        calendar_mini[month] = [...calendar[month], all_years[i]];
+      if (Object.keys(calendar_mini).includes(month)) {
+        calendar_mini[month] = [...calendar_mini[month], all_years[i]];
       } else {
         calendar_mini[month] = [all_years[i]];
       }
@@ -368,1333 +377,132 @@ const CalendarScreen = ({navigation}) => {
         <Text style={styles.topnavtext}>Calendar</Text>
       </View>
       {isLoading ? (
-        <View style={{alignSelf: 'center', marginTop: 70}}>
+        <View style={{ alignSelf: 'center', marginTop: 70 }}>
           <PacmanIndicator color="blue" />
         </View>
       ) : (
-        Object.keys(calendar).map(month => {
-          if (month.includes(current_hijri_year)) {
-            return (
-              <View>
+        <ScrollView>
+          {Object.keys(calendar).map(month => {
+            if (month.includes(current_hijri_year)) {
+              return (
                 <View>
-                  <Text>{month}</Text>
-                </View>
-                <View>
-                  <Text>Sun</Text>
-                  <Text>Mon</Text>
-                  <Text>Tue</Text>
-                  <Text>Wed</Text>
-                  <Text>Thu</Text>
-                  <Text>Fri</Text>
-                  <Text>Sat</Text>
-                </View>
-                <View>
-                  {[0, 1, 2, 3, 4].map(i => {
-                    counter = 0;
-                    limit += toggler;
-                    toggler *= -1;
-                    return (
-                      <View>
-                        {[0, 1, 2, 3, 4, 5, 6].map(j => {
-                          if (
-                            i == 0 &&
-                            j >=
+                  <View>
+                    <Text>{month}</Text>
+                  </View>
+                  <View>
+                    <Text>Sun</Text>
+                    <Text>Mon</Text>
+                    <Text>Tue</Text>
+                    <Text>Wed</Text>
+                    <Text>Thu</Text>
+                    <Text>Fri</Text>
+                    <Text>Sat</Text>
+                  </View>
+                  <View>
+                    {[0, 1, 2, 3, 4].map(i => {
+                      counter = 0;
+                      limit += toggler;
+                      toggler *= -1;
+                      return (
+                        <View>
+                          {[0, 1, 2, 3, 4, 5, 6].map(j => {
+                            if (
+                              i == 0 &&
+                              j >=
                               weekdays[
-                                calendar[month][0]['gregorian']['weekday']['en']
+                              calendar[month][0]['gregorian']['weekday']['en']
                               ]
-                          ) {
-                            counter++;
-                            return (
-                              <View>
-                                <Text>
-                                  {calendar[month][counter - 1]['hijri']['day']}
-                                </Text>
-                              </View>
-                            );
-                          } else if (i == 0 || counter >= limit)
-                            return (
-                              <View>
-                                <Text></Text>
-                              </View>
-                            );
-                          else {
-                            counter++;
-                            return (
-                              <View>
-                                <Text>
-                                  {calendar[month][counter - 1]['hijri']['day']}
-                                </Text>
-                              </View>
-                            );
-                          }
-                        })}
-                      </View>
-                    );
-                  })}
+                            ) {
+                              counter += 1;
+                              return (
+                                <View>
+                                  <Text>
+                                    {calendar[month][counter - 1]['hijri']['day']}
+                                  </Text>
+                                </View>
+                              );
+                            } else if (i == 0 || counter >= limit)
+                              return (
+                                <View>
+                                  <Text></Text>
+                                </View>
+                              );
+                            else {
+                              counter += 1;
+                              return (
+                                <View>
+                                  <Text>
+                                    {calendar[month][counter - 1]['hijri']['day']}
+                                  </Text>
+                                </View>
+                              );
+                            }
+                          })}
+                        </View>
+                      );
+                    })}
+                  </View>
                 </View>
-              </View>
-            );
-          }
-        })
-        // <ScrollView scrollEventThrottle={false}>
-        //   {/* JANUARY */}
-        //   <View
-        //     style={{
-        //       margin: 10,
-        //       backgroundColor: 'white',
-        //       width: windowWidth / 1.1,
-        //       alignSelf: 'center',
-        //       borderRadius: 30,
-        //       elevation: 10,
-        //       shadowColor: '#000',
-        //       shadowOffset: {
-        //         width: 0,
-        //         height: 3,
-        //       },
-        //       shadowOpacity: 0.27,
-        //       shadowRadius: 4.65,
-        //       // marginRight: 10,
-        //     }}>
-        //     <Text
-        //       style={{
-        //         alignSelf: 'center',
-        //         marginTop: 10,
-        //         fontSize: normalize(20),
-        //         fontWeight: '600',
-        //         color: '#090979',
-        //       }}>
-        //       January{' '}
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 10,
-        //         marginTop: 20,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       WeekDays
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 150,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Date
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 260,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Islamic Year
-        //     </Text>
-        //     <ScrollView scrollEventThrottle={false}>
-        //       {data.map(item => {
-        //         return (
-        //           <View>
-        //             <Text
-        //               style={{
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginTop: 20,
-        //                 marginRight: 10,
-        //                 // alignSelf: 'flex-end',
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.month.ar}
-        //             </Text>
-        //             <View
-        //               style={{
-        //                 borderWidth: 1,
-        //                 borderColor: 'black',
-        //                 width: 360,
-        //                 marginLeft: 15,
-        //                 // marginTop: 10,
-        //               }}></View>
-        //             <Text
-        //               style={{
-        //                 marginTop: -25,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 10,
-        //                 color: 'black',
-        //                 // alignSelf: 'flex-start',
-        //               }}>
-        //               {item.gregorian.weekday.en}
-        //             </Text>
-        //             <Text
-        //               style={{
-        //                 marginTop: -43,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 130,
-        //                 color: 'black',
-        //                 // alignSelf: 'center'
-        //               }}>
-        //               {item.hijri.date}
-        //             </Text>
-        //           </View>
-        //         );
-        //       })}
-        //     </ScrollView>
-        //   </View>
-        //   {/* FEBRUARY */}
-        //   <View
-        //     style={{
-        //       margin: 10,
-        //       backgroundColor: 'white',
-        //       width: windowWidth / 1.1,
-        //       alignSelf: 'center',
-        //       borderRadius: 30,
-        //       elevation: 10,
-        //       // marginRight: 10,
-        //     }}>
-        //     <Text
-        //       style={{
-        //         alignSelf: 'center',
-        //         marginTop: 10,
-        //         fontSize: normalize(20),
-        //         fontWeight: '600',
-        //         color: '#090979',
-        //       }}>
-        //       February{' '}
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 10,
-        //         marginTop: 20,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       WeekDays
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 150,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Date
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 260,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Islamic Year
-        //     </Text>
-        //     <ScrollView scrollEventThrottle={false}>
-        //       {feb.map(item => {
-        //         return (
-        //           <View>
-        //             <Text
-        //               style={{
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginTop: 20,
-        //                 marginRight: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.month.ar}
-        //             </Text>
-        //             <View
-        //               style={{
-        //                 borderWidth: 1,
-        //                 borderColor: 'black',
-        //                 width: 360,
-        //                 marginLeft: 15,
-        //                 // marginTop: 10,
-        //               }}></View>
-        //             <Text
-        //               style={{
-        //                 marginTop: -25,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.gregorian.weekday.en}
-        //             </Text>
-        //             <Text
-        //               style={{
-        //                 marginTop: -43,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 130,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.date}
-        //             </Text>
-        //           </View>
-        //         );
-        //       })}
-        //     </ScrollView>
-        //   </View>
-        //   {/* MARCH */}
-        //   <View
-        //     style={{
-        //       margin: 10,
-        //       backgroundColor: 'white',
-        //       width: windowWidth / 1.1,
-        //       alignSelf: 'center',
-        //       borderRadius: 30,
-        //       elevation: 10,
-        //     }}>
-        //     <Text
-        //       style={{
-        //         alignSelf: 'center',
-        //         marginTop: 10,
-        //         fontSize: normalize(20),
-        //         fontWeight: '600',
-        //         color: '#090979',
-        //       }}>
-        //       March{' '}
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 10,
-        //         marginTop: 20,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       WeekDays
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 170,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Date
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 260,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Islamic Year
-        //     </Text>
-        //     <ScrollView>
-        //       {march.map(item => {
-        //         return (
-        //           <View>
-        //             <Text
-        //               style={{
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginTop: 20,
-        //                 marginRight: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.month.ar}
-        //             </Text>
-        //             <View
-        //               style={{
-        //                 borderWidth: 1,
-        //                 borderColor: '#090979',
-        //                 width: 360,
-        //                 marginLeft: 15,
-        //                 // marginTop: 10,
-        //               }}></View>
-        //             <Text
-        //               style={{
-        //                 marginTop: -25,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.gregorian.weekday.en}
-        //             </Text>
-        //             <Text
-        //               style={{
-        //                 marginTop: -43,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 130,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.date}
-        //             </Text>
-        //           </View>
-        //         );
-        //       })}
-        //     </ScrollView>
-        //   </View>
-        //   {/* APRIL */}
-        //   <View
-        //     style={{
-        //       margin: 10,
-        //       backgroundColor: 'white',
-        //       width: windowWidth / 1.1,
-        //       alignSelf: 'center',
-        //       borderRadius: 30,
-        //       elevation: 10,
-        //     }}>
-        //     <Text
-        //       style={{
-        //         alignSelf: 'center',
-        //         marginTop: 10,
-        //         fontSize: normalize(20),
-        //         fontWeight: '600',
-        //         color: '#090979',
-        //       }}>
-        //       April{' '}
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 10,
-        //         marginTop: 20,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       WeekDays
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 170,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Date
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 260,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Islamic Year
-        //     </Text>
-        //     <ScrollView>
-        //       {april.map(item => {
-        //         return (
-        //           <View>
-        //             <Text
-        //               style={{
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginTop: 20,
-        //                 marginRight: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.month.ar}
-        //             </Text>
-        //             <View
-        //               style={{
-        //                 borderWidth: 1,
-        //                 borderColor: '#090979',
-        //                 width: 360,
-        //                 marginLeft: 15,
-        //                 // marginTop: 10,
-        //               }}></View>
-        //             <Text
-        //               style={{
-        //                 marginTop: -25,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.gregorian.weekday.en}
-        //             </Text>
-        //             <Text
-        //               style={{
-        //                 marginTop: -43,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 130,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.date}
-        //             </Text>
-        //           </View>
-        //         );
-        //       })}
-        //     </ScrollView>
-        //   </View>
-        //   {/* MAY */}
-        //   <View
-        //     style={{
-        //       margin: 10,
-        //       backgroundColor: 'white',
-        //       width: windowWidth / 1.1,
-        //       alignSelf: 'center',
-        //       borderRadius: 30,
-        //       elevation: 10,
-        //     }}>
-        //     <Text
-        //       style={{
-        //         alignSelf: 'center',
-        //         marginTop: 10,
-        //         fontSize: normalize(20),
-        //         fontWeight: '600',
-        //         color: '#090979',
-        //       }}>
-        //       May{' '}
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 10,
-        //         marginTop: 20,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       WeekDays
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 170,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Date
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 260,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Islamic Year
-        //     </Text>
-        //     <ScrollView>
-        //       {may.map(item => {
-        //         return (
-        //           <View>
-        //             <Text
-        //               style={{
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginTop: 20,
-        //                 marginRight: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.month.ar}
-        //             </Text>
-        //             <View
-        //               style={{
-        //                 borderWidth: 1,
-        //                 borderColor: '#090979',
-        //                 width: 360,
-        //                 marginLeft: 15,
-        //                 // marginTop: 10,
-        //               }}></View>
-        //             <Text
-        //               style={{
-        //                 marginTop: -25,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.gregorian.weekday.en}
-        //             </Text>
-        //             <Text
-        //               style={{
-        //                 marginTop: -43,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 130,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.date}
-        //             </Text>
-        //           </View>
-        //         );
-        //       })}
-        //     </ScrollView>
-        //   </View>
-        //   {/* JUNE */}
-        //   <View
-        //     style={{
-        //       margin: 10,
-        //       backgroundColor: 'white',
-        //       width: windowWidth / 1.1,
-        //       alignSelf: 'center',
-        //       borderRadius: 30,
-        //       elevation: 10,
-        //     }}>
-        //     <Text
-        //       style={{
-        //         alignSelf: 'center',
-        //         marginTop: 10,
-        //         fontSize: normalize(20),
-        //         fontWeight: '600',
-        //         color: '#090979',
-        //       }}>
-        //       June{' '}
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 10,
-        //         marginTop: 20,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       WeekDays
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 170,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Date
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 260,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Islamic Year
-        //     </Text>
-        //     <ScrollView>
-        //       {june.map(item => {
-        //         return (
-        //           <View>
-        //             <Text
-        //               style={{
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginTop: 20,
-        //                 marginRight: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.month.ar}
-        //             </Text>
-        //             <View
-        //               style={{
-        //                 borderWidth: 1,
-        //                 borderColor: '#090979',
-        //                 width: 360,
-        //                 marginLeft: 15,
-        //                 // marginTop: 10,
-        //               }}></View>
-        //             <Text
-        //               style={{
-        //                 marginTop: -25,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.gregorian.weekday.en}
-        //             </Text>
-        //             <Text
-        //               style={{
-        //                 marginTop: -43,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 130,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.date}
-        //             </Text>
-        //           </View>
-        //         );
-        //       })}
-        //     </ScrollView>
-        //   </View>
-        //   {/* JULY */}
-        //   <View
-        //     style={{
-        //       margin: 10,
-        //       backgroundColor: 'white',
-        //       width: windowWidth / 1.1,
-        //       alignSelf: 'center',
-        //       borderRadius: 30,
-        //       elevation: 10,
-        //     }}>
-        //     <Text
-        //       style={{
-        //         alignSelf: 'center',
-        //         marginTop: 10,
-        //         fontSize: normalize(20),
-        //         fontWeight: '600',
-        //         color: '#090979',
-        //       }}>
-        //       July{' '}
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 10,
-        //         marginTop: 20,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       WeekDays
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 170,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Date
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 260,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Islamic Year
-        //     </Text>
-        //     <ScrollView>
-        //       {july.map(item => {
-        //         return (
-        //           <View>
-        //             <Text
-        //               style={{
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginTop: 20,
-        //                 marginRight: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.month.ar}
-        //             </Text>
-        //             <View
-        //               style={{
-        //                 borderWidth: 1,
-        //                 borderColor: '#090979',
-        //                 width: 360,
-        //                 marginLeft: 15,
-        //                 // marginTop: 10,
-        //               }}></View>
-        //             <Text
-        //               style={{
-        //                 marginTop: -25,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.gregorian.weekday.en}
-        //             </Text>
-        //             <Text
-        //               style={{
-        //                 marginTop: -43,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 130,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.date}
-        //             </Text>
-        //           </View>
-        //         );
-        //       })}
-        //     </ScrollView>
-        //   </View>
-        //   {/* AUGUST */}
-        //   <View
-        //     style={{
-        //       margin: 10,
-        //       backgroundColor: 'white',
-        //       width: windowWidth / 1.1,
-        //       alignSelf: 'center',
-        //       borderRadius: 30,
-        //       elevation: 10,
-        //     }}>
-        //     <Text
-        //       style={{
-        //         alignSelf: 'center',
-        //         marginTop: 10,
-        //         fontSize: normalize(20),
-        //         fontWeight: '600',
-        //         color: '#090979',
-        //       }}>
-        //       August{' '}
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 10,
-        //         marginTop: 20,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       WeekDays
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 170,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Date
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 260,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Islamic Year
-        //     </Text>
-        //     <ScrollView>
-        //       {august.map(item => {
-        //         return (
-        //           <View>
-        //             <Text
-        //               style={{
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginTop: 20,
-        //                 marginRight: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.month.ar}
-        //             </Text>
-        //             <View
-        //               style={{
-        //                 borderWidth: 1,
-        //                 borderColor: '#090979',
-        //                 width: 360,
-        //                 marginLeft: 15,
-        //                 // marginTop: 10,
-        //               }}></View>
-        //             <Text
-        //               style={{
-        //                 marginTop: -25,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.gregorian.weekday.en}
-        //             </Text>
-        //             <Text
-        //               style={{
-        //                 marginTop: -43,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 130,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.date}
-        //             </Text>
-        //           </View>
-        //         );
-        //       })}
-        //     </ScrollView>
-        //   </View>
-        //   {/* SEPTEMBER */}
-        //   <View
-        //     style={{
-        //       margin: 10,
-        //       backgroundColor: 'white',
-        //       width: windowWidth / 1.1,
-        //       alignSelf: 'center',
-        //       borderRadius: 30,
-        //       elevation: 10,
-        //     }}>
-        //     <Text
-        //       style={{
-        //         alignSelf: 'center',
-        //         marginTop: 10,
-        //         fontSize: normalize(20),
-        //         fontWeight: '600',
-        //         color: '#090979',
-        //       }}>
-        //       September{' '}
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 10,
-        //         marginTop: 20,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       WeekDays
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 170,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Date
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 260,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Islamic Year
-        //     </Text>
-        //     <ScrollView>
-        //       {sept.map(item => {
-        //         return (
-        //           <View>
-        //             <Text
-        //               style={{
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginTop: 20,
-        //                 marginRight: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.month.ar}
-        //             </Text>
-        //             <View
-        //               style={{
-        //                 borderWidth: 1,
-        //                 borderColor: '#090979',
-        //                 width: 360,
-        //                 marginLeft: 15,
-        //                 // marginTop: 10,
-        //               }}></View>
-        //             <Text
-        //               style={{
-        //                 marginTop: -25,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.gregorian.weekday.en}
-        //             </Text>
-        //             <Text
-        //               style={{
-        //                 marginTop: -43,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 130,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.date}
-        //             </Text>
-        //           </View>
-        //         );
-        //       })}
-        //     </ScrollView>
-        //   </View>
-        //   {/* OCTOBER */}
-        //   <View
-        //     style={{
-        //       margin: 10,
-        //       backgroundColor: 'white',
-        //       width: windowWidth / 1.1,
-        //       alignSelf: 'center',
-        //       borderRadius: 30,
-        //       elevation: 10,
-        //     }}>
-        //     <Text
-        //       style={{
-        //         alignSelf: 'center',
-        //         marginTop: 10,
-        //         fontSize: normalize(20),
-        //         fontWeight: '600',
-        //         color: '#090979',
-        //       }}>
-        //       October{' '}
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 10,
-        //         marginTop: 20,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       WeekDays
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 170,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Date
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 260,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Islamic Year
-        //     </Text>
-        //     <ScrollView>
-        //       {oct.map(item => {
-        //         return (
-        //           <View>
-        //             <Text
-        //               style={{
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginTop: 20,
-        //                 marginRight: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.month.ar}
-        //             </Text>
-        //             <View
-        //               style={{
-        //                 borderWidth: 1,
-        //                 borderColor: '#090979',
-        //                 width: 360,
-        //                 marginLeft: 15,
-        //                 // marginTop: 10,
-        //               }}></View>
-        //             <Text
-        //               style={{
-        //                 marginTop: -25,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.gregorian.weekday.en}
-        //             </Text>
-        //             <Text
-        //               style={{
-        //                 marginTop: -43,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 130,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.date}
-        //             </Text>
-        //           </View>
-        //         );
-        //       })}
-        //     </ScrollView>
-        //   </View>
-        //   {/* NOVEMBER */}
-        //   <View
-        //     style={{
-        //       margin: 10,
-        //       backgroundColor: 'white',
-        //       width: windowWidth / 1.1,
-        //       alignSelf: 'center',
-        //       borderRadius: 30,
-        //       elevation: 10,
-        //     }}>
-        //     <Text
-        //       style={{
-        //         alignSelf: 'center',
-        //         marginTop: 10,
-        //         fontSize: normalize(20),
-        //         fontWeight: '600',
-        //         color: '#090979',
-        //       }}>
-        //       November{' '}
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 10,
-        //         marginTop: 20,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       WeekDays
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 170,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Date
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 260,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Islamic Year
-        //     </Text>
-        //     <ScrollView>
-        //       {nov.map(item => {
-        //         return (
-        //           <View>
-        //             <Text
-        //               style={{
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginTop: 20,
-        //                 marginRight: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.month.ar}
-        //             </Text>
-        //             <View
-        //               style={{
-        //                 borderWidth: 1,
-        //                 borderColor: '#090979',
-        //                 width: 360,
-        //                 marginLeft: 15,
-        //                 // marginTop: 10,
-        //               }}></View>
-        //             <Text
-        //               style={{
-        //                 marginTop: -25,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.gregorian.weekday.en}
-        //             </Text>
-        //             <Text
-        //               style={{
-        //                 marginTop: -43,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 130,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.date}
-        //             </Text>
-        //           </View>
-        //         );
-        //       })}
-        //     </ScrollView>
-        //   </View>
-        //   {/* DECEMBER */}
-        //   <View
-        //     style={{
-        //       margin: 10,
-        //       backgroundColor: 'white',
-        //       width: windowWidth / 1.1,
-        //       alignSelf: 'center',
-        //       borderRadius: 30,
-        //       elevation: 10,
-        //     }}>
-        //     <Text
-        //       style={{
-        //         alignSelf: 'center',
-        //         marginTop: 10,
-        //         fontSize: normalize(20),
-        //         fontWeight: '600',
-        //         color: '#090979',
-        //       }}>
-        //       December{' '}
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 10,
-        //         marginTop: 20,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       WeekDays
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 170,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Date
-        //     </Text>
-        //     <Text
-        //       style={{
-        //         textAlign: 'left',
-        //         marginLeft: 260,
-        //         marginTop: -22,
-        //         fontSize: normalize(14),
-        //         color: '#4b7bf2',
-        //       }}>
-        //       Islamic Year
-        //     </Text>
-        //     <ScrollView>
-        //       {dec.map(item => {
-        //         return (
-        //           <View>
-        //             <Text
-        //               style={{
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginTop: 20,
-        //                 marginRight: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.month.ar}
-        //             </Text>
-        //             <View
-        //               style={{
-        //                 borderWidth: 1,
-        //                 borderColor: '#090979',
-        //                 width: 360,
-        //                 marginLeft: 15,
-        //                 // marginTop: 10,
-        //               }}></View>
-        //             <Text
-        //               style={{
-        //                 marginTop: -25,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 10,
-        //                 color: 'black',
-        //               }}>
-        //               {item.gregorian.weekday.en}
-        //             </Text>
-        //             <Text
-        //               style={{
-        //                 marginTop: -43,
-        //                 fontSize: normalize(14),
-        //                 fontWeight: '600',
-        //                 marginBottom: 20,
-        //                 marginLeft: 130,
-        //                 color: 'black',
-        //               }}>
-        //               {item.hijri.date}
-        //             </Text>
-        //           </View>
-        //         );
-        //       })}
-        //     </ScrollView>
-        //   </View>
-        // </ScrollView>
-      )}
-    </View>
-  );
-};
+              );
+            }
+          })}
+        </ScrollView>
+      )
+      }</View>
+  )};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  topnav: {
-    height: 60,
-    width: 412,
-    backgroundColor: '#4b7bf2',
-  },
-  topnavtext: {
-    marginTop: -35,
-    alignSelf: 'center',
-    textAlign: 'center',
-    fontSize: normalize(22),
-    color: 'white',
-  },
-  icon: {
-    marginLeft: 20,
-    marginTop: 15,
-  },
-  umrah: {
-    marginTop: 20,
-    marginLeft: 10,
-    marginRight: 10,
-    height: 450,
-    width: 390,
-    backgroundColor: 'white',
-    elevation: 20,
-    borderRadius: 20,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 40,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
     },
-    backgroundColor: 'white',
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-});
+    topnav: {
+      height: 60,
+      width: 412,
+      backgroundColor: '#4b7bf2',
+    },
+    topnavtext: {
+      marginTop: -35,
+      alignSelf: 'center',
+      textAlign: 'center',
+      fontSize: normalize(22),
+      color: 'white',
+    },
+    icon: {
+      marginLeft: 20,
+      marginTop: 15,
+    },
+    umrah: {
+      marginTop: 20,
+      marginLeft: 10,
+      marginRight: 10,
+      height: 450,
+      width: 390,
+      backgroundColor: 'white',
+      elevation: 20,
+      borderRadius: 20,
+    },
+    modalView: {
+      margin: 20,
+      backgroundColor: 'white',
+      borderRadius: 40,
+      padding: 35,
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      backgroundColor: 'white',
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+    },
+    centeredView: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 22,
+    },
+  });
 
-export default CalendarScreen;
+  export default CalendarScreen;
