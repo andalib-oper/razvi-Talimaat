@@ -162,8 +162,9 @@ const Home = ({navigation}) => {
         <View style={styles.topContainer}>
           <ImageBackground
             style={styles.image}
-            source={
-              prayerLoading || Object.keys(prayerTimes).length < 9
+            source={require('../../images/background3.jpeg')}>
+            <View style={{backgroundColor: 'pink'}}>
+              {prayerLoading || Object.keys(prayerTimes).length < 9
                 ? null
                 : new Date().getTime() >=
                     new Date(
@@ -218,8 +219,8 @@ const Home = ({navigation}) => {
                       .set('millisecond', 0),
                   ).getTime()
                 ? require('../../images/fajr.png')
-                : null
-            }>
+                : null}
+            </View>
             <View style={{backgroundColor: 'pink'}}>
               <Text
                 style={{
@@ -442,6 +443,52 @@ const Home = ({navigation}) => {
               </Text>
             </View>
           </ImageBackground>
+          <View>
+            <View
+              style={{
+                backgroundColor: 'white',
+                height: 50,
+                width: windowWidth / 1.2,
+                marginLeft: 20,
+                marginRight: 20,
+                alignSelf: 'center',
+                marginTop: -20,
+                borderColor: 'black',
+                borderRadius: 20,
+                // borderWidth: 2
+                elevation: 5,
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 3,
+                },
+                shadowOpacity: 0.27,
+                shadowRadius: 4.65,
+                borderRadius: 20,
+              }}>
+              <Text
+                style={{
+                  margin: 10,
+                  textAlign: 'center',
+                  fontSize: 20,
+                  fontWeight: '600',
+                  color: 'black',
+                }}>
+                Latest Artical
+              </Text>
+              <Image
+                style={{
+                  height: 40,
+                  width: 40,
+                  borderRadius: 10,
+                  marginLeft: 10,
+                  // marginLeft: 10,
+                  marginTop: -45,
+                }}
+                source={require('../../images/article.jpg')}
+              />
+            </View>
+          </View>
         </View>
         {/* {prayerTimes.map(item => {
           return (

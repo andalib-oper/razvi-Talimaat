@@ -336,6 +336,7 @@ const styles = StyleSheet.create({
   },
   monthContainerText: {
     fontSize: normalize(18),
+    color: '#222',
   },
   weekRow: {
     display: 'flex',
@@ -348,10 +349,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: normalize(16),
     fontWeight: 'bold',
+    color: '#222',
   },
   weekText2: {
     textAlign: 'center',
     fontSize: normalize(14),
+    color: '#222',
   },
   weekTextHijri: {
     fontSize: normalize('12'),
