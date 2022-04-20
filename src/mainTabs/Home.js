@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -16,7 +16,7 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const NUM_OF_LINES = 4;
 import Geolocation from '@react-native-community/geolocation';
-import {PacmanIndicator} from 'react-native-indicators';
+import { PacmanIndicator } from 'react-native-indicators';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -32,7 +32,7 @@ function normalize(size) {
   }
 }
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [prayersTime, setPrayersTime] = useState([]);
@@ -89,10 +89,10 @@ const Home = ({navigation}) => {
   xhr.open(
     'GET',
     'https://us1.locationiq.com/v1/reverse.php?key=pk.6644ad4fb87f8a59e24b45827864b079&lat=' +
-      lat +
-      '&lon=' +
-      lng +
-      '&format=json',
+    lat +
+    '&lon=' +
+    lng +
+    '&format=json',
     true,
   );
   xhr.send();
@@ -130,7 +130,7 @@ const Home = ({navigation}) => {
           <ImageBackground
             style={styles.image}
             source={require('../../images/background3.jpeg')}>
-            <View style={{backgroundColor: 'pink'}}>
+            <View style={{ backgroundColor: 'pink' }}>
               <Text
                 style={{
                   textAlign: 'center',
@@ -231,6 +231,48 @@ const Home = ({navigation}) => {
               </Text>
             </View>
           </ImageBackground>
+          <View>
+            <View style={{
+              backgroundColor: 'white',
+              height: 50,
+              width: windowWidth / 1.2,
+              marginLeft: 20,
+              marginRight: 20,
+              alignSelf: 'center',
+              marginTop: -20,
+              borderColor: 'black',
+              borderRadius: 20,
+              // borderWidth: 2
+              elevation: 5,
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 3,
+              },
+              shadowOpacity: 0.27,
+              shadowRadius: 4.65,
+              borderRadius: 20,
+            }}>
+              <Text style={{
+                margin: 10,
+                textAlign: 'center',
+                fontSize: 20,
+                fontWeight: '600',
+                color: 'black'                
+              }}>Latest Artical</Text>
+                <Image
+                      style={{
+                        height: 40,
+                        width: 40,
+                        borderRadius: 10,
+                        marginLeft: 10,
+                        // marginLeft: 10,
+                        marginTop: -45,
+                      }}
+                      source={require('../../images/article.jpg')}
+                    />
+            </View>
+          </View>
         </View>
         {prayersTime.map(item => {
           return (
@@ -246,9 +288,9 @@ const Home = ({navigation}) => {
           );
         })}
 
-        <View style={{flex: 1, padding: 2}}>
+        <View style={{ flex: 1, padding: 2 }}>
           {isLoading ? (
-            <View style={{alignSelf: 'center', marginTop: 30}}>
+            <View style={{ alignSelf: 'center', marginTop: 30 }}>
               <PacmanIndicator color="blue" />
             </View>
           ) : (

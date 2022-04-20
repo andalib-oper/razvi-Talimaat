@@ -48,20 +48,20 @@ const CalendarScreen = ({ navigation }) => {
   };
   const [calendar, setCalendar] = useState({});
 
-  const getHijriCalendar = async () => {
-    try {
-      const response = await fetch(
-        'http://api.aladhan.com/v1/gToHCalendar/1/2022',
-      );
-      const json = await response.json();
-      // console.log(json.data)
-      setData(json.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getHijriCalendar = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       'http://api.aladhan.com/v1/gToHCalendar/1/2022',
+  //     );
+  //     const json = await response.json();
+  //     // console.log(json.data)
+  //     setData(json.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
     axios

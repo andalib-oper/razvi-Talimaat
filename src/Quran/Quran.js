@@ -60,96 +60,11 @@ const Quran = ({ navigation }) => {
                   fontSize: normalize(18),
                   color: 'white',
                   fontWeight: '600',
-                  marginTop: -50,
+                  marginTop: -130,
                   marginBottom: -60,
                   numberOfLines: 1,
                 }}>
                 Quran
-              </Text>
-            </View>
-            <View
-              style={
-                {
-                  // backgroundColor: 'pink'
-                }
-              }>
-              <Text
-                style={{
-                  textAlign: 'left',
-                  marginLeft: 15,
-                  fontSize: normalize(16),
-                  // color: '#023c54',
-                  color: 'white',
-                  fontWeight: '600',
-                  marginTop: 20,
-                }}>
-                Now
-              </Text>
-              <Text
-                style={{
-                  textAlign: 'left',
-                  marginLeft: 15,
-                  fontSize: normalize(20),
-                  // color: '#023c54',
-                  color: 'white',
-                  fontWeight: '600',
-                  marginTop: 5,
-                }}>
-                ISHA
-              </Text>
-              <Text
-                style={{
-                  textAlign: 'left',
-                  marginLeft: 15,
-                  fontSize: normalize(14),
-                  // color: '#023c54',
-                  color: 'white',
-                  fontWeight: '600',
-                  marginTop: 5,
-                }}>
-                Upcoming
-              </Text>
-              <FontAwesome
-                name="moon-o"
-                size={normalize(30)}
-                color="white"
-                style={{
-                  marginLeft: 315,
-                  marginTop: -100,
-                }}
-              />
-              <Text
-                style={{
-                  marginLeft: 330,
-                  fontSize: normalize(16),
-                  marginRight: 10,
-                  fontWeight: '600',
-                  color: 'white',
-                  marginTop: 10,
-                }}>
-                3
-              </Text>
-              <Text
-                style={{
-                  marginLeft: 210,
-                  marginRight: 10,
-                  fontSize: normalize(16),
-                  fontWeight: '600',
-                  color: 'white',
-                  marginTop: 5,
-                }}>
-                Ramadan, 1443
-              </Text>
-              <Text
-                style={{
-                  marginLeft: 270,
-                  marginRight: 10,
-                  fontSize: normalize(18),
-                  fontWeight: '600',
-                  color: 'white',
-                  marginTop: 5,
-                }}>
-                Monday
               </Text>
             </View>
           </ImageBackground>
