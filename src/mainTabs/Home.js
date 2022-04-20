@@ -92,10 +92,6 @@ const Home = ({ navigation }) => {
   xhr.open(
     'GET',
     'https://us1.locationiq.com/v1/reverse.php?key=pk.6644ad4fb87f8a59e24b45827864b079&lat=' +
-    // lat +
-    // '&lon=' +
-    // lng +
-    // '&format=json',
     lati +
     '&lon=' +
     logi +
@@ -530,11 +526,10 @@ const Home = ({ navigation }) => {
                   <View style={styles.umrah} key={item.number}>
                     <Image
                       style={{
-                        height: windowHeight / 2.9,
-                        width: windowWidth / 1.1,
+                        height: 130,
+                        width: 140,
                         borderRadius: 10,
-                        padding: 2
-                        // margin: 10,
+                        margin: 10,
                       }}
                       source={{
                         uri: item.contentImg,
@@ -544,10 +539,10 @@ const Home = ({ navigation }) => {
                     <View
                       style={{
                         margin: 10,
-                        height: 'auto',
-                        width: windowWidth / 1.2,
-                        // marginTop: -140,
-                        // marginLeft: 160,
+                        height: 130,
+                        width: windowWidth / 2.5,
+                        marginTop: -140,
+                        marginLeft: 160,
                         borderRadius: 10,
                       }}>
                       <Text
@@ -565,7 +560,7 @@ const Home = ({ navigation }) => {
                           color: 'black',
                           flexWrap: 'wrap',
                         }}
-                        // numberOfLines={NUM_OF_LINES}
+                        numberOfLines={NUM_OF_LINES}
                         onTextLayout={onTextLayout}>
                         {item.content}
                       </Text>
@@ -669,8 +664,6 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   umrah: {
-    flex: 1,
-    flexDirection: 'column',
     marginTop: 20,
     alignSelf: 'center',
     margin: 10,
