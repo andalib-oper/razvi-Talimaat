@@ -17,6 +17,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const NUM_OF_LINES = 4;
 import Geolocation from '@react-native-community/geolocation';
 import { PacmanIndicator } from 'react-native-indicators';
+import moment from 'moment';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -34,9 +35,11 @@ function normalize(size) {
 
 const Home = ({ navigation }) => {
   const [isLoading, setLoading] = useState(true);
+  const [prayerLoading, setPrayerLoading] = useState(true);
   const [data, setData] = useState([]);
-  const [prayersTime, setPrayersTime] = useState([]);
+  const [prayerTimes, setPrayerTimes] = useState({});
   const [refreshing, setRefreshing] = React.useState(false);
+  const [city, setCity] = useState('');
 
   useEffect(() => {
     fetch('https://razvitalimat.herokuapp.com/api/content')
@@ -68,55 +71,104 @@ const Home = ({ navigation }) => {
   }, []);
 
   Geolocation.getCurrentPosition(data => {
+    console.log(data);
     setLagitude(data.coords.latitude);
     setLongitude(data.coords.longitude);
   });
 
   // console.log(info);
   // console.log(time);
-  console.log('lagitude', lagitude);
-  console.log('longitude', longitude);
+  // console.log('lagitude', lagitude);
+  // console.log('longitude', longitude);
 
   const lati = lagitude;
   const logi = longitude;
 
   // function getCity(lati, logi) {
-  var xhr = new XMLHttpRequest();
-  var lat = lati;
-  var lng = logi;
+  const xhr = new XMLHttpRequest();
 
+  console.log(lagitude, logi);
   // Paste your LocationIQ token below.
   xhr.open(
     'GET',
     'https://us1.locationiq.com/v1/reverse.php?key=pk.6644ad4fb87f8a59e24b45827864b079&lat=' +
-    lat +
+    // lat +
+    // '&lon=' +
+    // lng +
+    // '&format=json',
+    lati +
     '&lon=' +
-    lng +
+    logi +
     '&format=json',
     true,
+    22,
   );
   xhr.send();
-  xhr.onreadystatechange = processRequest;
-  xhr.addEventListener('readystatechange', processRequest, false);
-
-  function processRequest(e) {
+  xhr.onreadystatechange = e => {
     if (xhr.readyState == 4 && xhr.status == 200) {
       var response = JSON.parse(xhr.responseText);
-      var city = response.address.city;
-      console.log(city);
+      setCity(response.address.city);
       return;
     }
-  }
+  };
+  xhr.addEventListener(
+    'readystatechange',
+    e => {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        var response = JSON.parse(xhr.responseText);
+        setCity(response.address.city);
+        return;
+      }
+    },
+    false,
+  );
+  // useEffect(() => {
+  // }, []);
 
   useEffect(() => {
-    fetch(
-      `https://api.pray.zone/v2/times/today.json?longitude=${logi}&latitude=${lati}&elevation=333`,
-    )
-      .then(response => response.json())
-      .then(json => setPrayersTime(json.results.datetime))
-      .catch(error => console.error(error))
-      .finally(() => setLoading(false));
-  }, []);
+    console.log(city || 'not');
+    if (city) {
+      console.log('INN');
+      fetch(
+        `http://api.aladhan.com/v1/calendarByCity?city=${city}&country=India&method=1&school=1&month=${new Date().getMonth() + 1
+        }&year=${new Date().getFullYear()}`,
+      )
+        .then(response => response.json())
+        .then(res => {
+          var resp = res.data.filter(
+            dat => dat.date.gregorian.date === moment().format('DD-MM-YYYY'),
+          )[0].timings;
+          Object.keys(resp).forEach(
+            key =>
+            (resp[key] = {
+              hr: resp[key].split(' ')[0].split(':')[0],
+              min: resp[key].split(' ')[0].split(':')[1],
+            }),
+          );
+          setPrayerTimes(resp);
+        })
+        .catch(error => console.error(error))
+        .finally(() => setPrayerLoading(false));
+    }
+  }, [city]);
+
+  console.log('time', prayerTimes, prayerLoading);
+  //   .set('hour', prayerTimes.Isha.split(':')[0])
+  //   .set('minute', prayerTimes.Isha.split(':')[1].split(' ')[0]);
+
+  // console.log(
+  //   new Date(
+  //     moment().get('year'),
+  //     moment().get('month') + 1,
+  //     moment().get('date'),
+  //     prayerTimes.Isha.split(':')[0],
+  //     prayerTimes.Isha.split(':')[1].split(' ')[0],
+  //   ),
+  // );
+
+  // console.log(
+  //   new Date(`${moment().format('DD-MM-YYYY')}, ${prayerTimes.Isha}`).getTime(),
+  // );
 
   return (
     <View style={styles.container}>
@@ -124,12 +176,69 @@ const Home = ({ navigation }) => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
-        <View
-        // style={styles.topContainer}
-        >
+        <View style={styles.topContainer}>
           <ImageBackground
             style={styles.image}
             source={require('../../images/background3.jpeg')}>
+            <View style={{ backgroundColor: 'pink' }}>
+              {prayerLoading || Object.keys(prayerTimes).length < 9
+                  ? null
+                  : new Date().getTime() >=
+                    new Date(
+                      moment()
+                        .set('hour', prayerTimes.Isha.hr)
+                        .set('minute', prayerTimes.Isha.min)
+                        .set('second', 0)
+                        .set('millisecond', 0),
+                    ).getTime() ||
+                    new Date().getTime() <
+                    new Date(
+                      moment()
+                        .set('hour', prayerTimes.Fajr.hr)
+                        .set('minute', prayerTimes.Fajr.min)
+                        .set('second', 0)
+                        .set('millisecond', 0),
+                    ).getTime()
+                    ? require('../../images/isha.png')
+                    : new Date().getTime() >=
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes.Maghrib.hr)
+                          .set('minute', prayerTimes.Maghrib.min)
+                          .set('second', 0)
+                          .set('millisecond', 0),
+                      ).getTime()
+                      ? require('../../images/maghrib.png')
+                      : new Date().getTime() >=
+                        new Date(
+                          moment()
+                            .set('hour', prayerTimes.Asr.hr)
+                            .set('minute', prayerTimes.Asr.min)
+                            .set('second', 0)
+                            .set('millisecond', 0),
+                        ).getTime()
+                        ? require('../../images/asr.png')
+                        : new Date().getTime() >=
+                          new Date(
+                            moment()
+                              .set('hour', prayerTimes.Dhuhr.hr)
+                              .set('minute', prayerTimes.Dhuhr.min)
+                              .set('second', 0)
+                              .set('millisecond', 0),
+                          ).getTime()
+                          ? require('../../images/dhuhr.png')
+                          : new Date().getTime() >=
+                            new Date(
+                              moment()
+                                .set('hour', prayerTimes.Fajr.hr)
+                                .set('minute', prayerTimes.Fajr.min)
+                                .set('second', 0)
+                                .set('millisecond', 0),
+                            ).getTime()
+                            ? require('../../images/fajr.png')
+                            : null
+              }
+            </View>
             <View style={{ backgroundColor: 'pink' }}>
               <Text
                 style={{
@@ -138,9 +247,9 @@ const Home = ({ navigation }) => {
                   fontSize: normalize(18),
                   color: 'white',
                   fontWeight: '600',
-                  marginTop: -50,
+                  marginTop: -25,
                   marginBottom: -60,
-                  numberOfLines: 1,
+                  // numberOfLines: 1,
                 }}>
                 Home
               </Text>
@@ -173,7 +282,73 @@ const Home = ({ navigation }) => {
                   fontWeight: '600',
                   marginTop: 5,
                 }}>
-                ISHA
+                {prayerLoading || Object.keys(prayerTimes).length < 9
+                  ? 'Loading...'
+                  : new Date().getTime() >=
+                    new Date(
+                      moment()
+                        .set('hour', prayerTimes.Isha.hr)
+                        .set('minute', prayerTimes.Isha.min)
+                        .set('second', 0)
+                        .set('millisecond', 0),
+                    ).getTime() ||
+                    new Date().getTime() <
+                    new Date(
+                      moment()
+                        .set('hour', prayerTimes.Fajr.hr)
+                        .set('minute', prayerTimes.Fajr.min)
+                        .set('second', 0)
+                        .set('millisecond', 0),
+                    ).getTime()
+                    ? 'Isha'
+                    : new Date().getTime() >=
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes.Maghrib.hr)
+                          .set('minute', prayerTimes.Maghrib.min)
+                          .set('second', 0)
+                          .set('millisecond', 0),
+                      ).getTime()
+                      ? 'Maghrib'
+                      : new Date().getTime() >=
+                        new Date(
+                          moment()
+                            .set('hour', prayerTimes.Asr.hr)
+                            .set('minute', prayerTimes.Asr.min)
+                            .set('second', 0)
+                            .set('millisecond', 0),
+                        ).getTime()
+                        ? 'Asr'
+                        : new Date().getTime() >=
+                          new Date(
+                            moment()
+                              .set('hour', prayerTimes.Dhuhr.hr)
+                              .set('minute', prayerTimes.Dhuhr.min)
+                              .set('second', 0)
+                              .set('millisecond', 0),
+                          ).getTime()
+                          ? 'Dhuhr'
+                          : new Date(
+                            moment().set('second', 0).set('millisecond', 0),
+                          ).getTime() ===
+                            new Date(
+                              moment()
+                                .set('hour', prayerTimes.Sunrise.hr)
+                                .set('minute', prayerTimes.Sunrise.min)
+                                .set('second', 0)
+                                .set('millisecond', 0),
+                            ).getTime()
+                            ? 'Sunrise'
+                            : new Date().getTime() >=
+                              new Date(
+                                moment()
+                                  .set('hour', prayerTimes.Fajr.hr)
+                                  .set('minute', prayerTimes.Fajr.min)
+                                  .set('second', 0)
+                                  .set('millisecond', 0),
+                              ).getTime()
+                              ? 'Fajr'
+                              : null}
               </Text>
               <Text
                 style={{
@@ -186,6 +361,61 @@ const Home = ({ navigation }) => {
                   marginTop: 5,
                 }}>
                 Upcoming
+              </Text>
+              <Text
+                style={{
+                  textAlign: 'left',
+                  marginLeft: 15,
+                  fontSize: normalize(20),
+                  // color: '#023c54',
+                  color: 'white',
+                  fontWeight: '600',
+                  marginTop: 5,
+                }}>
+                {prayerLoading || Object.keys(prayerTimes).length < 9
+                  ? 'Loading...'
+                  : new Date().getTime() >=
+                    new Date(
+                      moment()
+                        .set('hour', prayerTimes?.Isha?.hr)
+                        .set('minute', prayerTimes?.Isha?.min),
+                    ).getTime() ||
+                    new Date().getTime() <
+                    new Date(
+                      moment()
+                        .set('hour', prayerTimes?.Fajr?.hr)
+                        .set('minute', prayerTimes?.Fajr?.min),
+                    ).getTime()
+                    ? 'Fajr'
+                    : new Date().getTime() >=
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes?.Maghrib?.hr)
+                          .set('minute', prayerTimes?.Maghrib?.min),
+                      ).getTime()
+                      ? 'Isha'
+                      : new Date().getTime() >=
+                        new Date(
+                          moment()
+                            .set('hour', prayerTimes?.Asr?.hr)
+                            .set('minute', prayerTimes?.Asr?.min),
+                        ).getTime()
+                        ? 'Maghrib'
+                        : new Date().getTime() >=
+                          new Date(
+                            moment()
+                              .set('hour', prayerTimes?.Dhuhr?.hr)
+                              .set('minute', prayerTimes?.Dhuhr?.min),
+                          ).getTime()
+                          ? 'Asr'
+                          : new Date().getTime() >=
+                            new Date(
+                              moment()
+                                .set('hour', prayerTimes?.Fajr.hr)
+                                .set('minute', prayerTimes?.Fajr.min),
+                            ).getTime()
+                            ? 'Dhuhr'
+                            : null}
               </Text>
               <FontAwesome
                 name="moon-o"
@@ -258,23 +488,23 @@ const Home = ({ navigation }) => {
                 textAlign: 'center',
                 fontSize: 20,
                 fontWeight: '600',
-                color: 'black'                
+                color: 'black'
               }}>Latest Artical</Text>
-                <Image
-                      style={{
-                        height: 40,
-                        width: 40,
-                        borderRadius: 10,
-                        marginLeft: 10,
-                        // marginLeft: 10,
-                        marginTop: -45,
-                      }}
-                      source={require('../../images/article.jpg')}
-                    />
+              <Image
+                style={{
+                  height: 40,
+                  width: 40,
+                  borderRadius: 10,
+                  marginLeft: 10,
+                  // marginLeft: 10,
+                  marginTop: -45,
+                }}
+                source={require('../../images/article.jpg')}
+              />
             </View>
           </View>
         </View>
-        {prayersTime.map(item => {
+        {/* {prayerTimes.map(item => {
           return (
             <View>
               <Text
@@ -286,7 +516,7 @@ const Home = ({ navigation }) => {
               </Text>
             </View>
           );
-        })}
+        })} */}
 
         <View style={{ flex: 1, padding: 2 }}>
           {isLoading ? (
@@ -356,21 +586,23 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     // backgroundColor: '#ade0f5',
-    backgroundColor: '#035173',
-    // height: 200,
-    width: windowWidth / 0.5,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
+    // backgroundColor: '#035173',
+    // height: windowHeight / 2.9,
+    // width: windowWidth / 1,
+    // borderBottomLeftRadius: 30,
+    // borderBottomRightRadius: 30,
+    // backgroundColor: '#00000050',
   },
   image: {
     marginTop: 0,
-    height: windowHeight / 2.6,
+    height: windowHeight / 2.9,
     width: windowWidth / 1,
     alignContent: 'center',
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
     borderBottomLeftRadius: 30,
+    backgroundColor: '#00000050',
   },
   topbar: {
     // backgroundColor: 'pink',

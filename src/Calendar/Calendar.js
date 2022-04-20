@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import {
   PixelRatio,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { PacmanIndicator } from 'react-native-indicators';
+import {PacmanIndicator} from 'react-native-indicators';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -31,7 +31,7 @@ function normalize(size) {
   }
 }
 
-const CalendarScreen = ({ navigation }) => {
+const CalendarScreen = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -80,17 +80,19 @@ const CalendarScreen = ({ navigation }) => {
     //     setCurrent_hijri_year(res.data.hijri.year);
     //   })
     // .catch(err => console.log(err));
-    var all_years2 = []
+    var all_years2 = [];
     for (var i = 1; i < 13; i++) {
       const newFunc = async () => {
         // console.log(i);
         try {
           var [res1, res2, res3] = await Promise.all(
             [
-              `http://api.aladhan.com/v1/gToHCalendar/${i}/${new Date().getFullYear() - 1
+              `http://api.aladhan.com/v1/gToHCalendar/${i}/${
+                new Date().getFullYear() - 1
               }`,
               `http://api.aladhan.com/v1/gToHCalendar/${i}/${new Date().getFullYear()}`,
-              `http://api.aladhan.com/v1/gToHCalendar/${i}/${new Date().getFullYear() + 1
+              `http://api.aladhan.com/v1/gToHCalendar/${i}/${
+                new Date().getFullYear() + 1
               }`,
             ].map(async url => {
               const resp = await fetch(url);
@@ -104,15 +106,9 @@ const CalendarScreen = ({ navigation }) => {
           //   ...res2.data,
           //   ...res3.data,
           // ]);
-          all_years2.push(
-            ...res1.data
-          )
-          all_years2.push(
-            ...res2.data
-          )
-          all_years2.push(
-            ...res3.data
-          )
+          all_years2.push(...res1.data);
+          all_years2.push(...res2.data);
+          all_years2.push(...res3.data);
         } catch (err) {
           console.log(err);
           // console.log(err2);
@@ -120,11 +116,12 @@ const CalendarScreen = ({ navigation }) => {
         }
       };
       newFunc();
-    } setAll_years(all_years2)
-    console.log(all_years2)
+    }
+    setAll_years(all_years2);
+    // console.log(all_years2);
 
     var calendar_mini = {};
-    console.log(all_years.length)
+    // console.log(all_years.length);
     for (var i = 0; i < all_years.length; i++) {
       var month = `${all_years[i].hijri.month.en}_${all_years[i].hijri.year}`;
       if (Object.keys(calendar_mini).includes(month)) {
@@ -143,14 +140,17 @@ const CalendarScreen = ({ navigation }) => {
     //   }
     // });
     // console.log(calendar);
-    setCalendar(calendar_mini);
-    setLoading(false);
+    console.log(Object.keys(calendar_mini).length);
+    if (Object.keys(calendar_mini).length >= 36) {
+      setCalendar(calendar_mini);
+      setLoading(false);
+    }
     // set
   }, []);
 
   useEffect(() => {
-    console.log(Object.keys(calendar));
-  }, [calendar]);
+    console.log(Object.keys(calendar), isLoading);
+  }, [calendar, isLoading]);
 
   // const getfeb = async () => {
   //   try {
@@ -377,7 +377,7 @@ const CalendarScreen = ({ navigation }) => {
         <Text style={styles.topnavtext}>Calendar</Text>
       </View>
       {isLoading ? (
-        <View style={{ alignSelf: 'center', marginTop: 70 }}>
+        <View style={{alignSelf: 'center', marginTop: 70}}>
           <PacmanIndicator color="blue" />
         </View>
       ) : (
@@ -409,15 +409,21 @@ const CalendarScreen = ({ navigation }) => {
                             if (
                               i == 0 &&
                               j >=
-                              weekdays[
-                              calendar[month][0]['gregorian']['weekday']['en']
-                              ]
+                                weekdays[
+                                  calendar[month][0]['gregorian']['weekday'][
+                                    'en'
+                                  ]
+                                ]
                             ) {
                               counter += 1;
                               return (
                                 <View>
                                   <Text>
-                                    {calendar[month][counter - 1]['hijri']['day']}
+                                    {
+                                      calendar[month][counter - 1]['hijri'][
+                                        'day'
+                                      ]
+                                    }
                                   </Text>
                                 </View>
                               );
@@ -432,7 +438,11 @@ const CalendarScreen = ({ navigation }) => {
                               return (
                                 <View>
                                   <Text>
-                                    {calendar[month][counter - 1]['hijri']['day']}
+                                    {
+                                      calendar[month][counter - 1]['hijri'][
+                                        'day'
+                                      ]
+                                    }
                                   </Text>
                                 </View>
                               );
@@ -447,62 +457,63 @@ const CalendarScreen = ({ navigation }) => {
             }
           })}
         </ScrollView>
-      )
-      }</View>
-  )};
+      )}
+    </View>
+  );
+};
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  topnav: {
+    height: 60,
+    width: 412,
+    backgroundColor: '#4b7bf2',
+  },
+  topnavtext: {
+    marginTop: -35,
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontSize: normalize(22),
+    color: 'white',
+  },
+  icon: {
+    marginLeft: 20,
+    marginTop: 15,
+  },
+  umrah: {
+    marginTop: 20,
+    marginLeft: 10,
+    marginRight: 10,
+    height: 450,
+    width: 390,
+    backgroundColor: 'white',
+    elevation: 20,
+    borderRadius: 20,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 40,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    topnav: {
-      height: 60,
-      width: 412,
-      backgroundColor: '#4b7bf2',
-    },
-    topnavtext: {
-      marginTop: -35,
-      alignSelf: 'center',
-      textAlign: 'center',
-      fontSize: normalize(22),
-      color: 'white',
-    },
-    icon: {
-      marginLeft: 20,
-      marginTop: 15,
-    },
-    umrah: {
-      marginTop: 20,
-      marginLeft: 10,
-      marginRight: 10,
-      height: 450,
-      width: 390,
-      backgroundColor: 'white',
-      elevation: 20,
-      borderRadius: 20,
-    },
-    modalView: {
-      margin: 20,
-      backgroundColor: 'white',
-      borderRadius: 40,
-      padding: 35,
-      alignItems: 'center',
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      backgroundColor: 'white',
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5,
-    },
-    centeredView: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 22,
-    },
-  });
+    backgroundColor: 'white',
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+});
 
-  export default CalendarScreen;
+export default CalendarScreen;
