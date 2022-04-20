@@ -118,10 +118,10 @@ const CalendarScreen = ({navigation}) => {
       newFunc();
     }
     setAll_years(all_years2);
-    console.log(all_years2);
+    // console.log(all_years2);
 
     var calendar_mini = {};
-    console.log(all_years.length);
+    // console.log(all_years.length);
     for (var i = 0; i < all_years.length; i++) {
       var month = `${all_years[i].hijri.month.en}_${all_years[i].hijri.year}`;
       if (Object.keys(calendar_mini).includes(month)) {
@@ -140,14 +140,17 @@ const CalendarScreen = ({navigation}) => {
     //   }
     // });
     // console.log(calendar);
-    setCalendar(calendar_mini);
-    setLoading(false);
+    console.log(Object.keys(calendar_mini).length);
+    if (Object.keys(calendar_mini).length >= 36) {
+      setCalendar(calendar_mini);
+      setLoading(false);
+    }
     // set
   }, []);
 
   useEffect(() => {
-    console.log(Object.keys(calendar));
-  }, [calendar]);
+    console.log(Object.keys(calendar), isLoading);
+  }, [calendar, isLoading]);
 
   // const getfeb = async () => {
   //   try {

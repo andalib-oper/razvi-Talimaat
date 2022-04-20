@@ -177,24 +177,26 @@ const Home = ({navigation}) => {
           <ImageBackground
             style={styles.image}
             source={
-              new Date('2022-04-20T03:55:31+05:30').getTime() >=
-                new Date(
-                  moment()
-                    .set('hour', prayerTimes.Isha.hr)
-                    .set('minute', prayerTimes.Isha.min)
-                    .set('second', 0)
-                    .set('millisecond', 0),
-                ).getTime() ||
-              new Date('2022-04-20T03:55:31+05:30').getTime() <
-                new Date(
-                  moment()
-                    .set('hour', prayerTimes.Fajr.hr)
-                    .set('minute', prayerTimes.Fajr.min)
-                    .set('second', 0)
-                    .set('millisecond', 0),
-                ).getTime()
+              prayerLoading || Object.keys(prayerTimes).length < 9
+                ? null
+                : new Date().getTime() >=
+                    new Date(
+                      moment()
+                        .set('hour', prayerTimes.Isha.hr)
+                        .set('minute', prayerTimes.Isha.min)
+                        .set('second', 0)
+                        .set('millisecond', 0),
+                    ).getTime() ||
+                  new Date().getTime() <
+                    new Date(
+                      moment()
+                        .set('hour', prayerTimes.Fajr.hr)
+                        .set('minute', prayerTimes.Fajr.min)
+                        .set('second', 0)
+                        .set('millisecond', 0),
+                    ).getTime()
                 ? require('../../images/isha.png')
-                : new Date('2022-04-20T03:55:31+05:30').getTime() >=
+                : new Date().getTime() >=
                   new Date(
                     moment()
                       .set('hour', prayerTimes.Maghrib.hr)
@@ -203,7 +205,7 @@ const Home = ({navigation}) => {
                       .set('millisecond', 0),
                   ).getTime()
                 ? require('../../images/maghrib.png')
-                : new Date('2022-04-20T03:55:31+05:30').getTime() >=
+                : new Date().getTime() >=
                   new Date(
                     moment()
                       .set('hour', prayerTimes.Asr.hr)
@@ -212,7 +214,7 @@ const Home = ({navigation}) => {
                       .set('millisecond', 0),
                   ).getTime()
                 ? require('../../images/asr.png')
-                : new Date('2022-04-20T03:55:31+05:30').getTime() >=
+                : new Date().getTime() >=
                   new Date(
                     moment()
                       .set('hour', prayerTimes.Dhuhr.hr)
@@ -221,7 +223,7 @@ const Home = ({navigation}) => {
                       .set('millisecond', 0),
                   ).getTime()
                 ? require('../../images/dhuhr.png')
-                : new Date('2022-04-20T03:55:31+05:30').getTime() >=
+                : new Date().getTime() >=
                   new Date(
                     moment()
                       .set('hour', prayerTimes.Fajr.hr)
@@ -275,7 +277,7 @@ const Home = ({navigation}) => {
                   fontWeight: '600',
                   marginTop: 5,
                 }}>
-                {prayerLoading
+                {prayerLoading || Object.keys(prayerTimes).length < 9
                   ? 'Loading...'
                   : new Date().getTime() >=
                       new Date(
@@ -365,7 +367,7 @@ const Home = ({navigation}) => {
                   fontWeight: '600',
                   marginTop: 5,
                 }}>
-                {prayerLoading
+                {prayerLoading || Object.keys(prayerTimes).length < 9
                   ? 'Loading...'
                   : new Date().getTime() >=
                       new Date(
