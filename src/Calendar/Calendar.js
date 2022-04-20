@@ -48,321 +48,84 @@ const CalendarScreen = ({navigation}) => {
   };
   const [calendar, setCalendar] = useState({});
 
-  const getHijriCalendar = async () => {
-    try {
-      const response = await fetch(
-        'http://api.aladhan.com/v1/gToHCalendar/1/2022',
-      );
-      const json = await response.json();
-      // console.log(json.data)
-      setData(json.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    axios
-      .get(
-        `http://api.aladhan.com/v1/gToH?date=${moment().format('D-MM-YYYY')}`,
-      )
-      .then(res => {
-        // console.log(res);
-        setCurrent_hijri_year(res.data.data.hijri.year);
-      })
-      .catch(err => console.log(err));
-    // fetch(`http://api.aladhan.com/v1/gToH?date=18-04-2022`)
-    //   .then(res => res.json())
-    //   .then(res => {
-    //     console.log(res);
-    //     setCurrent_hijri_year(res.data.hijri.year);
-    //   })
-    // .catch(err => console.log(err));
-    var all_years2 = [];
-    for (var i = 1; i < 13; i++) {
-      const newFunc = async () => {
-        // console.log(i);
-        try {
-          var [res1, res2, res3] = await Promise.all(
-            [
-              `http://api.aladhan.com/v1/gToHCalendar/${i}/${
-                new Date().getFullYear() - 1
-              }`,
-              `http://api.aladhan.com/v1/gToHCalendar/${i}/${new Date().getFullYear()}`,
-              `http://api.aladhan.com/v1/gToHCalendar/${i}/${
-                new Date().getFullYear() + 1
-              }`,
-            ].map(async url => {
-              const resp = await fetch(url);
-              return resp.json();
-            }),
-          );
-          // console.log("data", res2.data);
-          // setAll_years([
-          //   ...all_years,
-          //   ...res1.data,
-          //   ...res2.data,
-          //   ...res3.data,
-          // ]);
-          all_years2.push(...res1.data);
-          all_years2.push(...res2.data);
-          all_years2.push(...res3.data);
-        } catch (err) {
-          console.log(err);
-          // console.log(err2);
-          // console.log(err3);
-        }
-      };
-      newFunc();
-    }
-    setAll_years(all_years2);
+    // var all_years2 = [];
+    // for (var i = 1; i < 13; i++) {
+    //   fetch(
+    //     `http://api.aladhan.com/v1/gToHCalendar/${i}/${new Date().getFullYear()}`,
+    //   )
+    //     .then(res => res.json())
+    //     .then(res => all_years2.push(...res.data))
+    //     .catch(err => console.log(err));
+    //   // const newFunc = async () => {
+    //   //   console.log(i);
+    //   //   try {
+    //   //     var resp = await fetch(
+    //   //       `http://api.aladhan.com/v1/gToHCalendar/${i}/${new Date().getFullYear()}`,
+    //   //     );
+    //   //     resp = await resp.json();
+    //   //     console.log('data', resp.data);
+    //   //     all_years2.push(...resp.data);
+    //   //   } catch (err) {
+    //   //     console.log(err);
+    //   //   }
+    //   // };
+    //   // newFunc();
+    // }
     // console.log(all_years2);
+    // setAll_years(all_years2);
+    init_func();
 
-    var calendar_mini = {};
-    // console.log(all_years.length);
-    for (var i = 0; i < all_years.length; i++) {
-      var month = `${all_years[i].hijri.month.en}_${all_years[i].hijri.year}`;
-      if (Object.keys(calendar_mini).includes(month)) {
-        calendar_mini[month] = [...calendar_mini[month], all_years[i]];
-      } else {
-        calendar_mini[month] = [all_years[i]];
-      }
-    }
-
-    // all_years.forEach(day => {
-    //   var month = `${day.hijri.month.en}_${day.hijri.year}`;
-    //   if (Object.keys(calendar).includes(month)) {
-    //     calendar[month] = [...calendar[month], data];
-    //   } else {
-    //     calendar[month] = [day];
-    //   }
-    // });
-    // console.log(calendar);
-    console.log(Object.keys(calendar_mini).length);
-    if (Object.keys(calendar_mini).length >= 36) {
-      setCalendar(calendar_mini);
-      setLoading(false);
-    }
     // set
   }, []);
 
+  const init_func = async () => {
+    await Promise.all(
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(async num => {
+        const res = await fetch(
+          `http://api.aladhan.com/v1/gToHCalendar/${num}/${new Date().getFullYear()}`,
+        );
+        return res.json();
+      }),
+    )
+      .then(res => {
+        // console.log('big length', res.length);
+        res.forEach(el => {
+          // console.log(el.data.length);
+          setAll_years(prev => [...prev, ...el.data]);
+        });
+      })
+      .catch(err => console.log(err));
+  };
+
   useEffect(() => {
-    console.log(Object.keys(calendar), isLoading);
-  }, [calendar, isLoading]);
+    // console.log('length', all_years.length);
+    if (all_years.length >= 365) {
+      var calendar_mini = {};
+      for (var i = 0; i < all_years.length; i++) {
+        // console.log('data', all_years[i]['gregorian']['month']['en']);
+        var month = `${all_years[i].gregorian.month.en}`;
+        if (Object.keys(calendar_mini).includes(month)) {
+          calendar_mini[month] = [...calendar_mini[month], all_years[i]];
+        } else {
+          calendar_mini[month] = [all_years[i]];
+        }
+      }
 
-  // const getfeb = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       'http://api.aladhan.com/v1/gToHCalendar/2/2022',
-  //     );
-  //     const json = await response.json();
-  //     console.log(json.data);
-  //     setFeb(json.data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      // console.log('90', calendar_mini);
 
-  // useEffect(() => {
-  //   getfeb();
-  // }, []);
+      if (Object.keys(calendar_mini).length === 12) {
+        // console.log('93', Object.keys(calendar_mini));
+        setCalendar(calendar_mini);
+        setLoading(false);
+      }
+    }
+  }, [all_years]);
 
-  // const getmarch = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       'http://api.aladhan.com/v1/gToHCalendar/3/2022',
-  //     );
-  //     const json = await response.json();
-  //     console.log(json.data);
-  //     setMarch(json.data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  // console.log('cal', all_years);
 
-  // useEffect(() => {
-  //   getmarch();
-  // }, []);
-
-  // const getapril = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       'http://api.aladhan.com/v1/gToHCalendar/4/2022',
-  //     );
-  //     const json = await response.json();
-  //     console.log(json.data);
-  //     setApril(json.data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getapril();
-  // }, []);
-
-  // const getmay = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       'http://api.aladhan.com/v1/gToHCalendar/5/2022',
-  //     );
-  //     const json = await response.json();
-  //     console.log(json.data);
-  //     setMay(json.data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getmay();
-  // }, []);
-
-  // const getjune = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       'http://api.aladhan.com/v1/gToHCalendar/6/2022',
-  //     );
-  //     const json = await response.json();
-  //     console.log(json.data);
-  //     setJune(json.data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getjune();
-  // }, []);
-
-  // const getjuly = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       'http://api.aladhan.com/v1/gToHCalendar/7/2022',
-  //     );
-  //     const json = await response.json();
-  //     console.log(json.data);
-  //     setJuly(json.data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getjuly();
-  // }, []);
-
-  // const getaugust = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       'http://api.aladhan.com/v1/gToHCalendar/8/2022',
-  //     );
-  //     const json = await response.json();
-  //     console.log(json.data);
-  //     setAugust(json.data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getaugust();
-  // }, []);
-
-  // const getsept = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       'http://api.aladhan.com/v1/gToHCalendar/9/2022',
-  //     );
-  //     const json = await response.json();
-  //     console.log(json.data);
-  //     setSept(json.data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getsept();
-  // }, []);
-
-  // const getoct = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       'http://api.aladhan.com/v1/gToHCalendar/10/2022',
-  //     );
-  //     const json = await response.json();
-  //     console.log(json.data);
-  //     setOct(json.data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getoct();
-  // }, []);
-
-  // const getnov = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       'http://api.aladhan.com/v1/gToHCalendar/11/2022',
-  //     );
-  //     const json = await response.json();
-  //     console.log(json.data);
-  //     setNov(json.data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getnov();
-  // }, []);
-
-  // const getdec = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       'http://api.aladhan.com/v1/gToHCalendar/12/2022',
-  //     );
-  //     const json = await response.json();
-  //     console.log(json.data);
-  //     setDec(json.data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getdec();
-  // }, []);
   var counter = 0;
-  var limit = 29;
-  var toggler = +1;
+  var limit = 30;
 
   return (
     <View style={styles.container}>
@@ -382,79 +145,165 @@ const CalendarScreen = ({navigation}) => {
         </View>
       ) : (
         <ScrollView>
-          {Object.keys(calendar).map(month => {
-            if (month.includes(current_hijri_year)) {
-              return (
-                <View>
-                  <View>
-                    <Text>{month}</Text>
-                  </View>
-                  <View>
-                    <Text>Sun</Text>
-                    <Text>Mon</Text>
-                    <Text>Tue</Text>
-                    <Text>Wed</Text>
-                    <Text>Thu</Text>
-                    <Text>Fri</Text>
-                    <Text>Sat</Text>
-                  </View>
-                  <View>
-                    {[0, 1, 2, 3, 4].map(i => {
-                      counter = 0;
-                      limit += toggler;
-                      toggler *= -1;
-                      return (
-                        <View>
-                          {[0, 1, 2, 3, 4, 5, 6].map(j => {
-                            if (
-                              i == 0 &&
-                              j >=
-                                weekdays[
-                                  calendar[month][0]['gregorian']['weekday'][
-                                    'en'
-                                  ]
-                                ]
-                            ) {
-                              counter += 1;
-                              return (
-                                <View>
-                                  <Text>
-                                    {
-                                      calendar[month][counter - 1]['hijri'][
-                                        'day'
-                                      ]
-                                    }
-                                  </Text>
-                                </View>
-                              );
-                            } else if (i == 0 || counter >= limit)
-                              return (
-                                <View>
-                                  <Text></Text>
-                                </View>
-                              );
-                            else {
-                              counter += 1;
-                              return (
-                                <View>
-                                  <Text>
-                                    {
-                                      calendar[month][counter - 1]['hijri'][
-                                        'day'
-                                      ]
-                                    }
-                                  </Text>
-                                </View>
-                              );
-                            }
-                          })}
-                        </View>
-                      );
-                    })}
-                  </View>
+          {[
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
+          ].map(month => {
+            counter = 0;
+            limit = calendar[month].length;
+            // if (month.includes(current_hijri_year)) {
+            return (
+              <View key={month} style={styles.monthContainer}>
+                <View
+                  style={{
+                    marginBottom: 20,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text
+                    style={{...styles.monthContainerText, fontWeight: '700'}}>
+                    {month}{' '}
+                  </Text>
+                  <Text
+                    style={{
+                      ...styles.monthContainerText,
+                      fontSize: normalize(14),
+                      width: '50%',
+                      fontWeight: '900',
+                    }}>
+                    {calendar[month][0].hijri.month.number ===
+                    calendar[month][calendar[month].length - 1].hijri.month
+                      .number
+                      ? calendar[month][0].hijri.month.en
+                      : `(${calendar[month][0].hijri.month.en}/${
+                          calendar[month][calendar[month].length - 1].hijri
+                            .month.en
+                        }), ${calendar[month][0].hijri.year}`}
+                  </Text>
                 </View>
-              );
-            }
+                <View style={{...styles.weekRow, backgroundColor: '#ccc'}}>
+                  <Text
+                    style={{
+                      width: `${100 / 7}%`,
+                      textAlign: 'center',
+                      fontSize: normalize(14),
+                    }}>
+                    Sun
+                  </Text>
+                  <Text
+                    style={{
+                      width: `${100 / 7}%`,
+                      textAlign: 'center',
+                      fontSize: normalize(14),
+                    }}>
+                    Mon
+                  </Text>
+                  <Text
+                    style={{
+                      width: `${100 / 7}%`,
+                      textAlign: 'center',
+                      fontSize: normalize(14),
+                    }}>
+                    Tue
+                  </Text>
+                  <Text
+                    style={{
+                      width: `${100 / 7}%`,
+                      textAlign: 'center',
+                      fontSize: normalize(14),
+                    }}>
+                    Wed
+                  </Text>
+                  <Text
+                    style={{
+                      width: `${100 / 7}%`,
+                      textAlign: 'center',
+                      fontSize: normalize(14),
+                    }}>
+                    Thu
+                  </Text>
+                  <Text
+                    style={{
+                      width: `${100 / 7}%`,
+                      textAlign: 'center',
+                      fontSize: normalize(14),
+                    }}>
+                    Fri
+                  </Text>
+                  <Text
+                    style={{
+                      width: `${100 / 7}%`,
+                      textAlign: 'center',
+                      fontSize: normalize(14),
+                    }}>
+                    Sat
+                  </Text>
+                </View>
+                <View>
+                  {[0, 1, 2, 3, 4].map(i => {
+                    // toggler *= -1;
+                    return (
+                      <View key={Math.random() * 1000} style={styles.weekRow}>
+                        {[0, 1, 2, 3, 4, 5, 6].map(j => {
+                          if (
+                            i === 0 &&
+                            j >=
+                              weekdays[calendar[month][0].gregorian.weekday.en]
+                          ) {
+                            counter += 1;
+                            return (
+                              <View
+                                key={Math.random() * 1000}
+                                style={styles.weekText}>
+                                <Text style={styles.weekText2}>
+                                  {calendar[month][counter - 1].gregorian.day}
+                                </Text>
+                                <Text style={styles.weekTextHijri}>
+                                  {calendar[month][counter - 1].hijri.day}
+                                </Text>
+                              </View>
+                            );
+                          } else if (i === 0 || counter >= limit) {
+                            return (
+                              <View
+                                key={Math.random() * 1000}
+                                style={styles.weekText}>
+                                <Text style={styles.weekText2} />
+                              </View>
+                            );
+                          } else {
+                            counter += 1;
+                            return (
+                              <View
+                                key={Math.random() * 1000}
+                                style={styles.weekText}>
+                                <Text style={styles.weekText2}>
+                                  {calendar[month][counter - 1].gregorian.day}
+                                </Text>
+                                <Text style={styles.weekTextHijri}>
+                                  {calendar[month][counter - 1].hijri.day}
+                                </Text>
+                              </View>
+                            );
+                          }
+                        })}
+                      </View>
+                    );
+                  })}
+                </View>
+              </View>
+            );
+            // }
           })}
         </ScrollView>
       )}
@@ -481,6 +330,33 @@ const styles = StyleSheet.create({
   icon: {
     marginLeft: 20,
     marginTop: 15,
+  },
+  monthContainer: {
+    padding: 20,
+  },
+  monthContainerText: {
+    fontSize: normalize(18),
+  },
+  weekRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 10,
+  },
+  weekText: {
+    width: `${100 / 7}%`,
+    height: 50,
+    textAlign: 'center',
+    fontSize: normalize(16),
+    fontWeight: 'bold',
+  },
+  weekText2: {
+    textAlign: 'center',
+    fontSize: normalize(14),
+  },
+  weekTextHijri: {
+    fontSize: normalize('12'),
+    color: '#CC5500',
+    textAlign: 'right',
   },
   umrah: {
     marginTop: 20,

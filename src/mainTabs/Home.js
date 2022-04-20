@@ -40,6 +40,7 @@ const Home = ({navigation}) => {
   const [prayerTimes, setPrayerTimes] = useState({});
   const [refreshing, setRefreshing] = React.useState(false);
   const [city, setCity] = useState('');
+  const [date, setDate] = useState({});
 
   useEffect(() => {
     fetch('https://razvitalimat.herokuapp.com/api/content')
@@ -48,6 +49,8 @@ const Home = ({navigation}) => {
       .catch(error => console.error(error))
       .finally(() => setLoading(false));
   }, []);
+
+  // console.log(data);
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
@@ -71,7 +74,6 @@ const Home = ({navigation}) => {
   }, []);
 
   Geolocation.getCurrentPosition(data => {
-    console.log(data);
     setLagitude(data.coords.latitude);
     setLongitude(data.coords.longitude);
   });
@@ -86,8 +88,6 @@ const Home = ({navigation}) => {
 
   // function getCity(lati, logi) {
   const xhr = new XMLHttpRequest();
-
-  console.log(lagitude, logi);
   // Paste your LocationIQ token below.
   xhr.open(
     'GET',
@@ -122,9 +122,7 @@ const Home = ({navigation}) => {
   // }, []);
 
   useEffect(() => {
-    console.log(city || 'not');
     if (city) {
-      console.log('INN');
       fetch(
         `http://api.aladhan.com/v1/calendarByCity?city=${city}&country=India&method=1&school=1&month=${
           new Date().getMonth() + 1
@@ -143,29 +141,17 @@ const Home = ({navigation}) => {
               }),
           );
           setPrayerTimes(resp);
+          // console.log(res.data);
+          setDate(
+            res.data.filter(
+              dat => dat.date.gregorian.date === moment().format('DD-MM-YYYY'),
+            )[0].date,
+          );
         })
         .catch(error => console.error(error))
         .finally(() => setPrayerLoading(false));
     }
   }, [city]);
-
-  console.log('time', prayerTimes, prayerLoading);
-  //   .set('hour', prayerTimes.Isha.split(':')[0])
-  //   .set('minute', prayerTimes.Isha.split(':')[1].split(' ')[0]);
-
-  // console.log(
-  //   new Date(
-  //     moment().get('year'),
-  //     moment().get('month') + 1,
-  //     moment().get('date'),
-  //     prayerTimes.Isha.split(':')[0],
-  //     prayerTimes.Isha.split(':')[1].split(' ')[0],
-  //   ),
-  // );
-
-  // console.log(
-  //   new Date(`${moment().format('DD-MM-YYYY')}, ${prayerTimes.Isha}`).getTime(),
-  // );
 
   return (
     <View style={styles.container}>
@@ -430,7 +416,7 @@ const Home = ({navigation}) => {
                   color: 'white',
                   marginTop: 10,
                 }}>
-                3
+                {date?.hijri?.day}
               </Text>
               <Text
                 style={{
@@ -441,7 +427,7 @@ const Home = ({navigation}) => {
                   color: 'white',
                   marginTop: 5,
                 }}>
-                Ramadan, 1443
+                {date?.hijri?.month.en}, {date?.hijri?.year}
               </Text>
               <Text
                 style={{
@@ -452,7 +438,7 @@ const Home = ({navigation}) => {
                   color: 'white',
                   marginTop: 5,
                 }}>
-                Monday
+                {date?.gregorian?.weekday.en}
               </Text>
             </View>
           </ImageBackground>
@@ -480,7 +466,7 @@ const Home = ({navigation}) => {
             <View>
               {data.map(item => {
                 return (
-                  <View style={styles.umrah} key={item.number}>
+                  <View style={styles.umrah} key={item._id}>
                     <Image
                       style={{
                         height: 130,

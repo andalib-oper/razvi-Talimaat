@@ -8,11 +8,14 @@ const Stack = createStackNavigator();
 
 const HomeNavigator = () => {
   return (
-    <Stack.Navigator headerMode="false" initialRouteName="splash">
+    <Stack.Navigator
+      screenOptions={{
+        headerMode: false,
+      }}
+      initialRouteName="splash">
       <Stack.Screen name="home" component={Home} />
       <Stack.Screen name="about" component={About} />
       <Stack.Screen name="timeresults" component={TimeResults} />
-      
     </Stack.Navigator>
   );
 };

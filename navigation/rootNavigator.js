@@ -7,9 +7,11 @@ const Stack = createStackNavigator();
 
 const RootNavigator = () => {
   return (
-    <Stack.Navigator headerMode="false" initialRouteName="splash">
+    <Stack.Navigator
+      screenOptions={{headerMode: false}}
+      initialRouteName="splash">
       <Stack.Screen name="splash" component={Splash} />
-      <Stack.Screen name="city" component={City}/>
+      <Stack.Screen name="city" component={City} />
     </Stack.Navigator>
   );
 };
