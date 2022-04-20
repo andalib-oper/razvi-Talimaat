@@ -49,34 +49,7 @@ const CalendarScreen = ({navigation}) => {
   const [calendar, setCalendar] = useState({});
 
   useEffect(() => {
-    // var all_years2 = [];
-    // for (var i = 1; i < 13; i++) {
-    //   fetch(
-    //     `http://api.aladhan.com/v1/gToHCalendar/${i}/${new Date().getFullYear()}`,
-    //   )
-    //     .then(res => res.json())
-    //     .then(res => all_years2.push(...res.data))
-    //     .catch(err => console.log(err));
-    //   // const newFunc = async () => {
-    //   //   console.log(i);
-    //   //   try {
-    //   //     var resp = await fetch(
-    //   //       `http://api.aladhan.com/v1/gToHCalendar/${i}/${new Date().getFullYear()}`,
-    //   //     );
-    //   //     resp = await resp.json();
-    //   //     console.log('data', resp.data);
-    //   //     all_years2.push(...resp.data);
-    //   //   } catch (err) {
-    //   //     console.log(err);
-    //   //   }
-    //   // };
-    //   // newFunc();
-    // }
-    // console.log(all_years2);
-    // setAll_years(all_years2);
     init_func();
-
-    // set
   }, []);
 
   const init_func = async () => {
@@ -336,7 +309,7 @@ const styles = StyleSheet.create({
   },
   monthContainerText: {
     fontSize: normalize(18),
-    color: '#222',
+    color: '#333',
   },
   weekRow: {
     display: 'flex',
@@ -349,12 +322,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: normalize(16),
     fontWeight: 'bold',
-    color: '#222',
+    color: '#333',
   },
   weekText2: {
     textAlign: 'center',
     fontSize: normalize(14),
-    color: '#222',
+    color: '#333',
   },
   weekTextHijri: {
     fontSize: normalize('12'),

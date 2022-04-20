@@ -162,9 +162,8 @@ const Home = ({navigation}) => {
         <View style={styles.topContainer}>
           <ImageBackground
             style={styles.image}
-            source={require('../../images/background3.jpeg')}>
-            <View style={{backgroundColor: 'pink'}}>
-              {prayerLoading || Object.keys(prayerTimes).length < 9
+            source={
+              prayerLoading || Object.keys(prayerTimes).length < 9
                 ? null
                 : new Date().getTime() >=
                     new Date(
@@ -219,17 +218,18 @@ const Home = ({navigation}) => {
                       .set('millisecond', 0),
                   ).getTime()
                 ? require('../../images/fajr.png')
-                : null}
-            </View>
+                : null
+            }>
+            {/* <View style={{backgroundColor: 'pink'}}></View> */}
             <View style={{backgroundColor: 'pink'}}>
               <Text
                 style={{
                   textAlign: 'center',
                   alignSelf: 'center',
-                  fontSize: normalize(18),
+                  fontSize: normalize(16),
                   color: 'white',
                   fontWeight: '600',
-                  marginTop: -25,
+                  marginTop: -35,
                   marginBottom: -60,
                   // numberOfLines: 1,
                 }}>
@@ -237,44 +237,88 @@ const Home = ({navigation}) => {
               </Text>
             </View>
             <View
-              style={
-                {
-                  // backgroundColor: 'pink'
-                }
-              }>
-              <Text
-                style={{
-                  textAlign: 'left',
-                  marginLeft: 15,
-                  fontSize: normalize(16),
-                  // color: '#023c54',
-                  color: 'white',
-                  fontWeight: '600',
-                  marginTop: 20,
-                }}>
-                Now
-              </Text>
-              <Text
-                style={{
-                  textAlign: 'left',
-                  marginLeft: 15,
-                  fontSize: normalize(20),
-                  // color: '#023c54',
-                  color: 'white',
-                  fontWeight: '600',
-                  marginTop: 5,
-                }}>
-                {prayerLoading || Object.keys(prayerTimes).length < 9
-                  ? 'Loading...'
-                  : new Date().getTime() >=
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <View style={{}}>
+                <Text
+                  style={{
+                    textAlign: 'left',
+                    marginLeft: 5,
+                    fontSize: normalize(12),
+                    // color: '#023c54',
+                    color: 'white',
+                    fontWeight: '600',
+                    marginTop: 10,
+                  }}>
+                  Now
+                </Text>
+                <Text
+                  style={{
+                    textAlign: 'left',
+                    marginLeft: 5,
+                    fontSize: normalize(20),
+                    // color: '#023c54',
+                    color: 'white',
+                    fontWeight: '700',
+                    marginTop: 0,
+                  }}>
+                  {prayerLoading || Object.keys(prayerTimes).length < 9
+                    ? 'Loading...'
+                    : new Date().getTime() >=
+                        new Date(
+                          moment()
+                            .set('hour', prayerTimes.Isha.hr)
+                            .set('minute', prayerTimes.Isha.min)
+                            .set('second', 0)
+                            .set('millisecond', 0),
+                        ).getTime() ||
+                      new Date().getTime() <
+                        new Date(
+                          moment()
+                            .set('hour', prayerTimes.Fajr.hr)
+                            .set('minute', prayerTimes.Fajr.min)
+                            .set('second', 0)
+                            .set('millisecond', 0),
+                        ).getTime()
+                    ? 'Isha'
+                    : new Date().getTime() >=
                       new Date(
                         moment()
-                          .set('hour', prayerTimes.Isha.hr)
-                          .set('minute', prayerTimes.Isha.min)
+                          .set('hour', prayerTimes.Maghrib.hr)
+                          .set('minute', prayerTimes.Maghrib.min)
                           .set('second', 0)
                           .set('millisecond', 0),
-                      ).getTime() ||
-                    new Date().getTime() <
+                      ).getTime()
+                    ? 'Maghrib'
+                    : new Date().getTime() >=
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes.Asr.hr)
+                          .set('minute', prayerTimes.Asr.min)
+                          .set('second', 0)
+                          .set('millisecond', 0),
+                      ).getTime()
+                    ? 'Asr'
+                    : new Date().getTime() >=
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes.Dhuhr.hr)
+                          .set('minute', prayerTimes.Dhuhr.min)
+                          .set('second', 0)
+                          .set('millisecond', 0),
+                      ).getTime()
+                    ? 'Dhuhr'
+                    : new Date(
+                        moment().set('second', 0).set('millisecond', 0),
+                      ).getTime() ===
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes.Sunrise.hr)
+                          .set('minute', prayerTimes.Sunrise.min)
+                          .set('second', 0)
+                          .set('millisecond', 0),
+                      ).getTime()
+                    ? 'Sunrise'
+                    : new Date().getTime() >=
                       new Date(
                         moment()
                           .set('hour', prayerTimes.Fajr.hr)
@@ -282,165 +326,198 @@ const Home = ({navigation}) => {
                           .set('second', 0)
                           .set('millisecond', 0),
                       ).getTime()
-                  ? 'Isha'
-                  : new Date().getTime() >=
-                    new Date(
-                      moment()
-                        .set('hour', prayerTimes.Maghrib.hr)
-                        .set('minute', prayerTimes.Maghrib.min)
-                        .set('second', 0)
-                        .set('millisecond', 0),
-                    ).getTime()
-                  ? 'Maghrib'
-                  : new Date().getTime() >=
-                    new Date(
-                      moment()
-                        .set('hour', prayerTimes.Asr.hr)
-                        .set('minute', prayerTimes.Asr.min)
-                        .set('second', 0)
-                        .set('millisecond', 0),
-                    ).getTime()
-                  ? 'Asr'
-                  : new Date().getTime() >=
-                    new Date(
-                      moment()
-                        .set('hour', prayerTimes.Dhuhr.hr)
-                        .set('minute', prayerTimes.Dhuhr.min)
-                        .set('second', 0)
-                        .set('millisecond', 0),
-                    ).getTime()
-                  ? 'Dhuhr'
-                  : new Date(
-                      moment().set('second', 0).set('millisecond', 0),
-                    ).getTime() ===
-                    new Date(
-                      moment()
-                        .set('hour', prayerTimes.Sunrise.hr)
-                        .set('minute', prayerTimes.Sunrise.min)
-                        .set('second', 0)
-                        .set('millisecond', 0),
-                    ).getTime()
-                  ? 'Sunrise'
-                  : new Date().getTime() >=
-                    new Date(
-                      moment()
-                        .set('hour', prayerTimes.Fajr.hr)
-                        .set('minute', prayerTimes.Fajr.min)
-                        .set('second', 0)
-                        .set('millisecond', 0),
-                    ).getTime()
-                  ? 'Fajr'
-                  : null}
-              </Text>
-              <Text
-                style={{
-                  textAlign: 'left',
-                  marginLeft: 15,
-                  fontSize: normalize(14),
-                  // color: '#023c54',
-                  color: 'white',
-                  fontWeight: '600',
-                  marginTop: 5,
-                }}>
-                Upcoming
-              </Text>
-              <Text
-                style={{
-                  textAlign: 'left',
-                  marginLeft: 15,
-                  fontSize: normalize(20),
-                  // color: '#023c54',
-                  color: 'white',
-                  fontWeight: '600',
-                  marginTop: 5,
-                }}>
-                {prayerLoading || Object.keys(prayerTimes).length < 9
-                  ? 'Loading...'
-                  : new Date().getTime() >=
+                    ? 'Fajr'
+                    : null}
+                </Text>
+                <Text
+                  style={{
+                    textAlign: 'left',
+                    marginLeft: 5,
+                    fontSize: normalize(12),
+                    // color: '#023c54',
+                    color: 'white',
+                    fontWeight: '500',
+                    marginTop: 10,
+                  }}>
+                  Upcoming
+                </Text>
+                <Text
+                  style={{
+                    textAlign: 'left',
+                    marginLeft: 5,
+                    fontSize: normalize(15),
+                    // color: '#023c54',
+                    color: 'white',
+                    fontWeight: '700',
+                    marginTop: 3,
+                  }}>
+                  {prayerLoading || Object.keys(prayerTimes).length < 9
+                    ? 'Loading...'
+                    : new Date().getTime() >=
+                        new Date(
+                          moment()
+                            .set('hour', prayerTimes?.Isha?.hr)
+                            .set('minute', prayerTimes?.Isha?.min),
+                        ).getTime() ||
+                      new Date().getTime() <
+                        new Date(
+                          moment()
+                            .set('hour', prayerTimes?.Fajr?.hr)
+                            .set('minute', prayerTimes?.Fajr?.min),
+                        ).getTime()
+                    ? 'Fajr'
+                    : new Date().getTime() >=
                       new Date(
                         moment()
-                          .set('hour', prayerTimes?.Isha?.hr)
-                          .set('minute', prayerTimes?.Isha?.min),
-                      ).getTime() ||
-                    new Date().getTime() <
-                      new Date(
-                        moment()
-                          .set('hour', prayerTimes?.Fajr?.hr)
-                          .set('minute', prayerTimes?.Fajr?.min),
+                          .set('hour', prayerTimes?.Maghrib?.hr)
+                          .set('minute', prayerTimes?.Maghrib?.min),
                       ).getTime()
-                  ? 'Fajr'
-                  : new Date().getTime() >=
-                    new Date(
-                      moment()
+                    ? 'Isha'
+                    : new Date().getTime() >=
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes?.Asr?.hr)
+                          .set('minute', prayerTimes?.Asr?.min),
+                      ).getTime()
+                    ? 'Maghrib'
+                    : new Date().getTime() >=
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes?.Dhuhr?.hr)
+                          .set('minute', prayerTimes?.Dhuhr?.min),
+                      ).getTime()
+                    ? 'Asr'
+                    : new Date().getTime() >=
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes?.Fajr.hr)
+                          .set('minute', prayerTimes?.Fajr.min),
+                      ).getTime()
+                    ? 'Dhuhr'
+                    : null}
+                </Text>
+                <Text
+                  style={{
+                    textAlign: 'left',
+                    marginLeft: 5,
+                    fontSize: normalize(12),
+                    // color: '#023c54',
+                    color: 'white',
+                    fontWeight: '500',
+                    marginTop: 0,
+                  }}>
+                  {prayerLoading || Object.keys(prayerTimes).length < 9
+                    ? 'Loading...'
+                    : new Date().getTime() >=
+                        new Date(
+                          moment()
+                            .set('hour', prayerTimes?.Isha?.hr)
+                            .set('minute', prayerTimes?.Isha?.min),
+                        ).getTime() ||
+                      new Date().getTime() <
+                        new Date(
+                          moment()
+                            .set('hour', prayerTimes?.Fajr?.hr)
+                            .set('minute', prayerTimes?.Fajr?.min),
+                        ).getTime()
+                    ? moment()
+                        .set('hour', prayerTimes?.Fajr?.hr)
+                        .set('minute', prayerTimes?.Fajr?.min)
+                        .format('H:mm A')
+                    : new Date().getTime() >=
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes?.Maghrib?.hr)
+                          .set('minute', prayerTimes?.Maghrib?.min),
+                      ).getTime()
+                    ? moment()
+                        .set('hour', prayerTimes?.Isha?.hr)
+                        .set('minute', prayerTimes?.Isha?.min)
+                        .format('H:mm A')
+                    : new Date().getTime() >=
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes?.Asr?.hr)
+                          .set('minute', prayerTimes?.Asr?.min),
+                      ).getTime()
+                    ? moment()
                         .set('hour', prayerTimes?.Maghrib?.hr)
-                        .set('minute', prayerTimes?.Maghrib?.min),
-                    ).getTime()
-                  ? 'Isha'
-                  : new Date().getTime() >=
-                    new Date(
-                      moment()
+                        .set('minute', prayerTimes?.Maghrib?.min)
+                        .format('H:mm A')
+                    : new Date().getTime() >=
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes?.Dhuhr?.hr)
+                          .set('minute', prayerTimes?.Dhuhr?.min),
+                      ).getTime()
+                    ? moment()
                         .set('hour', prayerTimes?.Asr?.hr)
-                        .set('minute', prayerTimes?.Asr?.min),
-                    ).getTime()
-                  ? 'Maghrib'
-                  : new Date().getTime() >=
-                    new Date(
-                      moment()
+                        .set('minute', prayerTimes?.Asr?.min)
+                        .format('H:mm A')
+                    : new Date().getTime() >=
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes?.Fajr.hr)
+                          .set('minute', prayerTimes?.Fajr.min),
+                      ).getTime()
+                    ? moment()
                         .set('hour', prayerTimes?.Dhuhr?.hr)
-                        .set('minute', prayerTimes?.Dhuhr?.min),
-                    ).getTime()
-                  ? 'Asr'
-                  : new Date().getTime() >=
-                    new Date(
-                      moment()
-                        .set('hour', prayerTimes?.Fajr.hr)
-                        .set('minute', prayerTimes?.Fajr.min),
-                    ).getTime()
-                  ? 'Dhuhr'
-                  : null}
-              </Text>
-              <FontAwesome
-                name="moon-o"
-                size={normalize(30)}
-                color="white"
+                        .set('minute', prayerTimes?.Dhuhr?.min)
+                        .format('H:mm A')
+                    : null}
+                </Text>
+              </View>
+              <View
                 style={{
-                  marginLeft: 315,
-                  marginTop: -100,
-                }}
-              />
-              <Text
-                style={{
-                  marginLeft: 330,
-                  fontSize: normalize(16),
-                  marginRight: 10,
-                  fontWeight: '600',
-                  color: 'white',
-                  marginTop: 10,
+                  width: '70%',
+                  alignItems: 'flex-end',
+                  justifyContent: 'flex-end',
                 }}>
-                {date?.hijri?.day}
-              </Text>
-              <Text
-                style={{
-                  marginLeft: 210,
-                  marginRight: 10,
-                  fontSize: normalize(16),
-                  fontWeight: '600',
-                  color: 'white',
-                  marginTop: 5,
-                }}>
-                {date?.hijri?.month.en}, {date?.hijri?.year}
-              </Text>
-              <Text
-                style={{
-                  marginLeft: 270,
-                  marginRight: 10,
-                  fontSize: normalize(18),
-                  fontWeight: '600',
-                  color: 'white',
-                  marginTop: 5,
-                }}>
-                {date?.gregorian?.weekday.en}
-              </Text>
+                <FontAwesome
+                  name="moon-o"
+                  size={normalize(30)}
+                  color="white"
+                  style={{
+                    marginRight: 25,
+                    marginTop: -0,
+                  }}
+                />
+                <Text
+                  style={{
+                    // marginLeft: 330,
+                    fontSize: normalize(26),
+                    marginRight: 0,
+                    fontWeight: '900',
+                    color: 'white',
+                    marginTop: 5,
+                  }}>
+                  {date?.hijri?.day}
+                </Text>
+                <Text
+                  style={{
+                    // marginLeft: 210,
+                    marginRight: 0,
+                    fontSize: normalize(13),
+                    fontWeight: '600',
+                    color: 'white',
+                    marginTop: 5,
+                  }}>
+                  {date?.hijri?.month.en}, {date?.hijri?.year}
+                </Text>
+                <Text
+                  style={{
+                    // marginLeft: 270,
+                    marginRight: 0,
+                    fontSize: normalize(13),
+                    fontWeight: '500',
+                    color: 'white',
+                    marginTop: 0,
+                  }}>
+                  {moment(date?.gregorian?.date, 'DD-MM-YYYY').format(
+                    'D MMM, ddd, YY',
+                  )}
+                </Text>
+              </View>
             </View>
           </ImageBackground>
           <View>
@@ -474,7 +551,7 @@ const Home = ({navigation}) => {
                   fontWeight: '600',
                   color: 'black',
                 }}>
-                Latest Artical
+                Latest Article
               </Text>
               <Image
                 style={{
