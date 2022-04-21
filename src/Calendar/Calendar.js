@@ -62,38 +62,37 @@ const CalendarScreen = ({navigation}) => {
       }),
     )
       .then(res => {
-        // console.log('big length', res.length);
         res.forEach(el => {
-          // console.log(el.data.length);
           setAll_years(prev => [...prev, ...el.data]);
         });
+        setLoading(false);
       })
       .catch(err => console.log(err));
   };
 
-  useEffect(() => {
-    // console.log('length', all_years.length);
-    if (all_years.length >= 365) {
-      var calendar_mini = {};
-      for (var i = 0; i < all_years.length; i++) {
-        // console.log('data', all_years[i]['gregorian']['month']['en']);
-        var month = `${all_years[i].gregorian.month.en}`;
-        if (Object.keys(calendar_mini).includes(month)) {
-          calendar_mini[month] = [...calendar_mini[month], all_years[i]];
-        } else {
-          calendar_mini[month] = [all_years[i]];
-        }
-      }
+  // useEffect(() => {
+  //   // console.log('length', all_years.length);
+  //   if (all_years.length >= 365) {
+  //     var calendar_mini = {};
+  //     for (var i = 0; i < all_years.length; i++) {
+  //       // console.log('data', all_years[i]['gregorian']['month']['en']);
+  //       var month = `${all_years[i].gregorian.month.en}`;
+  //       if (Object.keys(calendar_mini).includes(month)) {
+  //         calendar_mini[month] = [...calendar_mini[month], all_years[i]];
+  //       } else {
+  //         calendar_mini[month] = [all_years[i]];
+  //       }
+  //     }
 
-      // console.log('90', calendar_mini);
+  //     // console.log('90', calendar_mini);
 
-      if (Object.keys(calendar_mini).length === 12) {
-        // console.log('93', Object.keys(calendar_mini));
-        setCalendar(calendar_mini);
-        setLoading(false);
-      }
-    }
-  }, [all_years]);
+  //     if (Object.keys(calendar_mini).length === 12) {
+  //       // console.log('93', Object.keys(calendar_mini));
+  //       setCalendar(calendar_mini);
+  //       setLoading(false);
+  //     }
+  //   }
+  // }, [all_years]);
 
   // console.log('cal', all_years);
 
@@ -133,7 +132,11 @@ const CalendarScreen = ({navigation}) => {
             'December',
           ].map(month => {
             counter = 0;
-            limit = calendar[month].length;
+            const currentMonth = all_years.filter(
+              day => day.gregorian.month.en === month,
+            );
+            limit = currentMonth.length;
+            // console.log('Month', currentMonth);
             // if (month.includes(current_hijri_year)) {
             return (
               <View key={month} style={styles.monthContainer}>
@@ -154,14 +157,12 @@ const CalendarScreen = ({navigation}) => {
                       width: '50%',
                       fontWeight: '900',
                     }}>
-                    {calendar[month][0].hijri.month.number ===
-                    calendar[month][calendar[month].length - 1].hijri.month
-                      .number
-                      ? calendar[month][0].hijri.month.en
-                      : `(${calendar[month][0].hijri.month.en}/${
-                          calendar[month][calendar[month].length - 1].hijri
-                            .month.en
-                        }), ${calendar[month][0].hijri.year}`}
+                    {currentMonth[0].hijri.month.number ===
+                    currentMonth[currentMonth.length - 1].hijri.month.number
+                      ? currentMonth[0].hijri.month.en
+                      : `(${currentMonth[0].hijri.month.en}/${
+                          currentMonth[currentMonth.length - 1].hijri.month.en
+                        }), ${currentMonth[0].hijri.year}`}
                   </Text>
                 </View>
                 <View style={{...styles.weekRow, backgroundColor: '#ccc'}}>
@@ -230,8 +231,7 @@ const CalendarScreen = ({navigation}) => {
                         {[0, 1, 2, 3, 4, 5, 6].map(j => {
                           if (
                             i === 0 &&
-                            j >=
-                              weekdays[calendar[month][0].gregorian.weekday.en]
+                            j >= weekdays[currentMonth[0].gregorian.weekday.en]
                           ) {
                             counter += 1;
                             return (
@@ -239,10 +239,10 @@ const CalendarScreen = ({navigation}) => {
                                 key={Math.random() * 1000}
                                 style={styles.weekText}>
                                 <Text style={styles.weekText2}>
-                                  {calendar[month][counter - 1].gregorian.day}
+                                  {currentMonth[counter - 1].gregorian.day}
                                 </Text>
                                 <Text style={styles.weekTextHijri}>
-                                  {calendar[month][counter - 1].hijri.day}
+                                  {currentMonth[counter - 1].hijri.day}
                                 </Text>
                               </View>
                             );
@@ -261,10 +261,10 @@ const CalendarScreen = ({navigation}) => {
                                 key={Math.random() * 1000}
                                 style={styles.weekText}>
                                 <Text style={styles.weekText2}>
-                                  {calendar[month][counter - 1].gregorian.day}
+                                  {currentMonth[counter - 1].gregorian.day}
                                 </Text>
                                 <Text style={styles.weekTextHijri}>
-                                  {calendar[month][counter - 1].hijri.day}
+                                  {currentMonth[counter - 1].hijri.day}
                                 </Text>
                               </View>
                             );

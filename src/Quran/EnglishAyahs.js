@@ -6,32 +6,27 @@ import {
   ImageBackground,
   ScrollView,
   FlatList,
-  Dimensions,PixelRatio,Platform,
+  Dimensions,
+  PixelRatio,
+  Platform,
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // import ArabicAyahs from './ArabicAyahs';
-
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const scale = windowWidth / 320;
 
 function normalize(size) {
- 
-  const newSize = size * scale 
- 
- if (Platform.OS === 'ios' && 'android') {
- 
-    return Math.round(PixelRatio.roundToNearestPixel(newSize))
- 
+  const newSize = size * scale;
+
+  if (Platform.OS === 'ios' && 'android') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
   } else {
- 
-    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
- 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
   }
- 
 }
 
 const ArabicAyahs = ({route, navigation}) => {
@@ -55,18 +50,20 @@ const ArabicAyahs = ({route, navigation}) => {
     getSurahsAyahs();
   }, []);
 
-//   console.log(data);
+  //   console.log(data);
   const [focused, setFocused] = useState('');
   return (
     <View style={{flex: 1, padding: 0}}>
-        <View style={styles.topnav}>
-        <MaterialIcons name="arrow-back"
-                    size={30}
-                    color='white'
-                    style={styles.icon}
-                    onPress={() => navigation.goBack()} />
-          <Text style={styles.topnavtext}>Ayahs</Text>
-        </View>
+      <View style={styles.topnav}>
+        <MaterialIcons
+          name="arrow-back"
+          size={30}
+          color="white"
+          style={styles.icon}
+          onPress={() => navigation.goBack()}
+        />
+        <Text style={styles.topnavtext}>Ayahs</Text>
+      </View>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
@@ -102,9 +99,7 @@ const ArabicAyahs = ({route, navigation}) => {
                       Sajda
                     </Text>
                   </>
-                ) : (
-                null
-                )}
+                ) : null}
               </View>
             )}
           />
@@ -120,7 +115,7 @@ const styles = StyleSheet.create({
   },
   topnav: {
     height: 60,
-    width: windowWidth /1,
+    width: windowWidth / 1,
     backgroundColor: '#4b7bf2',
   },
   topnavtext: {
@@ -128,12 +123,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     fontSize: normalize(22),
-    color: 'white'
+    color: 'white',
   },
   icon: {
     marginLeft: 20,
     marginTop: 15,
-},
+  },
   image: {
     marginTop: 0,
     height: 250,
@@ -150,11 +145,11 @@ const styles = StyleSheet.create({
     marginRight: 10,
     alignSelf: 'center',
     height: 'auto',
-    width:  windowWidth /1.1,
+    width: windowWidth / 1.1,
     backgroundColor: 'white',
     elevation: 20,
     borderRadius: 20,
-    padding: 10
+    padding: 10,
   },
   number: {
     marginTop: 2,

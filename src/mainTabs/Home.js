@@ -423,7 +423,7 @@ const Home = ({navigation}) => {
                     ? moment()
                         .set('hour', prayerTimes?.Fajr?.hr)
                         .set('minute', prayerTimes?.Fajr?.min)
-                        .format('H:mm A')
+                        .format('h:mm A')
                     : new Date().getTime() >=
                       new Date(
                         moment()
@@ -433,7 +433,7 @@ const Home = ({navigation}) => {
                     ? moment()
                         .set('hour', prayerTimes?.Isha?.hr)
                         .set('minute', prayerTimes?.Isha?.min)
-                        .format('H:mm A')
+                        .format('h:mm A')
                     : new Date().getTime() >=
                       new Date(
                         moment()
@@ -443,7 +443,7 @@ const Home = ({navigation}) => {
                     ? moment()
                         .set('hour', prayerTimes?.Maghrib?.hr)
                         .set('minute', prayerTimes?.Maghrib?.min)
-                        .format('H:mm A')
+                        .format('h:mm A')
                     : new Date().getTime() >=
                       new Date(
                         moment()
@@ -453,7 +453,7 @@ const Home = ({navigation}) => {
                     ? moment()
                         .set('hour', prayerTimes?.Asr?.hr)
                         .set('minute', prayerTimes?.Asr?.min)
-                        .format('H:mm A')
+                        .format('h:mm A')
                     : new Date().getTime() >=
                       new Date(
                         moment()
@@ -463,7 +463,7 @@ const Home = ({navigation}) => {
                     ? moment()
                         .set('hour', prayerTimes?.Dhuhr?.hr)
                         .set('minute', prayerTimes?.Dhuhr?.min)
-                        .format('H:mm A')
+                        .format('h:mm A')
                     : null}
                 </Text>
               </View>
