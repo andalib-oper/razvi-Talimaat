@@ -73,51 +73,50 @@ const Home = ({navigation}) => {
     setShowMore(e.nativeEvent.lines.length > NUM_OF_LINES);
   }, []);
 
-  Geolocation.getCurrentPosition(data => {
-    setLagitude(data.coords.latitude);
-    setLongitude(data.coords.longitude);
-  });
-
   // console.log(info);
   // console.log(time);
   // console.log('lagitude', lagitude);
   // console.log('longitude', longitude);
 
-  const lati = lagitude;
-  const logi = longitude;
-
   // function getCity(lati, logi) {
-  const xhr = new XMLHttpRequest();
-  // Paste your LocationIQ token below.
-  xhr.open(
-    'GET',
-    'https://us1.locationiq.com/v1/reverse.php?key=pk.6644ad4fb87f8a59e24b45827864b079&lat=' +
-      lati +
-      '&lon=' +
-      logi +
-      '&format=json',
-    true,
-    22,
-  );
-  xhr.send();
-  xhr.onreadystatechange = e => {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      var response = JSON.parse(xhr.responseText);
-      setCity(response.address.city);
-      return;
-    }
-  };
-  xhr.addEventListener(
-    'readystatechange',
-    e => {
+  useEffect(() => {
+    Geolocation.getCurrentPosition(data => {
+      setLagitude(data.coords.latitude);
+      setLongitude(data.coords.longitude);
+    });
+    const xhr = new XMLHttpRequest();
+    // Paste your LocationIQ token below.
+    xhr.open(
+      'GET',
+      'https://us1.locationiq.com/v1/reverse.php?key=pk.6644ad4fb87f8a59e24b45827864b079&lat=' +
+        lagitude +
+        '&lon=' +
+        longitude +
+        '&format=json',
+      true,
+      22,
+    );
+    xhr.send();
+    xhr.onreadystatechange = e => {
       if (xhr.readyState == 4 && xhr.status == 200) {
         var response = JSON.parse(xhr.responseText);
         setCity(response.address.city);
         return;
       }
-    },
-    false,
-  );
+    };
+    xhr.addEventListener(
+      'readystatechange',
+      e => {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          var response = JSON.parse(xhr.responseText);
+          setCity(response.address.city);
+          return;
+        }
+      },
+      false,
+    );
+  }, []);
+
   // useEffect(() => {
   // }, []);
 
@@ -229,7 +228,7 @@ const Home = ({navigation}) => {
                   fontSize: normalize(16),
                   color: 'white',
                   fontWeight: '600',
-                  marginTop: -35,
+                  marginTop: -45,
                   marginBottom: -60,
                   // numberOfLines: 1,
                 }}>
@@ -247,7 +246,7 @@ const Home = ({navigation}) => {
                     // color: '#023c54',
                     color: 'white',
                     fontWeight: '600',
-                    marginTop: 10,
+                    marginTop: 5,
                   }}>
                   Now
                 </Text>
@@ -255,11 +254,11 @@ const Home = ({navigation}) => {
                   style={{
                     textAlign: 'left',
                     marginLeft: 5,
-                    fontSize: normalize(20),
+                    fontSize: normalize(18),
                     // color: '#023c54',
                     color: 'white',
                     fontWeight: '700',
-                    marginTop: 0,
+                    marginTop: -5,
                   }}>
                   {prayerLoading || Object.keys(prayerTimes).length < 9
                     ? 'Loading...'
@@ -307,9 +306,7 @@ const Home = ({navigation}) => {
                           .set('millisecond', 0),
                       ).getTime()
                     ? 'Dhuhr'
-                    : new Date(
-                        moment().set('second', 0).set('millisecond', 0),
-                      ).getTime() ===
+                    : new Date().getTime() >=
                       new Date(
                         moment()
                           .set('hour', prayerTimes.Sunrise.hr)
@@ -349,7 +346,7 @@ const Home = ({navigation}) => {
                     // color: '#023c54',
                     color: 'white',
                     fontWeight: '700',
-                    marginTop: 3,
+                    marginTop: -3,
                   }}>
                   {prayerLoading || Object.keys(prayerTimes).length < 9
                     ? 'Loading...'
@@ -394,6 +391,15 @@ const Home = ({navigation}) => {
                           .set('minute', prayerTimes?.Fajr.min),
                       ).getTime()
                     ? 'Dhuhr'
+                    : new Date().getTime() >=
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes.Sunrise.hr)
+                          .set('minute', prayerTimes.Sunrise.min)
+                          .set('second', 0)
+                          .set('millisecond', 0),
+                      ).getTime()
+                    ? 'Sunrise'
                     : null}
                 </Text>
                 <Text
@@ -457,12 +463,24 @@ const Home = ({navigation}) => {
                     : new Date().getTime() >=
                       new Date(
                         moment()
-                          .set('hour', prayerTimes?.Fajr.hr)
-                          .set('minute', prayerTimes?.Fajr.min),
+                          .set('hour', prayerTimes.Sunrise.hr)
+                          .set('minute', prayerTimes.Sunrise.min)
+                          .set('second', 0)
+                          .set('millisecond', 0),
                       ).getTime()
                     ? moment()
                         .set('hour', prayerTimes?.Dhuhr?.hr)
                         .set('minute', prayerTimes?.Dhuhr?.min)
+                        .format('h:mm A')
+                    : new Date().getTime() >=
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes?.Fajr.hr)
+                          .set('minute', prayerTimes?.Fajr.min),
+                      ).getTime()
+                    ? moment()
+                        .set('hour', prayerTimes?.Sunrise?.hr)
+                        .set('minute', prayerTimes?.Sunrise?.min)
                         .format('h:mm A')
                     : null}
                 </Text>
@@ -485,7 +503,7 @@ const Home = ({navigation}) => {
                 <Text
                   style={{
                     // marginLeft: 330,
-                    fontSize: normalize(26),
+                    fontSize: normalize(28),
                     marginRight: 0,
                     fontWeight: '900',
                     color: 'white',
@@ -498,7 +516,7 @@ const Home = ({navigation}) => {
                     // marginLeft: 210,
                     marginRight: 0,
                     fontSize: normalize(13),
-                    fontWeight: '600',
+                    // fontWeight: '500',
                     color: 'white',
                     marginTop: 5,
                   }}>
@@ -509,7 +527,7 @@ const Home = ({navigation}) => {
                     // marginLeft: 270,
                     marginRight: 0,
                     fontSize: normalize(13),
-                    fontWeight: '500',
+                    // fontWeight: '500',
                     color: 'white',
                     marginTop: 0,
                   }}>
@@ -656,6 +674,7 @@ const styles = StyleSheet.create({
     // borderBottomLeftRadius: 30,
     // borderBottomRightRadius: 30,
     // backgroundColor: '#00000050',
+    paddingHorizontal: normalize(10),
   },
   image: {
     marginTop: 0,

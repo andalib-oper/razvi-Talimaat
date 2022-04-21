@@ -224,7 +224,7 @@ const CalendarScreen = ({navigation}) => {
                   </Text>
                 </View>
                 <View>
-                  {[0, 1, 2, 3, 4].map(i => {
+                  {[0, 1, 2, 3, 4, 5].map(i => {
                     // toggler *= -1;
                     return (
                       <View key={Math.random() * 1000} style={styles.weekRow}>
