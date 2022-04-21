@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import { PacmanIndicator } from 'react-native-indicators';
+import { SkypeIndicator } from 'react-native-indicators';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const scale = windowWidth / 320;
@@ -69,7 +69,7 @@ const English = ({navigation}) => {
         </View>
         {isLoading ? (
             <View style={{alignSelf: 'center', marginTop: 300,}}>
-            <PacmanIndicator color='blue'/>
+            <SkypeIndicator color='blue'/>
           </View>
         ) : (
           <ScrollView>

@@ -13,7 +13,7 @@ import {
   PixelRatio,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {PacmanIndicator} from 'react-native-indicators';
+import {SkypeIndicator} from 'react-native-indicators';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -113,7 +113,7 @@ const CalendarScreen = ({navigation}) => {
       </View>
       {isLoading ? (
         <View style={{alignSelf: 'center', marginTop: 70}}>
-          <PacmanIndicator color="blue" />
+          <SkypeIndicator color="blue" />
         </View>
       ) : (
         <ScrollView>
@@ -165,12 +165,19 @@ const CalendarScreen = ({navigation}) => {
                         }), ${currentMonth[0].hijri.year}`}
                   </Text>
                 </View>
-                <View style={{...styles.weekRow, backgroundColor: '#ccc'}}>
+                <View
+                  style={{
+                    ...styles.weekRow,
+                    backgroundColor: '#ffffff',
+                    borderRadius: 10,
+                  }}>
                   <Text
                     style={{
                       width: `${100 / 7}%`,
                       textAlign: 'center',
                       fontSize: normalize(14),
+                      color: '#444',
+                      fontWeight: 'bold',
                     }}>
                     Sun
                   </Text>
@@ -179,6 +186,8 @@ const CalendarScreen = ({navigation}) => {
                       width: `${100 / 7}%`,
                       textAlign: 'center',
                       fontSize: normalize(14),
+                      color: '#444',
+                      fontWeight: 'bold',
                     }}>
                     Mon
                   </Text>
@@ -187,6 +196,8 @@ const CalendarScreen = ({navigation}) => {
                       width: `${100 / 7}%`,
                       textAlign: 'center',
                       fontSize: normalize(14),
+                      color: '#444',
+                      fontWeight: 'bold',
                     }}>
                     Tue
                   </Text>
@@ -195,6 +206,8 @@ const CalendarScreen = ({navigation}) => {
                       width: `${100 / 7}%`,
                       textAlign: 'center',
                       fontSize: normalize(14),
+                      color: '#444',
+                      fontWeight: 'bold',
                     }}>
                     Wed
                   </Text>
@@ -203,6 +216,8 @@ const CalendarScreen = ({navigation}) => {
                       width: `${100 / 7}%`,
                       textAlign: 'center',
                       fontSize: normalize(14),
+                      color: '#444',
+                      fontWeight: 'bold',
                     }}>
                     Thu
                   </Text>
@@ -211,6 +226,8 @@ const CalendarScreen = ({navigation}) => {
                       width: `${100 / 7}%`,
                       textAlign: 'center',
                       fontSize: normalize(14),
+                      color: '#444',
+                      fontWeight: 'bold',
                     }}>
                     Fri
                   </Text>
@@ -219,6 +236,8 @@ const CalendarScreen = ({navigation}) => {
                       width: `${100 / 7}%`,
                       textAlign: 'center',
                       fontSize: normalize(14),
+                      color: '#444',
+                      fontWeight: 'bold',
                     }}>
                     Sat
                   </Text>
@@ -231,7 +250,10 @@ const CalendarScreen = ({navigation}) => {
                         {[0, 1, 2, 3, 4, 5, 6].map(j => {
                           if (
                             i === 0 &&
-                            j >= weekdays[currentMonth[0].gregorian.weekday.en]
+                            j >=
+                              weekdays[
+                                currentMonth[0]['gregorian']['weekday']['en']
+                              ]
                           ) {
                             counter += 1;
                             return (
@@ -239,10 +261,14 @@ const CalendarScreen = ({navigation}) => {
                                 key={Math.random() * 1000}
                                 style={styles.weekText}>
                                 <Text style={styles.weekText2}>
-                                  {currentMonth[counter - 1].gregorian.day}
+                                  {
+                                    currentMonth[counter - 1]['gregorian'][
+                                      'day'
+                                    ]
+                                  }
                                 </Text>
                                 <Text style={styles.weekTextHijri}>
-                                  {currentMonth[counter - 1].hijri.day}
+                                  {currentMonth[counter - 1]['hijri']['day']}
                                 </Text>
                               </View>
                             );
@@ -261,10 +287,14 @@ const CalendarScreen = ({navigation}) => {
                                 key={Math.random() * 1000}
                                 style={styles.weekText}>
                                 <Text style={styles.weekText2}>
-                                  {currentMonth[counter - 1].gregorian.day}
+                                  {
+                                    currentMonth[counter - 1]['gregorian'][
+                                      'day'
+                                    ]
+                                  }
                                 </Text>
                                 <Text style={styles.weekTextHijri}>
-                                  {currentMonth[counter - 1].hijri.day}
+                                  {currentMonth[counter - 1]['hijri']['day']}
                                 </Text>
                               </View>
                             );
@@ -290,7 +320,7 @@ const styles = StyleSheet.create({
   },
   topnav: {
     height: 60,
-    width: 412,
+    width: windowWidth / 1,
     backgroundColor: '#4b7bf2',
   },
   topnavtext: {
@@ -315,6 +345,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     padding: 10,
+    // backgroundColor: 'blue'
   },
   weekText: {
     width: `${100 / 7}%`,
