@@ -13,10 +13,11 @@ import {
   PixelRatio,
   ToastAndroid,
 } from 'react-native';
+import ImageOverlay from "react-native-image-overlay";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const NUM_OF_LINES = 4;
 import Geolocation from '@react-native-community/geolocation';
-import {PacmanIndicator} from 'react-native-indicators';
+import {SkypeIndicator} from 'react-native-indicators';
 import moment from 'moment';
 
 const windowWidth = Dimensions.get('window').width;
@@ -160,7 +161,8 @@ const Home = ({navigation}) => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
         <View style={styles.topContainer}>
-          <ImageBackground
+          <ImageOverlay
+          overlayAlpha={0.1}
             style={styles.image}
             source={require('../../images/background3.jpeg')}>
             <View style={{backgroundColor: 'pink'}}>
@@ -442,7 +444,7 @@ const Home = ({navigation}) => {
                 {date?.gregorian?.weekday.en}
               </Text>
             </View>
-          </ImageBackground>
+          </ImageOverlay>
           <View>
             <View
               style={{
@@ -507,7 +509,7 @@ const Home = ({navigation}) => {
         <View style={{flex: 1, padding: 2}}>
           {isLoading ? (
             <View style={{alignSelf: 'center', marginTop: 30}}>
-              <PacmanIndicator color="blue" />
+              < SkypeIndicator color="blue" />
             </View>
           ) : (
             <View>
@@ -590,6 +592,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderBottomLeftRadius: 30,
     backgroundColor: '#00000050',
+
   },
   topbar: {
     // backgroundColor: 'pink',

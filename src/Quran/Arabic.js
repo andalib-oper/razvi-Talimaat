@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import {
-  PacmanIndicator,
+  SkypeIndicator,
 } from 'react-native-indicators';
 
 
@@ -69,7 +69,7 @@ const Arabic = ({navigation}) => {
       <ScrollView>
         {isLoading ? (
           <View style={{alignSelf: 'center', marginTop: 300,}}>
-            <PacmanIndicator color='blue'/>
+            <SkypeIndicator color='blue'/>
           </View>
         ) : (
           <ScrollView>

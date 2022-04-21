@@ -13,7 +13,7 @@ import {
   PixelRatio,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {PacmanIndicator} from 'react-native-indicators';
+import { SkypeIndicator} from 'react-native-indicators';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -141,7 +141,7 @@ const CalendarScreen = ({navigation}) => {
       </View>
       {isLoading ? (
         <View style={{alignSelf: 'center', marginTop: 70}}>
-          <PacmanIndicator color="blue" />
+          <SkypeIndicator color="blue" />
         </View>
       ) : (
         <ScrollView>
@@ -191,7 +191,7 @@ const CalendarScreen = ({navigation}) => {
                         }), ${calendar[month][0].hijri.year}`}
                   </Text>
                 </View>
-                <View style={{...styles.weekRow, backgroundColor: '#ccc'}}>
+                <View style={{...styles.weekRow, backgroundColor: '#ffffff', borderRadius: 10,}}>
                   <Text
                     style={{
                       width: `${100 / 7}%`,
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
   },
   topnav: {
     height: 60,
-    width: 412,
+    width: windowWidth /1,
     backgroundColor: '#4b7bf2',
   },
   topnavtext: {
@@ -337,11 +337,13 @@ const styles = StyleSheet.create({
   monthContainerText: {
     fontSize: normalize(18),
     color: '#222',
+    // backgroundColor: 'blue'
   },
   weekRow: {
     display: 'flex',
     flexDirection: 'row',
     padding: 10,
+    // backgroundColor: 'blue'
   },
   weekText: {
     width: `${100 / 7}%`,

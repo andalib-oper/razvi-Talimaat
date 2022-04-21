@@ -13,7 +13,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import { PacmanIndicator } from 'react-native-indicators';
+import { SkypeIndicator } from 'react-native-indicators';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 const windowWidth = Dimensions.get('window').width;
@@ -71,7 +71,7 @@ const ArabicAyahs = ({route,navigation}) => {
         </View>
       {isLoading ? (
        <View style={{alignSelf: 'center', marginTop: 30,}}>
-       <PacmanIndicator color='blue'/>
+       <SkypeIndicator color='blue'/>
      </View>
       ) : (
         <ScrollView>

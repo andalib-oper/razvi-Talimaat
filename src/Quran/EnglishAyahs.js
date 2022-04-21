@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { SkypeIndicator } from 'react-native-indicators';
 // import ArabicAyahs from './ArabicAyahs';
 
 
@@ -68,7 +69,9 @@ const ArabicAyahs = ({route, navigation}) => {
           <Text style={styles.topnavtext}>Ayahs</Text>
         </View>
       {isLoading ? (
-        <ActivityIndicator />
+         <View style={{alignSelf: 'center', marginTop: 30,}}>
+         <SkypeIndicator color='blue'/>
+       </View>
       ) : (
         <ScrollView>
           <FlatList
