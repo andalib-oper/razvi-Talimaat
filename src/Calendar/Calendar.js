@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay'
-import { SkypeIndicator} from 'react-native-indicators';
+import {SkypeIndicator} from 'react-native-indicators';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -50,34 +50,7 @@ const CalendarScreen = ({navigation}) => {
   const [calendar, setCalendar] = useState({});
 
   useEffect(() => {
-    // var all_years2 = [];
-    // for (var i = 1; i < 13; i++) {
-    //   fetch(
-    //     `http://api.aladhan.com/v1/gToHCalendar/${i}/${new Date().getFullYear()}`,
-    //   )
-    //     .then(res => res.json())
-    //     .then(res => all_years2.push(...res.data))
-    //     .catch(err => console.log(err));
-    //   // const newFunc = async () => {
-    //   //   console.log(i);
-    //   //   try {
-    //   //     var resp = await fetch(
-    //   //       `http://api.aladhan.com/v1/gToHCalendar/${i}/${new Date().getFullYear()}`,
-    //   //     );
-    //   //     resp = await resp.json();
-    //   //     console.log('data', resp.data);
-    //   //     all_years2.push(...resp.data);
-    //   //   } catch (err) {
-    //   //     console.log(err);
-    //   //   }
-    //   // };
-    //   // newFunc();
-    // }
-    // console.log(all_years2);
-    // setAll_years(all_years2);
     init_func();
-
-    // set
   }, []);
 
   const init_func = async () => {
@@ -90,38 +63,37 @@ const CalendarScreen = ({navigation}) => {
       }),
     )
       .then(res => {
-        // console.log('big length', res.length);
         res.forEach(el => {
-          // console.log(el.data.length);
           setAll_years(prev => [...prev, ...el.data]);
         });
+        setLoading(false);
       })
       .catch(err => console.log(err));
   };
 
-  useEffect(() => {
-    // console.log('length', all_years.length);
-    if (all_years.length >= 365) {
-      var calendar_mini = {};
-      for (var i = 0; i < all_years.length; i++) {
-        // console.log('data', all_years[i]['gregorian']['month']['en']);
-        var month = `${all_years[i].gregorian.month.en}`;
-        if (Object.keys(calendar_mini).includes(month)) {
-          calendar_mini[month] = [...calendar_mini[month], all_years[i]];
-        } else {
-          calendar_mini[month] = [all_years[i]];
-        }
-      }
+  // useEffect(() => {
+  //   // console.log('length', all_years.length);
+  //   if (all_years.length >= 365) {
+  //     var calendar_mini = {};
+  //     for (var i = 0; i < all_years.length; i++) {
+  //       // console.log('data', all_years[i]['gregorian']['month']['en']);
+  //       var month = `${all_years[i].gregorian.month.en}`;
+  //       if (Object.keys(calendar_mini).includes(month)) {
+  //         calendar_mini[month] = [...calendar_mini[month], all_years[i]];
+  //       } else {
+  //         calendar_mini[month] = [all_years[i]];
+  //       }
+  //     }
 
-      // console.log('90', calendar_mini);
+  //     // console.log('90', calendar_mini);
 
-      if (Object.keys(calendar_mini).length === 12) {
-        // console.log('93', Object.keys(calendar_mini));
-        setCalendar(calendar_mini);
-        setLoading(false);
-      }
-    }
-  }, [all_years]);
+  //     if (Object.keys(calendar_mini).length === 12) {
+  //       // console.log('93', Object.keys(calendar_mini));
+  //       setCalendar(calendar_mini);
+  //       setLoading(false);
+  //     }
+  //   }
+  // }, [all_years]);
 
   // console.log('cal', all_years);
 
@@ -165,7 +137,11 @@ const CalendarScreen = ({navigation}) => {
             'December',
           ].map(month => {
             counter = 0;
-            limit = calendar[month].length;
+            const currentMonth = all_years.filter(
+              day => day.gregorian.month.en === month,
+            );
+            limit = currentMonth.length;
+            // console.log('Month', currentMonth);
             // if (month.includes(current_hijri_year)) {
             return (
               <View key={month} style={styles.monthContainer}>
@@ -186,22 +162,27 @@ const CalendarScreen = ({navigation}) => {
                       width: '50%',
                       fontWeight: '900',
                     }}>
-                    {calendar[month][0].hijri.month.number ===
-                    calendar[month][calendar[month].length - 1].hijri.month
-                      .number
-                      ? calendar[month][0].hijri.month.en
-                      : `(${calendar[month][0].hijri.month.en}/${
-                          calendar[month][calendar[month].length - 1].hijri
-                            .month.en
-                        }), ${calendar[month][0].hijri.year}`}
+                    {currentMonth[0].hijri.month.number ===
+                    currentMonth[currentMonth.length - 1].hijri.month.number
+                      ? currentMonth[0].hijri.month.en
+                      : `(${currentMonth[0].hijri.month.en}/${
+                          currentMonth[currentMonth.length - 1].hijri.month.en
+                        }), ${currentMonth[0].hijri.year}`}
                   </Text>
                 </View>
-                <View style={{...styles.weekRow, backgroundColor: '#ffffff', borderRadius: 10,}}>
+                <View
+                  style={{
+                    ...styles.weekRow,
+                    backgroundColor: '#ffffff',
+                    borderRadius: 10,
+                  }}>
                   <Text
                     style={{
                       width: `${100 / 7}%`,
                       textAlign: 'center',
                       fontSize: normalize(14),
+                      color: '#444',
+                      fontWeight: 'bold',
                     }}>
                     Sun
                   </Text>
@@ -210,6 +191,8 @@ const CalendarScreen = ({navigation}) => {
                       width: `${100 / 7}%`,
                       textAlign: 'center',
                       fontSize: normalize(14),
+                      color: '#444',
+                      fontWeight: 'bold',
                     }}>
                     Mon
                   </Text>
@@ -218,6 +201,8 @@ const CalendarScreen = ({navigation}) => {
                       width: `${100 / 7}%`,
                       textAlign: 'center',
                       fontSize: normalize(14),
+                      color: '#444',
+                      fontWeight: 'bold',
                     }}>
                     Tue
                   </Text>
@@ -226,6 +211,8 @@ const CalendarScreen = ({navigation}) => {
                       width: `${100 / 7}%`,
                       textAlign: 'center',
                       fontSize: normalize(14),
+                      color: '#444',
+                      fontWeight: 'bold',
                     }}>
                     Wed
                   </Text>
@@ -234,6 +221,8 @@ const CalendarScreen = ({navigation}) => {
                       width: `${100 / 7}%`,
                       textAlign: 'center',
                       fontSize: normalize(14),
+                      color: '#444',
+                      fontWeight: 'bold',
                     }}>
                     Thu
                   </Text>
@@ -242,6 +231,8 @@ const CalendarScreen = ({navigation}) => {
                       width: `${100 / 7}%`,
                       textAlign: 'center',
                       fontSize: normalize(14),
+                      color: '#444',
+                      fontWeight: 'bold',
                     }}>
                     Fri
                   </Text>
@@ -250,12 +241,14 @@ const CalendarScreen = ({navigation}) => {
                       width: `${100 / 7}%`,
                       textAlign: 'center',
                       fontSize: normalize(14),
+                      color: '#444',
+                      fontWeight: 'bold',
                     }}>
                     Sat
                   </Text>
                 </View>
                 <View>
-                  {[0, 1, 2, 3, 4].map(i => {
+                  {[0, 1, 2, 3, 4, 5].map(i => {
                     // toggler *= -1;
                     return (
                       <View key={Math.random() * 1000} style={styles.weekRow}>
@@ -263,7 +256,9 @@ const CalendarScreen = ({navigation}) => {
                           if (
                             i === 0 &&
                             j >=
-                              weekdays[calendar[month][0].gregorian.weekday.en]
+                              weekdays[
+                                currentMonth[0]['gregorian']['weekday']['en']
+                              ]
                           ) {
                             counter += 1;
                             return (
@@ -271,10 +266,14 @@ const CalendarScreen = ({navigation}) => {
                                 key={Math.random() * 1000}
                                 style={styles.weekText}>
                                 <Text style={styles.weekText2}>
-                                  {calendar[month][counter - 1].gregorian.day}
+                                  {
+                                    currentMonth[counter - 1]['gregorian'][
+                                      'day'
+                                    ]
+                                  }
                                 </Text>
                                 <Text style={styles.weekTextHijri}>
-                                  {calendar[month][counter - 1].hijri.day}
+                                  {currentMonth[counter - 1]['hijri']['day']}
                                 </Text>
                               </View>
                             );
@@ -293,10 +292,14 @@ const CalendarScreen = ({navigation}) => {
                                 key={Math.random() * 1000}
                                 style={styles.weekText}>
                                 <Text style={styles.weekText2}>
-                                  {calendar[month][counter - 1].gregorian.day}
+                                  {
+                                    currentMonth[counter - 1]['gregorian'][
+                                      'day'
+                                    ]
+                                  }
                                 </Text>
                                 <Text style={styles.weekTextHijri}>
-                                  {calendar[month][counter - 1].hijri.day}
+                                  {currentMonth[counter - 1]['hijri']['day']}
                                 </Text>
                               </View>
                             );
@@ -322,7 +325,7 @@ const styles = StyleSheet.create({
   },
   topnav: {
     height: 60,
-    width: windowWidth /1,
+    width: windowWidth / 1,
     backgroundColor: '#4b7bf2',
   },
   topnavtext: {
@@ -341,8 +344,7 @@ const styles = StyleSheet.create({
   },
   monthContainerText: {
     fontSize: normalize(18),
-    color: '#222',
-    // backgroundColor: 'blue'
+    color: '#333',
   },
   weekRow: {
     display: 'flex',
@@ -356,12 +358,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: normalize(16),
     fontWeight: 'bold',
-    color: '#222',
+    color: '#333',
   },
   weekText2: {
     textAlign: 'center',
     fontSize: normalize(14),
-    color: '#222',
+    color: '#333',
   },
   weekTextHijri: {
     fontSize: normalize('12'),
