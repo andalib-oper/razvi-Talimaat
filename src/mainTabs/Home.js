@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -13,11 +13,12 @@ import {
   PixelRatio,
   ToastAndroid,
 } from 'react-native';
+import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import ImageOverlay from "react-native-image-overlay";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const NUM_OF_LINES = 4;
 import Geolocation from '@react-native-community/geolocation';
-import {SkypeIndicator} from 'react-native-indicators';
+import { SkypeIndicator } from 'react-native-indicators';
 import moment from 'moment';
 
 const windowWidth = Dimensions.get('window').width;
@@ -34,7 +35,7 @@ function normalize(size) {
   }
 }
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const [isLoading, setLoading] = useState(true);
   const [prayerLoading, setPrayerLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -93,10 +94,10 @@ const Home = ({navigation}) => {
   xhr.open(
     'GET',
     'https://us1.locationiq.com/v1/reverse.php?key=pk.6644ad4fb87f8a59e24b45827864b079&lat=' +
-      lati +
-      '&lon=' +
-      logi +
-      '&format=json',
+    lati +
+    '&lon=' +
+    logi +
+    '&format=json',
     true,
     22,
   );
@@ -125,8 +126,7 @@ const Home = ({navigation}) => {
   useEffect(() => {
     if (city) {
       fetch(
-        `http://api.aladhan.com/v1/calendarByCity?city=${city}&country=India&method=1&school=1&month=${
-          new Date().getMonth() + 1
+        `http://api.aladhan.com/v1/calendarByCity?city=${city}&country=India&method=1&school=1&month=${new Date().getMonth() + 1
         }&year=${new Date().getFullYear()}`,
       )
         .then(response => response.json())
@@ -136,10 +136,10 @@ const Home = ({navigation}) => {
           )[0].timings;
           Object.keys(resp).forEach(
             key =>
-              (resp[key] = {
-                hr: resp[key].split(' ')[0].split(':')[0],
-                min: resp[key].split(' ')[0].split(':')[1],
-              }),
+            (resp[key] = {
+              hr: resp[key].split(' ')[0].split(':')[0],
+              min: resp[key].split(' ')[0].split(':')[1],
+            }),
           );
           setPrayerTimes(resp);
           // console.log(res.data);
@@ -156,6 +156,18 @@ const Home = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      {/* {isLoading ? (
+        // <View style={{ alignSelf: 'center', marginTop: 30 }}>
+        //   < SkypeIndicator color="blue" />
+        // </View>
+         <OrientationLoadingOverlay
+          visible={true}
+          color="white"
+          indicatorSize="large"
+          messageFontSize={24}
+          // message="Loading... 😀😀😀"
+          />
+      ) : ( */}
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -508,9 +520,16 @@ const Home = ({navigation}) => {
 
         <View style={{flex: 1, padding: 2}}>
           {isLoading ? (
-            <View style={{alignSelf: 'center', marginTop: 30}}>
-              < SkypeIndicator color="blue" />
-            </View>
+            // <View style={{alignSelf: 'center', marginTop: 30}}>
+            //   < SkypeIndicator color="blue" />
+            // </View>
+            <OrientationLoadingOverlay
+            visible={true}
+            color="white"
+            indicatorSize="large"
+            messageFontSize={24}
+            // message="Loading... 😀😀😀"
+            />
           ) : (
             <View>
               {data.map(item => {
@@ -565,6 +584,7 @@ const Home = ({navigation}) => {
           )}
         </View>
       </ScrollView>
+      {/* )} */}
     </View>
   );
 };

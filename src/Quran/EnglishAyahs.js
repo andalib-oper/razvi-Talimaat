@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { SkypeIndicator } from 'react-native-indicators';
+import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 // import ArabicAyahs from './ArabicAyahs';
 
 
@@ -69,9 +70,13 @@ const ArabicAyahs = ({route, navigation}) => {
           <Text style={styles.topnavtext}>Ayahs</Text>
         </View>
       {isLoading ? (
-         <View style={{alignSelf: 'center', marginTop: 30,}}>
-         <SkypeIndicator color='blue'/>
-       </View>
+           <OrientationLoadingOverlay
+           visible={true}
+           color="white"
+           indicatorSize="large"
+           messageFontSize={24}
+           // message="Loading... 😀😀😀"
+           />
       ) : (
         <ScrollView>
           <FlatList

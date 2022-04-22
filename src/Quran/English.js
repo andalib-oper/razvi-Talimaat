@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { SkypeIndicator } from 'react-native-indicators';
+import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay'
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const scale = windowWidth / 320;
@@ -68,9 +69,13 @@ const English = ({navigation}) => {
         <View>
         </View>
         {isLoading ? (
-            <View style={{alignSelf: 'center', marginTop: 300,}}>
-            <SkypeIndicator color='blue'/>
-          </View>
+              <OrientationLoadingOverlay
+              visible={true}
+              color="white"
+              indicatorSize="large"
+              messageFontSize={24}
+              // message="Loading... 😀😀😀"
+              />
         ) : (
           <ScrollView>
             <FlatList
