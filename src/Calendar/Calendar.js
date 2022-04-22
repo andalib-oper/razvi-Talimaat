@@ -4,18 +4,18 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  ActivityIndicator,
-  Pressable,
-  FlatList,
-  Modal,
   Dimensions,
   Platform,
   PixelRatio,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {SkypeIndicator} from 'react-native-indicators';
-import axios from 'axios';
-import moment from 'moment';
+
+// global.Symbol = require('core-js/es/symbol');
+// require('core-js/features/symbol/iterator');
+// require('core-js/features/map');
+// require('core-js/features/set');
+// require('core-js/features/array/find');
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -33,10 +33,8 @@ function normalize(size) {
 
 const CalendarScreen = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
   const [all_years, setAll_years] = useState([]);
-  const [current_hijri_year, setCurrent_hijri_year] = useState(0);
+  const [isLoading, setLoading] = useState(true);
   const weekdays = {
     Sunday: 0,
     Monday: 1,
@@ -46,7 +44,6 @@ const CalendarScreen = ({navigation}) => {
     Friday: 5,
     Saturday: 6,
   };
-  const [calendar, setCalendar] = useState({});
 
   useEffect(() => {
     init_func();
@@ -65,53 +62,26 @@ const CalendarScreen = ({navigation}) => {
         res.forEach(el => {
           setAll_years(prev => [...prev, ...el.data]);
         });
-        setLoading(false);
+        if (res.length >= 12) setLoading(false);
       })
       .catch(err => console.log(err));
   };
 
-  // useEffect(() => {
-  //   // console.log('length', all_years.length);
-  //   if (all_years.length >= 365) {
-  //     var calendar_mini = {};
-  //     for (var i = 0; i < all_years.length; i++) {
-  //       // console.log('data', all_years[i]['gregorian']['month']['en']);
-  //       var month = `${all_years[i].gregorian.month.en}`;
-  //       if (Object.keys(calendar_mini).includes(month)) {
-  //         calendar_mini[month] = [...calendar_mini[month], all_years[i]];
-  //       } else {
-  //         calendar_mini[month] = [all_years[i]];
-  //       }
-  //     }
-
-  //     // console.log('90', calendar_mini);
-
-  //     if (Object.keys(calendar_mini).length === 12) {
-  //       // console.log('93', Object.keys(calendar_mini));
-  //       setCalendar(calendar_mini);
-  //       setLoading(false);
-  //     }
-  //   }
-  // }, [all_years]);
-
-  // console.log('cal', all_years);
-
-  var counter = 0;
-  var limit = 30;
+  console.log(isLoading, all_years.length);
 
   return (
     <View style={styles.container}>
       <View style={styles.topnav}>
-        <MaterialIcons
+        {/* <MaterialIcons
           name="arrow-back"
           size={30}
           color="white"
           style={styles.icon}
           onPress={() => navigation.goBack()}
-        />
+        /> */}
         <Text style={styles.topnavtext}>Calendar</Text>
       </View>
-      {isLoading ? (
+      {isLoading || all_years.length < 365 ? (
         <View style={{alignSelf: 'center', marginTop: 70}}>
           <SkypeIndicator color="blue" />
         </View>
@@ -131,16 +101,17 @@ const CalendarScreen = ({navigation}) => {
             'November',
             'December',
           ].map(month => {
-            counter = 0;
+            var counter = 0;
             const currentMonth = all_years.filter(
               day => day.gregorian.month.en === month,
             );
-            limit = currentMonth.length;
-            // console.log('Month', currentMonth);
+            var limit = currentMonth.length;
+            // console.log(month, currentMonth);
             // if (month.includes(current_hijri_year)) {
             return (
               <View key={month} style={styles.monthContainer}>
-                <View
+                {month}
+                {/* <View
                   style={{
                     marginBottom: 20,
                     flexDirection: 'row',
@@ -156,13 +127,16 @@ const CalendarScreen = ({navigation}) => {
                       fontSize: normalize(14),
                       width: '50%',
                       fontWeight: '900',
+                      color: '#CC5500',
                     }}>
-                    {currentMonth[0].hijri.month.number ===
-                    currentMonth[currentMonth.length - 1].hijri.month.number
-                      ? currentMonth[0].hijri.month.en
-                      : `(${currentMonth[0].hijri.month.en}/${
-                          currentMonth[currentMonth.length - 1].hijri.month.en
-                        }), ${currentMonth[0].hijri.year}`}
+                    {currentMonth?.[0]?.hijri?.month?.number ===
+                    currentMonth?.[currentMonth?.length - 1]?.hijri?.month
+                      ?.number
+                      ? `${currentMonth?.[0]?.hijri?.month?.en}, ${currentMonth?.[0]?.hijri?.year}`
+                      : `(${currentMonth?.[0]?.hijri?.month?.en}/${
+                          currentMonth?.[currentMonth?.length - 1]?.hijri?.month
+                            ?.en
+                        }), ${currentMonth?.[0]?.hijri?.year}`}
                   </Text>
                 </View>
                 <View
@@ -252,26 +226,35 @@ const CalendarScreen = ({navigation}) => {
                             i === 0 &&
                             j >=
                               weekdays[
-                                currentMonth[0]['gregorian']['weekday']['en']
+                                currentMonth?.[0]?.['gregorian']?.['weekday']?.[
+                                  'en'
+                                ]
                               ]
                           ) {
-                            counter += 1;
+                            // counter += 1;
                             return (
                               <View
                                 key={Math.random() * 1000}
                                 style={styles.weekText}>
                                 <Text style={styles.weekText2}>
                                   {
-                                    currentMonth[counter - 1]['gregorian'][
+                                    currentMonth?.[counter]?.['gregorian']?.[
                                       'day'
                                     ]
                                   }
                                 </Text>
                                 <Text style={styles.weekTextHijri}>
-                                  {currentMonth[counter - 1]['hijri']['day']}
+                                  {
+                                    currentMonth?.[counter++]?.['hijri']?.[
+                                      'day'
+                                    ]
+                                  }
                                 </Text>
                               </View>
                             );
+                          } else if (i === 5 && counter >= limit) {
+                            // console.log(counter);
+                            return null;
                           } else if (i === 0 || counter >= limit) {
                             return (
                               <View
@@ -281,20 +264,24 @@ const CalendarScreen = ({navigation}) => {
                               </View>
                             );
                           } else {
-                            counter += 1;
+                            // counter += 1;
                             return (
                               <View
                                 key={Math.random() * 1000}
                                 style={styles.weekText}>
                                 <Text style={styles.weekText2}>
                                   {
-                                    currentMonth[counter - 1]['gregorian'][
+                                    currentMonth?.[counter]?.['gregorian']?.[
                                       'day'
                                     ]
                                   }
                                 </Text>
                                 <Text style={styles.weekTextHijri}>
-                                  {currentMonth[counter - 1]['hijri']['day']}
+                                  {
+                                    currentMonth?.[counter++]?.['hijri']?.[
+                                      'day'
+                                    ]
+                                  }
                                 </Text>
                               </View>
                             );
@@ -303,7 +290,7 @@ const CalendarScreen = ({navigation}) => {
                       </View>
                     );
                   })}
-                </View>
+                </View> */}
               </View>
             );
             // }
@@ -322,9 +309,11 @@ const styles = StyleSheet.create({
     height: 60,
     width: windowWidth / 1,
     backgroundColor: '#4b7bf2',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   topnavtext: {
-    marginTop: -35,
+    // marginTop: -35,
     alignSelf: 'center',
     textAlign: 'center',
     fontSize: normalize(22),
@@ -386,7 +375,6 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    backgroundColor: 'white',
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,

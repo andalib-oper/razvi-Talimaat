@@ -145,6 +145,8 @@ const Home = ({navigation}) => {
     }
   }, [city]);
 
+  // console.log(prayerTimes);
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -157,13 +159,21 @@ const Home = ({navigation}) => {
               prayerLoading || Object.keys(prayerTimes).length < 9
                 ? 0.2
                 : new Date().getTime() >=
-                  new Date(
-                    moment()
-                      .set('hour', prayerTimes.Maghrib.hr)
-                      .set('minute', prayerTimes.Maghrib.min)
-                      .set('second', 0)
-                      .set('millisecond', 0),
-                  ).getTime()
+                    new Date(
+                      moment()
+                        .set('hour', prayerTimes.Maghrib.hr)
+                        .set('minute', prayerTimes.Maghrib.min)
+                        .set('second', 0)
+                        .set('millisecond', 0),
+                    ).getTime() ||
+                  new Date().getTime() <
+                    new Date(
+                      moment()
+                        .set('hour', prayerTimes.Fajr.hr)
+                        .set('minute', prayerTimes.Fajr.min)
+                        .set('second', 0)
+                        .set('millisecond', 0),
+                    ).getTime()
                 ? 0.25
                 : 0.45
             }
