@@ -19,6 +19,7 @@ const NUM_OF_LINES = 4;
 import Geolocation from '@react-native-community/geolocation';
 import {SkypeIndicator} from 'react-native-indicators';
 import moment from 'moment';
+// import RNLocation from 'react-native-location';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -42,6 +43,7 @@ const Home = ({navigation}) => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [city, setCity] = useState('');
   const [date, setDate] = useState({});
+  const [loc, setLoc] = useState({});
 
   useEffect(() => {
     fetch('https://razvitalimat.herokuapp.com/api/content')
@@ -74,6 +76,22 @@ const Home = ({navigation}) => {
     setShowMore(e.nativeEvent.lines.length > NUM_OF_LINES);
   }, []);
 
+  Geolocation.getCurrentPosition(
+    position => {
+    
+      setLagitude(position.coords.latitude)
+      setLongitude(position.coords.longitude)
+      console.log(lagitude);
+      console.log(longitude);
+    },
+    error => {
+      // See error code charts below.
+      console.warn('Error ' + error.code, error.message);
+    },
+    {enableHighAccuracy: true, timeout: 500000, maximumAge: 10000},
+  );
+
+
   // console.log(info);
   // console.log(time);
   // console.log('lagitude', lagitude);
@@ -81,10 +99,6 @@ const Home = ({navigation}) => {
 
   // function getCity(lati, logi) {
   useEffect(() => {
-    Geolocation.getCurrentPosition(data => {
-      setLagitude(data.coords.latitude);
-      setLongitude(data.coords.longitude);
-    });
     const xhr = new XMLHttpRequest();
     // Paste your LocationIQ token below.
     xhr.open(
@@ -118,9 +132,18 @@ const Home = ({navigation}) => {
     );
   }, []);
 
+  console.log("bv",city)
+
+
+  // useEffect(() => {
+  //   // Update the document title using the browser API
+  //   document.title = `You clicked ${count} times`;
+  // });
+
   // useEffect(() => {
   // }, []);
 
+ 
   useEffect(() => {
     if (city) {
       fetch(
