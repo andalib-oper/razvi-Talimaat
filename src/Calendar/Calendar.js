@@ -13,6 +13,7 @@ import {
   PixelRatio,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay'
 import {SkypeIndicator} from 'react-native-indicators';
 import axios from 'axios';
 import moment from 'moment';
@@ -112,9 +113,13 @@ const CalendarScreen = ({navigation}) => {
         <Text style={styles.topnavtext}>Calendar</Text>
       </View>
       {isLoading ? (
-        <View style={{alignSelf: 'center', marginTop: 70}}>
-          <SkypeIndicator color="blue" />
-        </View>
+          <OrientationLoadingOverlay
+          visible={true}
+          color="white"
+          indicatorSize="large"
+          messageFontSize={24}
+          // message="Loading... 😀😀😀"
+          />
       ) : (
         <ScrollView>
           {[

@@ -17,6 +17,7 @@ import ImageOverlay from 'react-native-image-overlay';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const NUM_OF_LINES = 4;
 import Geolocation from '@react-native-community/geolocation';
+import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import {SkypeIndicator} from 'react-native-indicators';
 import moment from 'moment';
 // import RNLocation from 'react-native-location';
@@ -168,6 +169,8 @@ const Home = ({navigation}) => {
     }
   }, [city]);
 
+  // console.log(prayerTimes);
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -180,13 +183,21 @@ const Home = ({navigation}) => {
               prayerLoading || Object.keys(prayerTimes).length < 9
                 ? 0.2
                 : new Date().getTime() >=
-                  new Date(
-                    moment()
-                      .set('hour', prayerTimes.Maghrib.hr)
-                      .set('minute', prayerTimes.Maghrib.min)
-                      .set('second', 0)
-                      .set('millisecond', 0),
-                  ).getTime()
+                    new Date(
+                      moment()
+                        .set('hour', prayerTimes.Maghrib.hr)
+                        .set('minute', prayerTimes.Maghrib.min)
+                        .set('second', 0)
+                        .set('millisecond', 0),
+                    ).getTime() ||
+                  new Date().getTime() <
+                    new Date(
+                      moment()
+                        .set('hour', prayerTimes.Fajr.hr)
+                        .set('minute', prayerTimes.Fajr.min)
+                        .set('second', 0)
+                        .set('millisecond', 0),
+                    ).getTime()
                 ? 0.25
                 : 0.45
             }
@@ -633,9 +644,13 @@ const Home = ({navigation}) => {
 
         <View style={{flex: 1, padding: 2}}>
           {isLoading ? (
-            <View style={{alignSelf: 'center', marginTop: 30}}>
-              <SkypeIndicator color="blue" />
-            </View>
+             <OrientationLoadingOverlay
+             visible={true}
+             color="white"
+             indicatorSize="large"
+             messageFontSize={24}
+             // message="Loading... 😀😀😀"
+             />
           ) : (
             <View>
               {data.map(item => {
