@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
-  View, 
-  Text, 
-  StyleSheet, 
-  ScrollView, 
-  ActivityIndicator, 
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
   Dimensions,
   Platform,
   PixelRatio,
   Pressable,
-  FlatList, 
-  Modal
+  FlatList,
+  Modal,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {SkypeIndicator} from 'react-native-indicators';
+import axios from 'axios';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -29,76 +30,59 @@ function normalize(size) {
   }
 }
 
-const Ramzan = ({ navigation }) => {
-  const[modalVisible,setModelVisible]=useState(false);
-  const[all_years,setAll_years]=useState([]);
-  const[isLodaing,setLoading]=useState(true);
+const Ramzan = ({navigation}) => {
+  const [modalVisible, setModelVisible] = useState(false);
+  const [all_years, setAll_years] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+  const [err, setErr] = useState([]);
   const weekdays = {
-    Sunday:0,
-    Monday:1,
-    Tuesday:2,
-    Wednesday:3,
-    Thursday:4,
-    Friday:5,
-    Saturday:6,
+    Sunday: 0,
+    Monday: 1,
+    Tuesday: 2,
+    Wednesday: 3,
+    Thursday: 4,
+    Friday: 5,
+    Saturday: 6,
   };
   useEffect(() => {
-    init_func();
-  }, []);
-
-  const init_func = async () => {
-    await Promise.all(
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(async num => {
-        const res = await fetch(
-          `http://api.aladhan.com/v1/gToHCalendar/${num}/${new Date().getFullYear()}`,
-        );
-        return res.json();
-      }),
-    )
+    axios
+      .get('https://protected-tundra-18400.herokuapp.com/api/hijriCalendar')
       .then(res => {
-        res.forEach(el => {
-          setAll_years(prev => [...prev, ...el.data]);
-        });
-        setLoading(false);
+        setAll_years(res.data.map(item => item.days));
+        if (res.data.length > 11) setLoading(false);
       })
       .catch(err => console.log(err));
-  };
-  // console.log(all_years)
+    // init_func();
+  }, []);
+
+  const init_func = async () => {};
+  console.log(all_years);
   return (
     <View style={styles.container}>
       <View style={styles.topnav}>
         <Text style={styles.topnavtext}>Calendar</Text>
       </View>
-      {isLodaing ? (
-        <View style={{alignSelf: 'center', marginTop:70}}>
-          <SkypeIndicator color="blue"/>
+      {isLoading ? (
+        <View style={{alignSelf: 'center', marginTop: 70}}>
+          <SkypeIndicator color="blue" />
         </View>
-      ):(
+      ) : err.length > 0 ? (
+        <View>
+          <Text>Error</Text>
+        </View>
+      ) : (
         <ScrollView>
-
-          {[
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December'
-          ].map(month => {
+          {all_years.map(month => {
             var counter = 0;
-            const currentMonth = all_years.filter(
-              day => day.gregorian.month.en === month,
-            );
-            console.log(currentMonth)
-            var limit = currentMonth.length;
-            return(
+            // const currentMonth = all_years.filter(day => {
+            //   // console.log(day);
+            //   return day?.gregorian?.month?.en === month;
+            // });
+            // console.log(currentMonth);
+            var limit = month.length;
+            return (
               <View key={month} style={styles.monthContainer}>
-               <View
+                <View
                   style={{
                     marginBottom: 20,
                     flexDirection: 'row',
@@ -106,7 +90,7 @@ const Ramzan = ({ navigation }) => {
                   }}>
                   <Text
                     style={{...styles.monthContainerText, fontWeight: '700'}}>
-                    {month}{' '}
+                    {month[0].gregorian.month.en}{' '}
                   </Text>
                   <Text
                     style={{
@@ -115,12 +99,12 @@ const Ramzan = ({ navigation }) => {
                       width: '50%',
                       fontWeight: '900',
                     }}>
-                    {currentMonth[0].hijri.month.number ===
-                    currentMonth[currentMonth.length - 1].hijri.month.number
-                      ? currentMonth[0].hijri.month.en
-                      : `(${currentMonth[0].hijri.month.en}/${
-                          currentMonth[currentMonth.length - 1].hijri.month.en
-                        }), ${currentMonth[0].hijri.year}`}
+                    {month?.[0]?.hijri?.month?.number ===
+                    month?.[month?.length - 1]?.hijri?.month?.number
+                      ? month?.[0]?.hijri?.month?.en
+                      : `(${month?.[0]?.hijri?.month?.en}/${
+                          month?.[month?.length - 1]?.hijri?.month?.en
+                        }), ${month?.[0]?.hijri?.year}`}
                   </Text>
                 </View>
                 <View
@@ -205,7 +189,7 @@ const Ramzan = ({ navigation }) => {
           })}
         </ScrollView>
       )}
-    </View >
+    </View>
   );
 };
 

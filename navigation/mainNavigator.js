@@ -1,9 +1,9 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { View, StyleSheet } from 'react-native';
-import Ramzan from '../src/Ramzan/Ramzan'
+import {View, StyleSheet} from 'react-native';
+import Ramzan from '../src/Ramzan/Ramzan';
 import HomeNavigator from './HomeNavigator';
 import CalendarScreen from '../src/Calendar/Calendar';
 import QuranNavigator from './QuranNavigator';
@@ -26,11 +26,8 @@ const mainNavigator = () => {
           paddingBottom: 10,
           elevation: 10,
         },
-        
-        tabBarBackground: () => (
-          <View/>
-        ),
 
+        tabBarBackground: () => <View />,
       }}
       initialRouteName="home">
       <Tab.Screen
@@ -38,81 +35,86 @@ const mainNavigator = () => {
         component={HomeNavigator}
         options={{
           tabBarLabel: 'Home',
-          tabBarIcon: ({ color, focused } ) => (
+          tabBarIcon: ({color, focused}) => (
             <FontAwesome5
-              name='home'
-              color={focused ? "#090979" : "#808080"}
-              size={23} />
+              name="home"
+              color={focused ? '#090979' : '#808080'}
+              size={23}
+            />
           ),
           tabBarLabelStyle: {
             fontSize: 15,
             fontFamily: 'poppins',
-            fontWeight:"bold"
-          }
-        }} />
-        <Tab.Screen
-          name="quran"
-          component={QuranNavigator}
-          options={{
-            tabBarLabel: 'Quran',
-            tabBarIcon: ({ color, focused }) => (
-              <FontAwesome5
-              color={focused ? "#090979" : "#808080"}
-                name='quran'
-                size={23} />
-            ),
-            tabBarLabelStyle: {
-              fontSize: 15,
-              fontFamily: 'poppins',
-              fontWeight:"bold"
-            }
-          }}
-        />
+            fontWeight: 'bold',
+          },
+        }}
+      />
+      <Tab.Screen
+        name="quran"
+        component={QuranNavigator}
+        options={{
+          tabBarLabel: 'Quran',
+          tabBarIcon: ({color, focused}) => (
+            <FontAwesome5
+              color={focused ? '#090979' : '#808080'}
+              name="quran"
+              size={23}
+            />
+          ),
+          tabBarLabelStyle: {
+            fontSize: 15,
+            fontFamily: 'poppins',
+            fontWeight: 'bold',
+          },
+        }}
+      />
       <Tab.Screen
         name="calendar"
         component={CalendarScreen}
         options={{
           tabBarLabel: 'Calendar',
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({color, focused}) => (
             <FontAwesome5
-            color={focused ? "#090979" : "#808080"}
-              name='calendar-alt'
-              size={23} />
+              color={focused ? '#090979' : '#808080'}
+              name="calendar-alt"
+              size={23}
+            />
           ),
           tabBarLabelStyle: {
             fontSize: 15,
             fontFamily: 'poppins',
-            fontWeight:"bold"
-          }
+            fontWeight: 'bold',
+          },
         }}
       />
       <Tab.Screen
         name="ramzan"
         component={Ramzan}
-        options={{ 
+        options={{
           tabBarLabel: 'Ramzan',
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({color, focused}) => (
             <FontAwesome5
-            color={focused ? "#090979" : "#808080"}
-              name='clock'
-              size={23} />
+              color={focused ? '#090979' : '#808080'}
+              name="clock"
+              size={23}
+            />
           ),
           tabBarLabelStyle: {
             fontSize: 15,
             fontFamily: 'poppins',
-            fontWeight:"bold"
-          }
+            fontWeight: 'bold',
+          },
         }}
       />
     </Tab.Navigator>
   );
-      }
+};
 
 const styles = StyleSheet.create({
   iconContainer: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: 120
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    width: 120,
   },
 });
 
