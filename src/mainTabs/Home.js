@@ -20,6 +20,7 @@ import Geolocation from '@react-native-community/geolocation';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import {SkypeIndicator} from 'react-native-indicators';
 import moment from 'moment';
+import { hasPermission } from '../Hooks/LocationPermission';
 // import RNLocation from 'react-native-location';
 
 const windowWidth = Dimensions.get('window').width;
@@ -77,6 +78,8 @@ const Home = ({navigation}) => {
     setShowMore(e.nativeEvent.lines.length > NUM_OF_LINES);
   }, []);
 
+  const locationPermission =  hasPermission();
+    if (!locationPermission) return;
   Geolocation.getCurrentPosition(
     position => {
       setLagitude(position.coords.latitude);
