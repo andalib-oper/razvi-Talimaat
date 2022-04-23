@@ -87,24 +87,25 @@ const mainNavigator = () => {
           },
         }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="ramzan"
         component={Ramzan}
-        options={{ 
+        options={{
           tabBarLabel: 'Ramzan',
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({color, focused}) => (
             <FontAwesome5
-            color={focused ? "#090979" : "#808080"}
-              name='clock'
-              size={23} />
+              color={focused ? '#090979' : '#808080'}
+              name="clock"
+              size={23}
+            />
           ),
           tabBarLabelStyle: {
             fontSize: 15,
             fontFamily: 'poppins',
-            fontWeight:"bold"
-          }
+            fontWeight: 'bold',
+          },
         }}
-      /> */}
+      />
     </Tab.Navigator>
   );
 };

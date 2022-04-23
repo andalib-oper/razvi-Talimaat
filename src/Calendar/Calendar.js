@@ -9,7 +9,9 @@ import {
   PixelRatio,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import {SkypeIndicator} from 'react-native-indicators';
+import axios from 'axios';
 
 // global.Symbol = require('core-js/es/symbol');
 // require('core-js/features/symbol/iterator');
@@ -46,28 +48,33 @@ const CalendarScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    init_func();
-  }, []);
-
-  const init_func = async () => {
-    await Promise.all(
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(async num => {
-        const res = await fetch(
-          `http://api.aladhan.com/v1/gToHCalendar/${num}/${new Date().getFullYear()}`,
-        );
-        return res.json();
-      }),
-    )
+    // init_func();
+    axios
+      .get('https://protected-tundra-18400.herokuapp.com/api/hijriCalendar')
       .then(res => {
-        res.forEach(el => {
-          setAll_years(prev => [...prev, ...el.data]);
-        });
-        if (res.length >= 12) setLoading(false);
+        setAll_years(res.data.map(item => item.days).flat());
+        if (res.data.length > 11) setLoading(false);
       })
       .catch(err => console.log(err));
-  };
+  }, []);
 
-  console.log(isLoading, all_years.length);
+  // const init_func = async () => {
+  //   await Promise.all(
+  //     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(async num => {
+  //       const res = await fetch(
+  //         `http://api.aladhan.com/v1/gToHCalendar/${num}/${new Date().getFullYear()}`,
+  //       );
+  //       return res.json();
+  //     }),
+  //   )
+  //     .then(res => {
+  //       res.forEach(el => {
+  //         setAll_years(prev => [...prev, ...el.data]);
+  //       });
+  //       if (res.length >= 12) setLoading(false);
+  //     })
+  //     .catch(err => console.log(err));
+  // };
 
   return (
     <View style={styles.container}>
@@ -81,10 +88,14 @@ const CalendarScreen = ({navigation}) => {
         /> */}
         <Text style={styles.topnavtext}>Calendar</Text>
       </View>
-      {isLoading || all_years.length < 365 ? (
-        <View style={{alignSelf: 'center', marginTop: 70}}>
-          <SkypeIndicator color="blue" />
-        </View>
+      {isLoading ? (
+        <OrientationLoadingOverlay
+          visible={true}
+          color="white"
+          indicatorSize="large"
+          messageFontSize={24}
+          // message="Loading... 😀😀😀"
+        />
       ) : (
         <ScrollView>
           {[
@@ -110,8 +121,8 @@ const CalendarScreen = ({navigation}) => {
             // if (month.includes(current_hijri_year)) {
             return (
               <View key={month} style={styles.monthContainer}>
-                {month}
-                {/* <View
+                {/* {month} */}
+                <View
                   style={{
                     marginBottom: 20,
                     flexDirection: 'row',
@@ -290,7 +301,7 @@ const CalendarScreen = ({navigation}) => {
                       </View>
                     );
                   })}
-                </View> */}
+                </View>
               </View>
             );
             // }

@@ -17,6 +17,7 @@ import ImageOverlay from 'react-native-image-overlay';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const NUM_OF_LINES = 4;
 import Geolocation from '@react-native-community/geolocation';
+import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import {SkypeIndicator} from 'react-native-indicators';
 import moment from 'moment';
 
@@ -620,9 +621,13 @@ const Home = ({navigation}) => {
 
         <View style={{flex: 1, padding: 2}}>
           {isLoading ? (
-            <View style={{alignSelf: 'center', marginTop: 30}}>
-              <SkypeIndicator color="blue" />
-            </View>
+            <OrientationLoadingOverlay
+              visible={true}
+              color="white"
+              indicatorSize="large"
+              messageFontSize={24}
+              // message="Loading... 😀😀😀"
+            />
           ) : (
             <View>
               {data.map(item => {
