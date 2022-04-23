@@ -79,9 +79,8 @@ const Home = ({navigation}) => {
 
   Geolocation.getCurrentPosition(
     position => {
-    
-      setLagitude(position.coords.latitude)
-      setLongitude(position.coords.longitude)
+      setLagitude(position.coords.latitude);
+      setLongitude(position.coords.longitude);
       console.log(lagitude);
       console.log(longitude);
     },
@@ -92,49 +91,10 @@ const Home = ({navigation}) => {
     {enableHighAccuracy: true, timeout: 500000, maximumAge: 10000},
   );
 
-
   // console.log(info);
   // console.log(time);
   // console.log('lagitude', lagitude);
   // console.log('longitude', longitude);
-
-  // function getCity(lati, logi) {
-  useEffect(() => {
-    const xhr = new XMLHttpRequest();
-    // Paste your LocationIQ token below.
-    xhr.open(
-      'GET',
-      'https://us1.locationiq.com/v1/reverse.php?key=pk.6644ad4fb87f8a59e24b45827864b079&lat=' +
-        lagitude +
-        '&lon=' +
-        longitude +
-        '&format=json',
-      true,
-      22,
-    );
-    xhr.send();
-    xhr.onreadystatechange = e => {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        var response = JSON.parse(xhr.responseText);
-        setCity(response.address.city);
-        return;
-      }
-    };
-    xhr.addEventListener(
-      'readystatechange',
-      e => {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-          var response = JSON.parse(xhr.responseText);
-          setCity(response.address.city);
-          return;
-        }
-      },
-      false,
-    );
-  }, []);
-
-  console.log("bv",city)
-
 
   // useEffect(() => {
   //   // Update the document title using the browser API
@@ -144,30 +104,30 @@ const Home = ({navigation}) => {
   // useEffect(() => {
   // }, []);
 
- 
   useEffect(() => {
-    if (city) {
-      fetch(
-        `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=India&method=1&school=1`,
-      )
-        .then(response => response.json())
-        .then(res => {
-          var resp = res.data.timings;
-          Object.keys(resp).forEach(
-            key =>
-              (resp[key] = {
-                hr: resp[key].split(' ')[0].split(':')[0],
-                min: resp[key].split(' ')[0].split(':')[1],
-              }),
-          );
-          setPrayerTimes(resp);
-          // console.log(res.data);
-          setDate(res.data.date);
-        })
-        .catch(error => console.error(error))
-        .finally(() => setPrayerLoading(false));
-    }
-  }, [city]);
+    // if (city) {
+    fetch(
+      `http://api.aladhan.com/v1/timings?latitude=${lagitude}&longitude=${longitude}`,
+    )
+      .then(response => response.json())
+      .then(res => {
+        console.log("object");
+        var resp = res.data.timings;
+        Object.keys(resp).forEach(
+          key =>
+            (resp[key] = {
+              hr: resp[key].split(' ')[0].split(':')[0],
+              min: resp[key].split(' ')[0].split(':')[1],
+            }),
+        );
+        setPrayerTimes(resp);
+        // console.log(res.data);
+        setDate(res.data.date);
+      })
+      .catch(error => console.error(error))
+      .finally(() => setPrayerLoading(false));
+    // }
+  }, [lagitude, longitude]);
 
   // console.log(prayerTimes);
 
@@ -644,13 +604,13 @@ const Home = ({navigation}) => {
 
         <View style={{flex: 1, padding: 2}}>
           {isLoading ? (
-             <OrientationLoadingOverlay
-             visible={true}
-             color="white"
-             indicatorSize="large"
-             messageFontSize={24}
-             // message="Loading... 😀😀😀"
-             />
+            <OrientationLoadingOverlay
+              visible={true}
+              color="white"
+              indicatorSize="large"
+              messageFontSize={24}
+              // message="Loading... 😀😀😀"
+            />
           ) : (
             <View>
               {data.map(item => {

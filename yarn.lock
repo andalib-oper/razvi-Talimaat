@@ -6240,6 +6240,11 @@
   "resolved" "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz"
   "version" "2.5.6"
 
+"react-native-orientation-loading-overlay@^0.1.6":
+  "integrity" "sha512-SbsBFnZIejF/zZy3nL2vmmZkUovQ9ed28b6p2x8ZhAYoseHyO3dS0iahhPu1eSneGE2+XVw+zoKHmxOmVFmKXw=="
+  "resolved" "https://registry.npmjs.org/react-native-orientation-loading-overlay/-/react-native-orientation-loading-overlay-0.1.6.tgz"
+  "version" "0.1.6"
+
 "react-native-paper@^4.12.0":
   "integrity" "sha512-4g9bbxbxTkylcriYy8W+EgXo71mrZHhIm044G+4LTp0JaOEWjGJm571OwV5pPAMwN1N8xUs24ymvHfpOjqHpaw=="
   "resolved" "https://registry.npmjs.org/react-native-paper/-/react-native-paper-4.12.0.tgz"
