@@ -20,6 +20,7 @@ import Geolocation from '@react-native-community/geolocation';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import {SkypeIndicator} from 'react-native-indicators';
 import moment from 'moment';
+// import RNLocation from 'react-native-location';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -43,6 +44,7 @@ const Home = ({navigation}) => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [city, setCity] = useState('');
   const [date, setDate] = useState({});
+  const [loc, setLoc] = useState({});
 
   useEffect(() => {
     fetch('https://razvitalimat.herokuapp.com/api/content')
@@ -75,76 +77,57 @@ const Home = ({navigation}) => {
     setShowMore(e.nativeEvent.lines.length > NUM_OF_LINES);
   }, []);
 
+  Geolocation.getCurrentPosition(
+    position => {
+      setLagitude(position.coords.latitude);
+      setLongitude(position.coords.longitude);
+      console.log(lagitude);
+      console.log(longitude);
+    },
+    error => {
+      // See error code charts below.
+      console.warn('Error ' + error.code, error.message);
+    },
+    {enableHighAccuracy: true, timeout: 500000, maximumAge: 10000},
+  );
+
   // console.log(info);
   // console.log(time);
   // console.log('lagitude', lagitude);
   // console.log('longitude', longitude);
 
-  // function getCity(lati, logi) {
-  useEffect(() => {
-    Geolocation.getCurrentPosition(data => {
-      setLagitude(data.coords.latitude);
-      setLongitude(data.coords.longitude);
-    });
-    const xhr = new XMLHttpRequest();
-    // Paste your LocationIQ token below.
-    xhr.open(
-      'GET',
-      'https://us1.locationiq.com/v1/reverse.php?key=pk.6644ad4fb87f8a59e24b45827864b079&lat=' +
-        lagitude +
-        '&lon=' +
-        longitude +
-        '&format=json',
-      true,
-      22,
-    );
-    xhr.send();
-    xhr.onreadystatechange = e => {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        var response = JSON.parse(xhr.responseText);
-        setCity(response.address.city);
-        return;
-      }
-    };
-    xhr.addEventListener(
-      'readystatechange',
-      e => {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-          var response = JSON.parse(xhr.responseText);
-          setCity(response.address.city);
-          return;
-        }
-      },
-      false,
-    );
-  }, []);
+  // useEffect(() => {
+  //   // Update the document title using the browser API
+  //   document.title = `You clicked ${count} times`;
+  // });
 
   // useEffect(() => {
   // }, []);
 
   useEffect(() => {
-    if (city) {
-      fetch(
-        `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=India&method=1&school=1`,
-      )
-        .then(response => response.json())
-        .then(res => {
-          var resp = res.data.timings;
-          Object.keys(resp).forEach(
-            key =>
-              (resp[key] = {
-                hr: resp[key].split(' ')[0].split(':')[0],
-                min: resp[key].split(' ')[0].split(':')[1],
-              }),
-          );
-          setPrayerTimes(resp);
-          // console.log(res.data);
-          setDate(res.data.date);
-        })
-        .catch(error => console.error(error))
-        .finally(() => setPrayerLoading(false));
-    }
-  }, [city]);
+    // if (city) {
+    fetch(
+      `http://api.aladhan.com/v1/timings?latitude=${lagitude}&longitude=${longitude}`,
+    )
+      .then(response => response.json())
+      .then(res => {
+        console.log("object");
+        var resp = res.data.timings;
+        Object.keys(resp).forEach(
+          key =>
+            (resp[key] = {
+              hr: resp[key].split(' ')[0].split(':')[0],
+              min: resp[key].split(' ')[0].split(':')[1],
+            }),
+        );
+        setPrayerTimes(resp);
+        // console.log(res.data);
+        setDate(res.data.date);
+      })
+      .catch(error => console.error(error))
+      .finally(() => setPrayerLoading(false));
+    // }
+  }, [lagitude, longitude]);
 
   // console.log(prayerTimes);
 

@@ -93,6 +93,10 @@ const English = ({navigation}) => {
                     {/* <Text style={styles.surahArabic}>{item.name}</Text> */}
                     <Text style={styles.surahEnglish}>
                       {item.englishName},{item.englishNameTranslation}
+                    <Text style={{
+                      flex: 1,
+                      // flexDirection: 'column'
+                    }}>{item.name}</Text>
                     </Text>
                     <Text style={styles.verses}>
                       Verses {item.numberOfAyahs}
@@ -138,7 +142,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
-    height: windowHeight/7,
+    height: 'auto',
     width:  windowWidth /1.1,
     alignSelf: 'center',
     backgroundColor: 'white',
