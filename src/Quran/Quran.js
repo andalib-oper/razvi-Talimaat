@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -12,8 +12,11 @@ import {
   ImageBackground,
   ActivityIndicator,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -29,93 +32,187 @@ function normalize(size) {
   }
 }
 
-const Quran = ({navigation}) => {
+function Arabic({navigation}) {
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+
+  const getSurahs = async () => {
+    try {
+      const response = await fetch('http://api.alquran.cloud/v1/surah');
+      const json = await response.json();
+      setData(json.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getSurahs();
+  }, []);
+  return (
+    <ScrollView>
+     {isLoading ? (
+            <OrientationLoadingOverlay
+            visible={true}
+            color="white"
+            indicatorSize="large"
+            messageFontSize={24}
+            // message="Loading... 😀😀😀"
+            />
+        ) : (
+          <ScrollView>
+            <FlatList
+              data={data}
+              keyExtractor={({id}, index) => id}
+              renderItem={({item}) => (
+                // <View style={styles.topnav}>
+                <Pressable
+                  onPress={() => navigation.navigate('arabicAyahs', {
+                    code: item.number,
+                  })}>
+                  <View style={styles.surah}>
+                    <Text style={styles.number}>{item.number}.</Text>
+                  <View 
+                  style={{
+                    // backgroundColor: 'pink',
+                    alignContent:'center',
+                    alignSelf: 'center',
+                    marginTop: -10,
+                    // fontSize: 20,
+                  }}
+                  >
+                    <Text style={styles.surahArabic}>{item.name}</Text>
+                    </View>
+                    <View 
+                  style={{
+                    // backgroundColor: 'pink'
+                    marginTop: -5,
+
+                  }}
+                  >
+                    <Text style={styles.versesArabic}>
+                      Verses {item.numberOfAyahs}
+                    </Text>
+                  </View>
+                  </View>
+                </Pressable>
+              )}
+            />
+          </ScrollView>
+        )}
+    </ScrollView>
+  );
+}
+
+function English({ navigation }) {
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const getSurahs = async () => {
+    try {
+      const response = await fetch('http://api.alquran.cloud/v1/surah');
+      const json = await response.json();
+      setData(json.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getSurahs();
+  }, []);
+  return (
+    <View>
+      {isLoading ? (
+        <OrientationLoadingOverlay
+          visible={true}
+          color="white"
+          indicatorSize="large"
+          messageFontSize={24}
+        // message="Loading... 😀😀😀"
+        />
+      ) : (
+        <ScrollView>
+          <FlatList
+            data={data}
+            keyExtractor={({ id }, index) => id}
+            renderItem={({ item }) => (
+              <Pressable
+                onPress={() =>
+                  navigation.navigate('englishAyahs', {
+                    code: item.number,
+                  })
+                }>
+                <View style={styles.surah}>
+                  <Text style={styles.number}>{item.number}.</Text>
+                  <View 
+                  style={{
+                    // backgroundColor: 'pink',
+                    alignContent:'center',
+                    alignSelf: 'center',
+                    marginTop: -10,
+                    // fontSize: 20,
+                  }}
+                  >
+                  <Text style={styles.surahArabic}>{item.name}</Text>
+                  </View>
+                  <View>
+                  <Text style={styles.surahEnglish}>
+                    {item.englishName}
+                  </Text>
+                  </View>
+                  <View 
+                  style={{
+                    // backgroundColor: 'pink'
+                    marginTop: -5
+                  }}
+                  >
+                  <Text style={styles.verses}>
+                    Verses {item.numberOfAyahs}
+                  </Text>
+                  </View>
+                </View>
+              </Pressable>
+            )}
+          />
+        </ScrollView>
+      )}
+    </View>
+  );
+}
+
+const Tab = createMaterialTopTabNavigator();
+
+export default function Quran() {
   return (
     <View style={styles.container}>
-      {/* <View style={styles.topnav}>
-        <MaterialIcons name="arrow-back"
-          size={30}
-          color='white'
-          style={styles.icon}
-          onPress={() => navigation.goBack()} />
-        <Text style={styles.topnavtext}>Quran</Text>
-      </View> */}
-      <View
-      // style={styles.topContainer}
-      >
-        <ImageBackground
-          style={styles.image}
-          source={require('../../images/background3.jpeg')}>
-          <View style={{backgroundColor: 'pink'}}>
-            <Text
-              style={{
-                textAlign: 'center',
-                alignSelf: 'center',
-                fontSize: normalize(18),
-                color: 'white',
-                fontWeight: '600',
-                marginTop: -130,
-                marginBottom: -60,
-                // numberOfLines: 1,
-              }}>
-              Quran
-            </Text>
-          </View>
-        </ImageBackground>
-      </View>
-      <View
-        style={
-          {
-            // backgroundColor: 'pink',
-            // marginBottom: 20,
-          }
-        }>
-        <ScrollView>
-          <View
+      <ImageBackground
+        style={styles.image}
+        source={require('../../images/background3.jpeg')}>
+        <View style={{ backgroundColor: 'pink' }}>
+          <Text
             style={{
-              flexDirection: 'row',
-              // backgroundColor: 'pink',
+              textAlign: 'center',
               alignSelf: 'center',
+              fontSize: normalize(18),
+              color: 'white',
+              fontWeight: '600',
+              marginTop: -130,
+              marginBottom: -60,
+              // numberOfLines: 1,
             }}>
-            <TouchableOpacity
-              // style={styles.English}
-              onPress={() => navigation.navigate('arabic')}>
-              <View style={styles.verses}>
-                <Image
-                  style={{
-                    height: 60,
-                    width: 60,
-                    borderRadius: 10,
-                    marginRight: 80,
-                    // marginLeft: 10,
-                    marginTop: 10,
-                  }}
-                  source={require('../../images/ArabicHamza.jpg')}
-                />
-                <Text style={styles.translate}>Arabic</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.English}
-              onPress={() => navigation.navigate('english')}>
-              <View style={styles.verses}>
-                <Image
-                  style={{
-                    height: 60,
-                    width: 60,
-                    borderRadius: 10,
-                    marginRight: 80,
-                    // marginLeft: 10,
-                    marginTop: 10,
-                  }}
-                  source={require('../../images/e.jpg')}
-                />
-                <Text style={styles.translate}>English</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </View>
+            Quran
+          </Text>
+        </View>
+      </ImageBackground>
+      <Tab.Navigator>
+        <Tab.Screen name="english" component={English} />
+        <Tab.Screen name="arabic" component={Arabic} />
+      </Tab.Navigator>
+
     </View>
   );
 };
@@ -150,63 +247,60 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 15,
   },
-  verses: {
-    marginTop: 20,
-    marginLeft: 10,
-    marginRight: 10,
-    marginBottom: 20,
-    alignSelf: 'center',
-    height: windowHeight / 9,
-    width: windowWidth / 2.5,
-    backgroundColor: 'white',
-    flexDirection: 'column',
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-    borderRadius: 20,
-    // display: 'flex',
-    // justifyContent: 'center',
-    // flexDirection: 'column',
-    alignItems: 'center',
-  },
-  verseheader: {
-    marginTop: 20,
-    marginLeft: 13,
-    fontSize: 18,
-    color: 'black',
-  },
-  verseby: {
-    marginTop: 2,
-    marginLeft: 15,
-    fontSize: 14,
-    color: 'blue',
-  },
-  versesurat: {
-    marginTop: 2,
-    marginLeft: 15,
-    fontSize: 14,
-    color: 'black',
-  },
-  ayat: {
-    fontSize: 18,
-    marginRight: 20,
-    marginTop: 10,
-    fontWeight: '700',
-    color: 'black',
-  },
-
-  translate: {
-    marginTop: -40,
-    fontSize: normalize(14),
-    marginLeft: 65,
+  surahArabic: {
+    marginTop: -10,
+    marginRight: 170,
+    marginLeft: 0,
+    fontSize: 24,
     fontWeight: '600',
-    color: 'black',
+    color: '#152693'
+  },
+  surahEnglish: {
+    marginTop: -30,
+    marginLeft: 200,
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  verses: {
+    marginTop: -2,
+    fontSize: 14,
+    marginLeft: 200,
+    marginBottom: 10
+  },
+  versesArabic: {
+    marginTop: 10,
+    fontSize: 14,
+    marginLeft: 50,
+    marginBottom: 10
+  },
+  revelation: {
+    marginTop: 2,
+    fontSize: 14,
+    marginLeft: 40,
+  },
+  surah: {
+    marginTop: 10,
+    marginLeft: 5,
+    marginRight: 5,
+    height: 'auto',
+    width:  windowWidth /1.1,
+    alignSelf: 'center',
+    backgroundColor: 'white',
+    elevation: 20,
+    borderRadius: 10,
+  },
+  number: {
+    marginTop: 22,
+    marginLeft: 10,
   },
 });
 
-export default Quran;
+// export default Quran;
+// export default function App() {
+//   return (
+//     <Tab.Navigator>
+//       <Tab.Screen name="Home" component={HomeScreen} />
+//       <Tab.Screen name="Settings" component={SettingsScreen} />
+//     </Tab.Navigator>
+//   );
+// }
