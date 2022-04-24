@@ -162,15 +162,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   surah: {
-    marginTop: 20,
-    marginLeft: 10,
-    marginRight: 10,
+    marginTop: 10,
+    marginLeft: 5,
+    marginRight: 5,
     alignSelf: 'center',
     height: 'auto',
     width:  windowWidth /1.1,
     backgroundColor: '#ffffff',
-    elevation: 20,
-    borderRadius: 20,
+    elevation: 5,
+    borderRadius: 10,
     padding: 10
   },
   number: {

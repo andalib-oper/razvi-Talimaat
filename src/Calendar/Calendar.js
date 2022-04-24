@@ -78,16 +78,14 @@ const CalendarScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topnav}>
-        {/* <MaterialIcons
-          name="arrow-back"
-          size={30}
-          color="white"
-          style={styles.icon}
-          onPress={() => navigation.goBack()}
-        /> */}
-        <Text style={styles.topnavtext}>Calendar</Text>
-      </View>
+       <View style={styles.topnav}>
+        {/* <MaterialIcons name="arrow-back"
+                    size={30}
+                    color='white'
+                    style={styles.icon}
+                    onPress={() => navigation.goBack()} /> */}
+          <Text style={styles.topnavtext}>Calendar</Text>
+        </View>
       {isLoading ? (
         <OrientationLoadingOverlay
           visible={true}
