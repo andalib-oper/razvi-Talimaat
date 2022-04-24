@@ -8,33 +8,26 @@ import {
   FlatList,
   ActivityIndicator,
   TouchableOpacity,
-  Dimensions,PixelRatio,Platform,
+  Dimensions,
+  PixelRatio,
+  Platform,
 } from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import {
-  SkypeIndicator,
-} from 'react-native-indicators';
-import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay'
-
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {SkypeIndicator} from 'react-native-indicators';
+import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const scale = windowWidth / 320;
 
 function normalize(size) {
- 
-  const newSize = size * scale 
- 
- if (Platform.OS === 'ios' && 'android') {
- 
-    return Math.round(PixelRatio.roundToNearestPixel(newSize))
- 
+  const newSize = size * scale;
+
+  if (Platform.OS === 'ios' && 'android') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
   } else {
- 
-    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
- 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
   }
- 
 }
 
 const Arabic = ({navigation}) => {
@@ -59,34 +52,38 @@ const Arabic = ({navigation}) => {
   const [focused, setFocused] = useState('');
   return (
     <View style={styles.container}>
-        <View style={styles.topnav}>
-        <MaterialIcons name="arrow-back"
-                    size={30}
-                    color='white'
-                    style={styles.icon}
-                    onPress={() => navigation.goBack()} />
-          <Text style={styles.topnavtext}>Arabic Version</Text>
-        </View>
+      <View style={styles.topnav}>
+        <MaterialIcons
+          name="arrow-back"
+          size={30}
+          color="white"
+          style={styles.icon}
+          onPress={() => navigation.goBack()}
+        />
+        <Text style={styles.topnavtext}>Arabic Version</Text>
+      </View>
       <ScrollView>
         {isLoading ? (
-            <OrientationLoadingOverlay
+          <OrientationLoadingOverlay
             visible={true}
             color="white"
             indicatorSize="large"
             messageFontSize={24}
             // message="Loading... 😀😀😀"
-            />
+          />
         ) : (
-          <ScrollView>
+          <ScrollView style={{marginBottom: normalize(10)}}>
             <FlatList
               data={data}
               keyExtractor={({id}, index) => id}
               renderItem={({item}) => (
                 // <View style={styles.topnav}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('arabicAyahs', {
-                    code: item.number,
-                  })}>
+                  onPress={() =>
+                    navigation.navigate('arabicAyahs', {
+                      code: item.number,
+                    })
+                  }>
                   {/* <View>
                     <ArabicAyahs code = {item.number}/>
                   </View> */}
@@ -123,7 +120,7 @@ const styles = StyleSheet.create({
   },
   topnav: {
     height: 60,
-    width: windowWidth /1,
+    width: windowWidth / 1,
     backgroundColor: '#4b7bf2',
   },
   topnavtext: {
@@ -131,12 +128,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     fontSize: normalize(22),
-    color: 'white'
+    color: 'white',
   },
   icon: {
     marginLeft: 20,
     marginTop: 15,
-},
+  },
   image: {
     marginTop: 0,
     height: 250,
@@ -152,8 +149,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     alignSelf: 'center',
-    height: windowHeight/7,
-    width:  windowWidth /1.1,
+    height: windowHeight / 7,
+    width: windowWidth / 1.1,
     backgroundColor: 'white',
     elevation: 20,
     borderRadius: 20,
@@ -161,7 +158,7 @@ const styles = StyleSheet.create({
   number: {
     marginTop: 22,
     marginLeft: 10,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   surahArabic: {
     marginTop: -24,
@@ -200,7 +197,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
   },
-
 });
 
 export default Arabic;
