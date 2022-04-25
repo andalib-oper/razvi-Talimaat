@@ -154,11 +154,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     elevation: 20,
     borderRadius: 20,
+    color: '#555',
   },
   number: {
     marginTop: 22,
     marginLeft: 10,
     fontWeight: '600',
+    color: '#555',
   },
   surahArabic: {
     marginTop: -24,
@@ -166,23 +168,27 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     fontSize: normalize(18),
     fontWeight: '600',
+    color: '#555',
   },
   surahEnglish: {
     marginTop: 2,
     marginLeft: 40,
     fontSize: 16,
     fontWeight: '700',
+    color: '#555',
   },
   verses: {
     marginTop: 2,
     fontSize: 14,
     marginLeft: 40,
     fontWeight: '600',
+    color: '#555',
   },
   revelation: {
     marginTop: 2,
     fontSize: 14,
     marginLeft: 40,
+    color: '#555',
   },
   iconheart: {
     marginLeft: 330,
@@ -196,6 +202,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+    color: '#555',
   },
 });
 

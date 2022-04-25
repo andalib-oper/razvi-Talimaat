@@ -12,6 +12,9 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import {SkypeIndicator} from 'react-native-indicators';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {MMKV} from 'react-native-mmkv';
+import moment from 'moment';
 
 // global.Symbol = require('core-js/es/symbol');
 // require('core-js/features/symbol/iterator');
@@ -47,16 +50,40 @@ const CalendarScreen = ({navigation}) => {
     Saturday: 6,
   };
 
+  const storage = new MMKV();
+
   useEffect(() => {
-    // init_func();
-    axios
-      .get('https://protected-tundra-18400.herokuapp.com/api/hijriCalendar')
-      .then(res => {
-        setAll_years(res.data.map(item => item.days).flat());
-        if (res.data.length > 11) setLoading(false);
-      })
-      .catch(err => console.log(err));
+    init_func();
   }, []);
+
+  const clear_all = async () => {
+    try {
+      await AsyncStorage.clear();
+    } catch (e) {
+      console.log(err);
+    }
+  };
+
+  const init_func = async () => {
+    clear_all();
+    const calendar_data = storage.contains('calendar')
+      ? JSON.parse(storage.getString('calendar'))
+      : [];
+    if (calendar_data[0]?.gregorian.year !== moment().format('YYYY')) {
+      axios
+        .get('https://protected-tundra-18400.herokuapp.com/api/hijriCalendar')
+        .then(async res => {
+          const processed_data = res.data.map(item => item.days).flat();
+          setAll_years(processed_data);
+          storage.set('calendar', JSON.stringify(processed_data));
+          if (res.data.length > 11) setLoading(false);
+        })
+        .catch(err => console.log(err));
+    } else {
+      setAll_years(calendar_data);
+      setLoading(false);
+    }
+  };
 
   // const init_func = async () => {
   //   await Promise.all(
@@ -78,14 +105,14 @@ const CalendarScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-       <View style={styles.topnav}>
+      <View style={styles.topnav}>
         {/* <MaterialIcons name="arrow-back"
                     size={30}
                     color='white'
                     style={styles.icon}
                     onPress={() => navigation.goBack()} /> */}
-          <Text style={styles.topnavtext}>Calendar</Text>
-        </View>
+        <Text style={styles.topnavtext}>Calendar</Text>
+      </View>
       {isLoading ? (
         <OrientationLoadingOverlay
           visible={true}

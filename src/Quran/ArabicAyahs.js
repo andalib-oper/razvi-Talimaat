@@ -13,31 +13,25 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import { SkypeIndicator } from 'react-native-indicators';
+import {SkypeIndicator} from 'react-native-indicators';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const scale = windowWidth / 320;
 
 function normalize(size) {
- 
-  const newSize = size * scale 
- 
- if (Platform.OS === 'ios' && 'android') {
- 
-    return Math.round(PixelRatio.roundToNearestPixel(newSize))
- 
+  const newSize = size * scale;
+
+  if (Platform.OS === 'ios' && 'android') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
   } else {
- 
-    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
- 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
   }
- 
 }
 
-const ArabicAyahs = ({route,navigation}) => {
+const ArabicAyahs = ({route, navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const getSurahsAyahs = async () => {
@@ -62,21 +56,23 @@ const ArabicAyahs = ({route,navigation}) => {
   const [focused, setFocused] = useState('');
   return (
     <View style={{flex: 1, padding: 0}}>
-       <View style={styles.topnav}>
-        <MaterialIcons name="arrow-back"
-                    size={30}
-                    color='white'
-                    style={styles.icon}
-                    onPress={() => navigation.goBack()} />
-          <Text style={styles.topnavtext}>Ayahs</Text>
-        </View>
+      <View style={styles.topnav}>
+        <MaterialIcons
+          name="arrow-back"
+          size={30}
+          color="white"
+          style={styles.icon}
+          onPress={() => navigation.goBack()}
+        />
+        <Text style={styles.topnavtext}>Ayahs</Text>
+      </View>
       {isLoading ? (
         <OrientationLoadingOverlay
-        visible={true}
-        color="white"
-        indicatorSize="large"
-        messageFontSize={24}
-        // message="Loading... 😀😀😀"
+          visible={true}
+          color="white"
+          indicatorSize="large"
+          messageFontSize={24}
+          // message="Loading... 😀😀😀"
         />
       ) : (
         <ScrollView>
@@ -95,7 +91,8 @@ const ArabicAyahs = ({route,navigation}) => {
                     marginLeft: 200,
                     marginTop: 10,
                     fontSize: normalize(14),
-                    fontWeight: '600'
+                    fontWeight: '600',
+                    color: '#555',
                   }}>
                   Number in Surah: {item.numberInSurah}
                 </Text>
@@ -104,7 +101,8 @@ const ArabicAyahs = ({route,navigation}) => {
                     marginLeft: 200,
                     marginTop: 5,
                     fontSize: normalize(14),
-                    fontWeight: '600'
+                    fontWeight: '600',
+                    color: '#555',
                   }}>
                   Ruku: {item.ruku}
                 </Text>
@@ -117,9 +115,7 @@ const ArabicAyahs = ({route,navigation}) => {
                       Sajda
                     </Text>
                   </>
-                ) : (
-                null
-                )}
+                ) : null}
               </View>
             )}
           />
@@ -136,7 +132,7 @@ const styles = StyleSheet.create({
   topnav: {
     marginTop: 0,
     height: 60,
-    width: windowWidth/1,
+    width: windowWidth / 1,
     backgroundColor: '#4b7bf2',
   },
   topnavtext: {
@@ -144,12 +140,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     fontSize: normalize(22),
-    color: 'white'
+    color: 'white',
   },
   icon: {
     marginLeft: 20,
     marginTop: 10,
-},
+  },
   image: {
     marginTop: 50,
     marginRight: 120,
@@ -167,16 +163,17 @@ const styles = StyleSheet.create({
     marginRight: 5,
     alignSelf: 'center',
     height: 'auto',
-    width:  windowWidth /1.1,
+    width: windowWidth / 1.1,
     backgroundColor: '#ffffff',
     elevation: 5,
     borderRadius: 10,
-    padding: 10
+    padding: 10,
   },
   number: {
     marginTop: 10,
     marginLeft: 5,
-    fontSize: normalize(12)
+    fontSize: normalize(12),
+    color: '#555',
   },
   surahArabic: {
     marginTop: -20,
@@ -184,6 +181,7 @@ const styles = StyleSheet.create({
     marginLeft: 40,
     fontSize: normalize(16),
     fontWeight: '600',
+    color: '#555',
     // width: 200
   },
   surahEnglish: {
@@ -191,16 +189,19 @@ const styles = StyleSheet.create({
     marginLeft: 40,
     fontSize: 16,
     fontWeight: '700',
+    color: '#555',
   },
   verses: {
     marginTop: 2,
     fontSize: 14,
     marginLeft: 40,
+    color: '#555',
   },
   revelation: {
     marginTop: 2,
     fontSize: 14,
     marginLeft: 40,
+    color: '#555',
   },
   iconheart: {
     marginLeft: 330,
@@ -214,6 +215,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+    color: '#555',
   },
   English: {
     marginTop: 20,
@@ -224,6 +226,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: 'blue',
     borderWidth: 1,
+    color: '#555',
   },
   Hindi: {
     marginTop: -29,
@@ -234,6 +237,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: 'blue',
     borderWidth: 1,
+    color: '#555',
   },
   Urdu: {
     marginTop: -31,
@@ -244,6 +248,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: 'blue',
     borderWidth: 1,
+    color: '#555',
   },
 });
 

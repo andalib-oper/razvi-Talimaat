@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import {SkypeIndicator} from 'react-native-indicators';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // import ArabicAyahs from './ArabicAyahs';
 
 const windowWidth = Dimensions.get('window').width;
@@ -67,13 +67,13 @@ const ArabicAyahs = ({route, navigation}) => {
         <Text style={styles.topnavtext}>Ayahs</Text>
       </View>
       {isLoading ? (
-           <OrientationLoadingOverlay
-           visible={true}
-           color="white"
-           indicatorSize="large"
-           messageFontSize={24}
-           // message="Loading... 😀😀😀"
-           />
+        <OrientationLoadingOverlay
+          visible={true}
+          color="white"
+          indicatorSize="large"
+          messageFontSize={24}
+          // message="Loading... 😀😀😀"
+        />
       ) : (
         <ScrollView>
           <FlatList
@@ -158,12 +158,15 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderRadius: 10,
     padding: 10,
+    color: '#555',
   },
   number: {
+    color: '#555',
     marginTop: 2,
     // marginLeft: 10,
   },
   surahArabic: {
+    color: '#555',
     marginTop: -24,
     // marginRight: 20,
     marginLeft: 40,
@@ -176,16 +179,19 @@ const styles = StyleSheet.create({
     marginLeft: 40,
     fontSize: 16,
     fontWeight: '700',
+    color: '#555',
   },
   verses: {
     marginTop: 2,
     fontSize: 14,
     marginLeft: 40,
+    color: '#555',
   },
   revelation: {
     marginTop: 2,
     fontSize: 14,
     marginLeft: 40,
+    color: '#555',
   },
   iconheart: {
     marginLeft: 330,
@@ -198,6 +204,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   title: {
+    color: '#555',
     fontSize: 32,
   },
   English: {

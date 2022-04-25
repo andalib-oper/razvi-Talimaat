@@ -22,11 +22,14 @@ import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay'
 import {SkypeIndicator} from 'react-native-indicators';
 import moment from 'moment';
 import {hasPermission} from '../Hooks/LocationPermission';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // import RNLocation from 'react-native-location';
 
 import LocationEnabler from 'react-native-location-enabler';
 import axios from 'axios';
+
+import {MMKV} from 'react-native-mmkv';
 
 const {
   PRIORITIES: {HIGH_ACCURACY},
@@ -65,6 +68,8 @@ const Home = ({navigation}) => {
     false /* optional: default undefined */,
   );
 
+  const storage = new MMKV();
+
   useEffect(() => {
     fetch('https://razvitalimat.herokuapp.com/api/content')
       .then(response => response.json())
@@ -96,60 +101,69 @@ const Home = ({navigation}) => {
     setShowMore(e.nativeEvent.lines.length > NUM_OF_LINES);
   }, []);
 
-  const locationPermission = hasPermission();
-  if (!locationPermission) return;
-  Geolocation.getCurrentPosition(
-    position => {
-      setLagitude(position.coords.latitude);
-      setLongitude(position.coords.longitude);
-      console.log(lagitude);
-      console.log(longitude);
-      setLocPermission(true);
-    },
-    error => {
-      // See error code charts below.
-      console.warn('Error ' + error.code, error.message);
-      setLocPermission(false);
-    },
-    {enableHighAccuracy: true, timeout: 500000, maximumAge: 10000},
-  );
-
-  // console.log(info);
-  // console.log(time);
-  // console.log('lagitude', lagitude);
-  // console.log('longitude', longitude);
-
-  // useEffect(() => {
-  //   // Update the document title using the browser API
-  //   document.title = `You clicked ${count} times`;
-  // });
-
-  // useEffect(() => {
-  // }, []);
+  var locationPermission = hasPermission();
+  locationPermission.then(res => {
+    if (res) {
+      Geolocation.getCurrentPosition(
+        position => {
+          setLagitude(position.coords.latitude);
+          setLongitude(position.coords.longitude);
+          // console.log(lagitude);
+          // console.log(longitude);
+          setLocPermission(true);
+        },
+        error => {
+          // See error code charts below.
+          console.warn('Error ' + error.code, error.message);
+          setLocPermission(false);
+        },
+        {enableHighAccuracy: true, timeout: 500000, maximumAge: 10000},
+      );
+    }
+  });
 
   useEffect(() => {
     // if (city) {
-    axios
-      .get(
-        `http://api.aladhan.com/v1/timings?latitude=${lagitude}&longitude=${longitude}`,
-      )
-      .then(res => {
-        const resp = res.data.data.timings;
-        Object.keys(resp).forEach(
-          key =>
-            (resp[key] = {
-              hr: resp[key].split(' ')[0].split(':')[0],
-              min: resp[key].split(' ')[0].split(':')[1],
-            }),
-        );
-        setPrayerTimes(resp);
-        // console.log(res.data);
-        setDate(res.data.data.date);
-      })
-      .catch(error => console.error(error))
-      .finally(() => setPrayerLoading(false));
-    // }
+    init_time();
   }, [lagitude, longitude]);
+
+  const init_time = async () => {
+    const storage_data = storage.contains('prayerTimes')
+      ? JSON.parse(storage.getString('prayerTimes'))
+      : {};
+    if (storage_data.date?.gregorian.date !== moment().format('DD-MM-YYYY')) {
+      axios
+        .get(
+          `http://api.aladhan.com/v1/timings?latitude=${lagitude}&longitude=${longitude}`,
+        )
+        .then(res => {
+          const resp = res.data.data.timings;
+          Object.keys(resp).forEach(
+            key =>
+              (resp[key] = {
+                hr: resp[key].split(' ')[0].split(':')[0],
+                min: resp[key].split(' ')[0].split(':')[1],
+              }),
+          );
+          setPrayerTimes(resp);
+          setDate(res.data.data.date);
+          storage.set(
+            'prayerTimes',
+            JSON.stringify({
+              data: resp,
+              date: res.data.data.date,
+            }),
+          );
+        })
+        .catch(error => console.error(error))
+        .finally(() => setPrayerLoading(false));
+      // }
+    } else {
+      setPrayerTimes(storage_data?.data);
+      setDate(storage_data?.date);
+      setPrayerLoading(false);
+    }
+  };
 
   // console.log(prayerTimes);
 
@@ -263,8 +277,8 @@ const Home = ({navigation}) => {
                         alignSelf: 'center',
                         fontSize: normalize(16),
                         color: 'white',
-                        fontWeight: '600',
-                        marginTop: -45,
+                        fontWeight: 'bold',
+                        marginTop: -55,
                         marginBottom: -60,
                         // numberOfLines: 1,
                       }}>
@@ -385,7 +399,7 @@ const Home = ({navigation}) => {
                           // color: '#023c54',
                           color: 'white',
                           fontWeight: '700',
-                          marginTop: 0,
+                          marginTop: 2,
                         }}>
                         {prayerLoading || Object.keys(prayerTimes).length < 9
                           ? 'Loading...'
@@ -690,7 +704,7 @@ const Home = ({navigation}) => {
         })} */}
 
         <View style={{flex: 1, padding: 2}}>
-          {isLoading ? (
+          {isLoading || (locPermission && prayerLoading) ? (
             <OrientationLoadingOverlay
               visible={true}
               color="white"
