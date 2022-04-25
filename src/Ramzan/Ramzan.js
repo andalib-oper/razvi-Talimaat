@@ -2,29 +2,34 @@ import * as React from 'react';
 import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-function HomeScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home!</Text>
-    </View>
-  );
-}
-
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
-
-const Tab = createMaterialTopTabNavigator();
 
 export default function App() {
   return (
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-      </Tab.Navigator>
+<View style={{
+  flex: 1
+}}> 
+<View style={{
+  backgroundColor: 'pink',
+  borderRadius: 10,
+  height: 200,
+  width: 200,
+  flexDirection: 'row'
+}}>
+<View style={{
+  backgroundColor: 'red'
+}}>
+  <Text>
+    Ramzan 12
+  </Text>
+</View>
+<View style={{
+  backgroundColor: 'blue'
+}}>
+  <Text>
+    Ramzan 67
+  </Text>
+</View>
+</View>
+</View>
   );
 }

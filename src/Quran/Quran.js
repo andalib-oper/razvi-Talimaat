@@ -135,7 +135,7 @@ function English({ navigation }) {
         // message="Loading... 😀😀😀"
         />
       ) : (
-        <ScrollView>
+        <ScrollView scrollIndicatorInsets={false}>
           <FlatList
             data={data}
             keyExtractor={({ id }, index) => id}
@@ -150,31 +150,30 @@ function English({ navigation }) {
                   <Text style={styles.number}>{item.number}.</Text>
                   <View 
                   style={{
-                    // backgroundColor: 'pink',
-                    alignContent:'center',
-                    alignSelf: 'center',
-                    marginTop: -10,
+                    // backgroundColor: 'grey',
+                    width: '50%',
+                    paddingRight: normalize(15)
+                    // alignContent:'center',
+                    // alignSelf: 'center',
+                    // marginTop: -10,
                     // fontSize: 20,
                   }}
                   >
                   <Text style={styles.surahArabic}>{item.name}</Text>
                   </View>
-                  <View>
+                  <View style={{
+                    // backgroundColor: 'pink',
+                    width: '40%'
+                
+                  }}>
                   <Text style={styles.surahEnglish}>
                     {item.englishName}
                   </Text>
-                  </View>
-                  <View 
-                  style={{
-                    // backgroundColor: 'pink'
-                    marginTop: -5
-                  }}
-                  >
                   <Text style={styles.verses}>
                     Verses {item.numberOfAyahs}
                   </Text>
                   </View>
-                </View>
+                  </View>
               </Pressable>
             )}
           />
@@ -248,24 +247,28 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   surahArabic: {
-    marginTop: -10,
-    marginRight: 170,
-    marginLeft: 0,
+    // marginTop: -10,
+    // marginRight: 170,
+    // marginLeft: 0,
+    // width: '55%',
+    textAlign: 'right',
     fontSize: 24,
     fontWeight: '600',
     color: '#152693'
   },
   surahEnglish: {
-    marginTop: -30,
-    marginLeft: 200,
+    // marginTop: -30,
+    // marginLeft: 200,
+    // width: '40%',
+    textAlign: 'left',
     fontSize: 16,
     fontWeight: '700',
   },
   verses: {
-    marginTop: -2,
+    // marginTop: -2,
     fontSize: 14,
-    marginLeft: 200,
-    marginBottom: 10
+    // marginLeft: 200,
+    // marginBottom: 10
   },
   versesArabic: {
     marginTop: 10,
@@ -282,6 +285,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 5,
     marginRight: 5,
+    marginBottom: 10,
+    paddingVertical: normalize(18),
+    paddingHorizontal: normalize(20),
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
     height: 'auto',
     width:  windowWidth /1.1,
     alignSelf: 'center',
@@ -290,8 +299,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   number: {
-    marginTop: 22,
-    marginLeft: 10,
+    // backgroundColor: 'pink'
   },
 });
 
