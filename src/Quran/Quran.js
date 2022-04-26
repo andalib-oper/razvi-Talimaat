@@ -15,9 +15,8 @@ import {
   Pressable,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
-import LinearGradient from 'react-native-linear-gradient';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -54,60 +53,60 @@ function Arabic({navigation}) {
   }, []);
   return (
     <ScrollView>
-      {isLoading ? (
-        <OrientationLoadingOverlay
-          visible={true}
-          color="white"
-          indicatorSize="large"
-          messageFontSize={24}
-          // message="Loading... 😀😀😀"
-        />
-      ) : (
-        <ScrollView>
-          <FlatList
-            data={data}
-            keyExtractor={({id}, index) => id}
-            renderItem={({item}) => (
-              // <View style={styles.topnav}>
-              <Pressable
-                onPress={() =>
-                  navigation.navigate('arabicAyahs', {
+     {isLoading ? (
+            <OrientationLoadingOverlay
+            visible={true}
+            color="white"
+            indicatorSize="large"
+            messageFontSize={24}
+            // message="Loading... 😀😀😀"
+            />
+        ) : (
+          <ScrollView>
+            <FlatList
+              data={data}
+              keyExtractor={({id}, index) => id}
+              renderItem={({item}) => (
+                // <View style={styles.topnav}>
+                <Pressable
+                  onPress={() => navigation.navigate('arabicAyahs', {
                     code: item.number,
-                  })
-                }>
-                <View style={styles.surah}>
-                  <Text style={styles.number}>{item.number}.</Text>
-                  <View
-                    style={{
-                      // backgroundColor: 'pink',
-                      alignContent: 'center',
-                      textAlign: 'right',
-                      marginTop: -10,
-                      marginRight: 10,
-                      fontWeight: 'bold',
-                    }}>
+                  })}>
+                  <View style={styles.surah}>
+                    <Text style={styles.number}>{item.number}.</Text>
+                  <View 
+                  style={{
+                    // backgroundColor: 'pink',
+                    alignContent:'center',
+                    alignSelf: 'center',
+                    marginTop: -10,
+                    // fontSize: 20,
+                  }}
+                  >
                     <Text style={styles.surahArabic}>{item.name}</Text>
-                  </View>
-                  <View
-                    style={{
-                      // backgroundColor: 'pink'
-                      marginTop: -5,
-                    }}>
+                    </View>
+                    <View 
+                  style={{
+                    // backgroundColor: 'pink'
+                    marginTop: -5,
+
+                  }}
+                  >
                     <Text style={styles.versesArabic}>
                       Verses {item.numberOfAyahs}
                     </Text>
                   </View>
-                </View>
-              </Pressable>
-            )}
-          />
-        </ScrollView>
-      )}
+                  </View>
+                </Pressable>
+              )}
+            />
+          </ScrollView>
+        )}
     </ScrollView>
   );
 }
 
-function English({navigation}) {
+function English({ navigation }) {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const getSurahs = async () => {
@@ -133,14 +132,14 @@ function English({navigation}) {
           color="white"
           indicatorSize="large"
           messageFontSize={24}
-          // message="Loading... 😀😀😀"
+        // message="Loading... 😀😀😀"
         />
       ) : (
         <ScrollView scrollIndicatorInsets={false}>
           <FlatList
             data={data}
-            keyExtractor={({id}, index) => id}
-            renderItem={({item}) => (
+            keyExtractor={({ id }, index) => id}
+            renderItem={({ item }) => (
               <Pressable
                 onPress={() =>
                   navigation.navigate('englishAyahs', {
@@ -189,66 +188,10 @@ const Tab = createMaterialTopTabNavigator();
 export default function Quran() {
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={['#009ffd', '#2a2a72']}
-        style={styles.image}
-        start={{x: 0, y: 0}}
-        end={{x: 0.5, y: 0.6}}
-        locations={[0.2, 1]}>
-        <Text
-          style={{
-            textAlign: 'center',
-            alignSelf: 'center',
-            fontSize: normalize(18),
-            color: 'white',
-            fontWeight: 'bold',
-            marginTop: 20,
-            marginBottom: -60,
-          }}>
-          Quran
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flex: 1,
-            width: '100%',
-          }}>
-          <Image
-            source={require('../../images/mosque.png')}
-            style={{width: normalize(40), height: normalize(70)}}
-          />
-          <Image
-            source={require('../../images/mosque.png')}
-            style={{width: normalize(60), height: normalize(100)}}
-          />
-          <Image
-            source={require('../../images/mosque.png')}
-            style={{width: normalize(40), height: normalize(70)}}
-          />
-          <Image
-            source={require('../../images/praying.png')}
-            style={{
-              width: normalize(90),
-              height: normalize(90),
-              position: 'absolute',
-              top: normalize(100),
-              alignSelf: 'center',
-              // right: -5,
-              // transform: [
-              //   {
-              //     translateX: -50,
-              //   },
-              // ],
-            }}
-          />
-        </View>
-      </LinearGradient>
-      {/* <ImageBackground
+      <ImageBackground
         style={styles.image}
         source={require('../../images/background3.jpeg')}>
-        <View style={{backgroundColor: 'pink'}}>
+        <View style={{ backgroundColor: 'pink' }}>
           <Text
             style={{
               textAlign: 'center',
@@ -263,14 +206,15 @@ export default function Quran() {
             Quran
           </Text>
         </View>
-      </ImageBackground> */}
+      </ImageBackground>
       <Tab.Navigator>
-        <Tab.Screen name="english" component={English} />
+        {/* <Tab.Screen name="english" component={English} /> */}
         <Tab.Screen name="arabic" component={Arabic} />
       </Tab.Navigator>
+
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -283,13 +227,13 @@ const styles = StyleSheet.create({
   },
   image: {
     marginTop: 0,
-    height: windowHeight / 3,
+    height: windowHeight / 2.6,
     width: windowWidth / 1,
     alignContent: 'center',
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    // borderBottomLeftRadius: 30,
+    borderBottomLeftRadius: 30,
   },
   topnavtext: {
     marginTop: -35,
@@ -310,8 +254,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     fontSize: 24,
     fontWeight: '600',
-    color: '#152693',
-    textAlign: 'right',
+    color: '#152693'
   },
   surahEnglish: {
     // marginTop: -30,
@@ -320,7 +263,6 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: 16,
     fontWeight: '700',
-    color: '#555',
   },
   verses: {
     // marginTop: -2,
@@ -332,14 +274,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 14,
     marginLeft: 50,
-    marginBottom: 10,
-    color: '#555',
+    marginBottom: 10
   },
   revelation: {
     marginTop: 2,
     fontSize: 14,
     marginLeft: 40,
-    color: '#555',
   },
   surah: {
     marginTop: 10,
@@ -352,15 +292,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     height: 'auto',
-    width: windowWidth / 1.1,
+    width:  windowWidth /1.1,
     alignSelf: 'center',
     backgroundColor: 'white',
     elevation: 20,
     borderRadius: 10,
-    // justifyContent: 'space-between',
   },
   number: {
+    // backgroundColor: 'pink'
+  },
+});
+
+// export default Quran;
+// export default function App() {
 //   return (
+//     <Tab.Navigator>
 //       <Tab.Screen name="Home" component={HomeScreen} />
 //       <Tab.Screen name="Settings" component={SettingsScreen} />
 //     </Tab.Navigator>
