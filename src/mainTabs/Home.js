@@ -59,6 +59,7 @@ const Home = ({navigation}) => {
   const [city, setCity] = useState('');
   const [date, setDate] = useState({});
   const [locPermission, setLocPermission] = useState(false);
+  const [locLoading, setLocLoading] = useState(true);
   const [enabled, requestResolution] = useLocationSettings(
     {
       priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
@@ -108,14 +109,14 @@ const Home = ({navigation}) => {
         position => {
           setLagitude(position.coords.latitude);
           setLongitude(position.coords.longitude);
-          // console.log(lagitude);
-          // console.log(longitude);
           setLocPermission(true);
+          setLocLoading(false);
         },
         error => {
           // See error code charts below.
           console.warn('Error ' + error.code, error.message);
           setLocPermission(false);
+          setLocLoading(false);
         },
         {enableHighAccuracy: true, timeout: 500000, maximumAge: 10000},
       );
@@ -190,7 +191,7 @@ const Home = ({navigation}) => {
                 overlayAlpha={
                   prayerLoading || Object.keys(prayerTimes).length < 9
                     ? 0.2
-                    : new Date().getTime() >=
+                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
                         new Date(
                           moment()
                             .set('hour', prayerTimes.Maghrib.hr)
@@ -198,7 +199,7 @@ const Home = ({navigation}) => {
                             .set('second', 0)
                             .set('millisecond', 0),
                         ).getTime() ||
-                      new Date().getTime() <
+                      new Date('2022-04-26T15:50:39+05:30').getTime() <
                         new Date(
                           moment()
                             .set('hour', prayerTimes.Fajr.hr)
@@ -213,7 +214,7 @@ const Home = ({navigation}) => {
                 source={
                   prayerLoading || Object.keys(prayerTimes).length < 9
                     ? null
-                    : new Date().getTime() >=
+                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
                         new Date(
                           moment()
                             .set('hour', prayerTimes.Isha.hr)
@@ -221,7 +222,7 @@ const Home = ({navigation}) => {
                             .set('second', 0)
                             .set('millisecond', 0),
                         ).getTime() ||
-                      new Date().getTime() <
+                      new Date('2022-04-26T15:50:39+05:30').getTime() <
                         new Date(
                           moment()
                             .set('hour', prayerTimes.Fajr.hr)
@@ -230,7 +231,7 @@ const Home = ({navigation}) => {
                             .set('millisecond', 0),
                         ).getTime()
                     ? require('../../images/isha.png')
-                    : new Date().getTime() >=
+                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
                       new Date(
                         moment()
                           .set('hour', prayerTimes.Maghrib.hr)
@@ -239,7 +240,7 @@ const Home = ({navigation}) => {
                           .set('millisecond', 0),
                       ).getTime()
                     ? require('../../images/maghrib.png')
-                    : new Date().getTime() >=
+                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
                       new Date(
                         moment()
                           .set('hour', prayerTimes.Asr.hr)
@@ -248,7 +249,7 @@ const Home = ({navigation}) => {
                           .set('millisecond', 0),
                       ).getTime()
                     ? require('../../images/asr.png')
-                    : new Date().getTime() >=
+                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
                       new Date(
                         moment()
                           .set('hour', prayerTimes.Dhuhr.hr)
@@ -257,7 +258,7 @@ const Home = ({navigation}) => {
                           .set('millisecond', 0),
                       ).getTime()
                     ? require('../../images/dhuhr.png')
-                    : new Date().getTime() >=
+                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
                       new Date(
                         moment()
                           .set('hour', prayerTimes.Fajr.hr)
@@ -704,7 +705,7 @@ const Home = ({navigation}) => {
         })} */}
 
         <View style={{flex: 1, padding: 2}}>
-          {isLoading || (locPermission && prayerLoading) ? (
+          {isLoading || (locPermission && prayerLoading) || locLoading ? (
             <OrientationLoadingOverlay
               visible={true}
               color="white"

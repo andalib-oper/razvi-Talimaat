@@ -149,32 +149,29 @@ function English({navigation}) {
                 }>
                 <View style={styles.surah}>
                   <Text style={styles.number}>{item.number}.</Text>
-                  <View 
-                  style={{
-                    // backgroundColor: 'grey',
-                    width: '50%',
-                    paddingRight: normalize(15)
-                    // alignContent:'center',
-                    // alignSelf: 'center',
-                    // marginTop: -10,
-                    // fontSize: 20,
-                  }}
-                  >
-                  <Text style={styles.surahArabic}>{item.name}</Text>
+                  <View
+                    style={{
+                      // backgroundColor: 'grey',
+                      width: '50%',
+                      paddingRight: normalize(15),
+                      // alignContent:'center',
+                      // alignSelf: 'center',
+                      // marginTop: -10,
+                      // fontSize: 20,
+                    }}>
+                    <Text style={styles.surahArabic}>{item.name}</Text>
                   </View>
-                  <View style={{
-                    // backgroundColor: 'pink',
-                    width: '40%'
-                
-                  }}>
-                  <Text style={styles.surahEnglish}>
-                    {item.englishName}
-                  </Text>
-                  <Text style={styles.verses}>
-                    Verses {item.numberOfAyahs}
-                  </Text>
+                  <View
+                    style={{
+                      // backgroundColor: 'pink',
+                      width: '40%',
+                    }}>
+                    <Text style={styles.surahEnglish}>{item.englishName}</Text>
+                    <Text style={styles.verses}>
+                      Verses {item.numberOfAyahs}
+                    </Text>
                   </View>
-                  </View>
+                </View>
               </Pressable>
             )}
           />
@@ -360,9 +357,10 @@ const styles = StyleSheet.create({
     // justifyContent: 'space-between',
   },
   number: {
-//   return (
-//       <Tab.Screen name="Home" component={HomeScreen} />
-//       <Tab.Screen name="Settings" component={SettingsScreen} />
-//     </Tab.Navigator>
-//   );
-// }
+    //   return (
+    //       <Tab.Screen name="Home" component={HomeScreen} />
+    //       <Tab.Screen name="Settings" component={SettingsScreen} />
+    //     </Tab.Navigator>
+    //   );
+  },
+});
