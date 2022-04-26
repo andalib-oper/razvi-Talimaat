@@ -54,12 +54,13 @@ function Arabic({navigation}) {
   };
 
   useEffect(() => {
+    // storage.clearAll();
     const quran = storage.contains('quran')
       ? JSON.parse(storage.getString('quran'))
       : [];
     if (quran.length === 0) {
       axios
-        .get('http://api.alquran.cloud/v1/quran/quran-uthmani')
+        .get('http://api.alquran.cloud/v1/quran/quran-unicode')
         .then(res => {
           setData(res.data.data.surahs);
           storage.set('quran', JSON.stringify(res.data.data.surahs));
