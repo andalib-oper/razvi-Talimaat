@@ -16,6 +16,7 @@ import {
 import {SkypeIndicator} from 'react-native-indicators';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {MMKV} from 'react-native-mmkv';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -34,25 +35,31 @@ function normalize(size) {
 const ArabicAyahs = ({route, navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const getSurahsAyahs = async () => {
-    try {
-      const response = await fetch(
-        `http://api.alquran.cloud/v1/surah/${route.params.code}`,
-      );
-      const json = await response.json();
-      setData(json.data.ayahs);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+
+  const storage = new MMKV();
+
+  // const getSurahsAyahs = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `http://api.alquran.cloud/v1/surah/${route.params.code}`,
+  //     );
+  //     const json = await response.json();
+  //     setData(json.data.ayahs);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
-    getSurahsAyahs();
+    const currentSurah = JSON.parse(storage.getString('quran')).filter(
+      surah => surah.number === route.params.code,
+    )[0];
+    setData(currentSurah);
+    setLoading(false);
   }, []);
 
-  console.log(data);
   const [focused, setFocused] = useState('');
   return (
     <View style={{flex: 1, padding: 0}}>
@@ -75,51 +82,51 @@ const ArabicAyahs = ({route, navigation}) => {
           // message="Loading... 😀😀😀"
         />
       ) : (
-        <ScrollView>
-          <FlatList
-            data={data}
-            keyExtractor={({id}, index) => id}
-            renderItem={({item}) => (
-              <View style={styles.surah}>
-                <Text style={styles.number}>{item.number}.</Text>
-                <Text style={styles.surahArabic}>{item.text}</Text>
-                {/* <Image
+        // <ScrollView>
+        <FlatList
+          data={data.ayahs}
+          keyExtractor={({number}, index) => number}
+          renderItem={({item}) => (
+            <View style={styles.surah}>
+              <Text style={styles.number}>{item.number}.</Text>
+              <Text style={styles.surahArabic}>{item.text}</Text>
+              {/* <Image
                 style={styles.image}
                 source={require('../../images/quran.png')}/> */}
-                <Text
-                  style={{
-                    marginLeft: 200,
-                    marginTop: 10,
-                    fontSize: normalize(14),
-                    fontWeight: '600',
-                    color: '#555',
-                  }}>
-                  Number in Surah: {item.numberInSurah}
-                </Text>
-                <Text
-                  style={{
-                    marginLeft: 200,
-                    marginTop: 5,
-                    fontSize: normalize(14),
-                    fontWeight: '600',
-                    color: '#555',
-                  }}>
-                  Ruku: {item.ruku}
-                </Text>
-                {item.sajda ? (
-                  <>
-                    <Text
-                      style={{
-                        marginLeft: 250,
-                      }}>
-                      Sajda
-                    </Text>
-                  </>
-                ) : null}
-              </View>
-            )}
-          />
-        </ScrollView>
+              <Text
+                style={{
+                  marginLeft: 200,
+                  marginTop: 10,
+                  fontSize: normalize(14),
+                  fontWeight: '600',
+                  color: '#555',
+                }}>
+                Number in Surah: {item.numberInSurah}
+              </Text>
+              <Text
+                style={{
+                  marginLeft: 200,
+                  marginTop: 5,
+                  fontSize: normalize(14),
+                  fontWeight: '600',
+                  color: '#555',
+                }}>
+                Ruku: {item.ruku}
+              </Text>
+              {item.sajda ? (
+                <>
+                  <Text
+                    style={{
+                      marginLeft: 250,
+                    }}>
+                    Sajda
+                  </Text>
+                </>
+              ) : null}
+            </View>
+          )}
+        />
+        //</ScrollView>
       )}
     </View>
   );

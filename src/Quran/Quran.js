@@ -17,6 +17,8 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
+import {MMKV} from 'react-native-mmkv';
+import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
 
 const windowWidth = Dimensions.get('window').width;
@@ -37,6 +39,8 @@ function Arabic({navigation}) {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
+  const storage = new MMKV();
+
   const getSurahs = async () => {
     try {
       const response = await fetch('http://api.alquran.cloud/v1/surah');
@@ -50,10 +54,25 @@ function Arabic({navigation}) {
   };
 
   useEffect(() => {
-    getSurahs();
+    const quran = storage.contains('quran')
+      ? JSON.parse(storage.getString('quran'))
+      : [];
+    if (quran.length === 0) {
+      axios
+        .get('http://api.alquran.cloud/v1/quran/quran-uthmani')
+        .then(res => {
+          setData(res.data.data.surahs);
+          storage.set('quran', JSON.stringify(res.data.data.surahs));
+          setLoading(false);
+        })
+        .catch(err => console.log(err));
+    } else {
+      setData(quran);
+      setLoading(false);
+    }
   }, []);
   return (
-    <ScrollView>
+    <>
       {isLoading ? (
         <OrientationLoadingOverlay
           visible={true}
@@ -63,10 +82,10 @@ function Arabic({navigation}) {
           // message="Loading... 😀😀😀"
         />
       ) : (
-        <ScrollView>
+        <>
           <FlatList
             data={data}
-            keyExtractor={({id}, index) => id}
+            keyExtractor={({number}, index) => number}
             renderItem={({item}) => (
               // <View style={styles.topnav}>
               <Pressable
@@ -77,113 +96,116 @@ function Arabic({navigation}) {
                 }>
                 <View style={styles.surah}>
                   <Text style={styles.number}>{item.number}.</Text>
-                  <View
-                    style={{
-                      // backgroundColor: 'pink',
-                      alignContent: 'center',
-                      textAlign: 'right',
-                      marginTop: -10,
-                      marginRight: 10,
-                      fontWeight: 'bold',
-                    }}>
-                    <Text style={styles.surahArabic}>{item.name}</Text>
-                  </View>
-                  <View
-                    style={{
-                      // backgroundColor: 'pink'
-                      marginTop: -5,
-                    }}>
-                    <Text style={styles.versesArabic}>
-                      Verses {item.numberOfAyahs}
-                    </Text>
-                  </View>
-                </View>
-              </Pressable>
-            )}
-          />
-        </ScrollView>
-      )}
-    </ScrollView>
-  );
-}
-
-function English({navigation}) {
-  const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
-  const getSurahs = async () => {
-    try {
-      const response = await fetch('http://api.alquran.cloud/v1/surah');
-      const json = await response.json();
-      setData(json.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getSurahs();
-  }, []);
-  return (
-    <View>
-      {isLoading ? (
-        <OrientationLoadingOverlay
-          visible={true}
-          color="white"
-          indicatorSize="large"
-          messageFontSize={24}
-          // message="Loading... 😀😀😀"
-        />
-      ) : (
-        <ScrollView scrollIndicatorInsets={false}>
-          <FlatList
-            data={data}
-            keyExtractor={({id}, index) => id}
-            renderItem={({item}) => (
-              <Pressable
-                onPress={() =>
-                  navigation.navigate('englishAyahs', {
-                    code: item.number,
-                  })
-                }>
-                <View style={styles.surah}>
-                  <Text style={styles.number}>{item.number}.</Text>
-                  <View
-                    style={{
-                      // backgroundColor: 'grey',
-                      width: '50%',
-                      paddingRight: normalize(15),
-                      // alignContent:'center',
-                      // alignSelf: 'center',
-                      // marginTop: -10,
-                      // fontSize: 20,
-                    }}>
-                    <Text style={styles.surahArabic}>{item.name}</Text>
-                  </View>
-                  <View
-                    style={{
-                      // backgroundColor: 'pink',
-                      width: '40%',
-                    }}>
-                    <Text style={styles.surahEnglish}>{item.englishName}</Text>
-                    <Text style={styles.verses}>
-                      Verses {item.numberOfAyahs}
-                    </Text>
+                  <View>
+                    <View
+                      style={{
+                        // backgroundColor: 'pink',
+                        alignContent: 'center',
+                        alignSelf: 'center',
+                        // marginTop: -10,
+                        // fontSize: 20,
+                      }}>
+                      <Text style={styles.surahArabic}>{item.name}</Text>
+                    </View>
+                    <View
+                      style={{
+                        width: normalize(60),
+                        // backgroundColor: 'pink',
+                        alignSelf: 'flex-end',
+                        marginTop: 0,
+                      }}>
+                      <Text style={styles.versesArabic}>
+                        Verses {item.numberOfAyahs}
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </Pressable>
             )}
           />
-        </ScrollView>
+        </>
       )}
-    </View>
+    </>
   );
 }
 
-const Tab = createMaterialTopTabNavigator();
+// function English({navigation}) {
+//   const [isLoading, setLoading] = useState(true);
+//   const [data, setData] = useState([]);
+//   const getSurahs = async () => {
+//     try {
+//       const response = await fetch('http://api.alquran.cloud/v1/surah');
+//       const json = await response.json();
+//       setData(json.data);
+//     } catch (error) {
+//       console.error(error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
-export default function Quran() {
+//   useEffect(() => {
+//     getSurahs();
+//   }, []);
+//   return (
+//     <View>
+//       {isLoading ? (
+//         <OrientationLoadingOverlay
+//           visible={true}
+//           color="white"
+//           indicatorSize="large"
+//           messageFontSize={24}
+//           // message="Loading... 😀😀😀"
+//         />
+//       ) : (
+//         <ScrollView scrollIndicatorInsets={false}>
+//           <FlatList
+//             data={data}
+//             keyExtractor={({id}, index) => id}
+//             renderItem={({item}) => (
+//               <Pressable
+//                 onPress={() =>
+//                   navigation.navigate('englishAyahs', {
+//                     code: item.number,
+//                   })
+//                 }>
+//                 <View style={styles.surah}>
+//                   <Text style={styles.number}>{item.number}.</Text>
+//                   <View
+//                     style={{
+//                       // backgroundColor: 'grey',
+//                       width: '50%',
+//                       paddingRight: normalize(15),
+//                       // alignContent:'center',
+//                       // alignSelf: 'center',
+//                       // marginTop: -10,
+//                       // fontSize: 20,
+//                     }}>
+//                     <Text style={styles.surahArabic}>{item.name}</Text>
+//                   </View>
+//                   <View
+//                     style={{
+//                       // backgroundColor: 'pink',
+//                       width: '40%',
+//                     }}>
+//                     <Text style={styles.surahEnglish}>{item.englishName}</Text>
+//                     <Text style={styles.verses}>
+//                       Verses {item.numberOfAyahs}
+//                     </Text>
+//                   </View>
+//                 </View>
+//               </Pressable>
+//             )}
+//           />
+//         </ScrollView>
+//       )}
+//     </View>
+//   );
+// }
+
+// const Tab = createMaterialTopTabNavigator();
+
+export default function Quran({navigation}) {
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -242,29 +264,12 @@ export default function Quran() {
           />
         </View>
       </LinearGradient>
-      {/* <ImageBackground
-        style={styles.image}
-        source={require('../../images/background3.jpeg')}>
-        <View style={{backgroundColor: 'pink'}}>
-          <Text
-            style={{
-              textAlign: 'center',
-              alignSelf: 'center',
-              fontSize: normalize(18),
-              color: 'white',
-              fontWeight: '600',
-              marginTop: -130,
-              marginBottom: -60,
-              // numberOfLines: 1,
-            }}>
-            Quran
-          </Text>
-        </View>
-      </ImageBackground> */}
-      <Tab.Navigator>
-        <Tab.Screen name="english" component={English} />
+      {/* </ImageBackground> */}
+      {/* <Tab.Navigator>
+        {/* <Tab.Screen name="english" component={English} /> 
         <Tab.Screen name="arabic" component={Arabic} />
-      </Tab.Navigator>
+      </Tab.Navigator> */}
+      <Arabic navigation={navigation} />
     </View>
   );
 }
@@ -308,7 +313,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '600',
     color: '#152693',
-    textAlign: 'right',
   },
   surahEnglish: {
     // marginTop: -30,
@@ -317,7 +321,6 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: 16,
     fontWeight: '700',
-    color: '#555',
   },
   verses: {
     // marginTop: -2,
@@ -326,17 +329,16 @@ const styles = StyleSheet.create({
     // marginBottom: 10
   },
   versesArabic: {
-    marginTop: 10,
+    marginTop: 5,
     fontSize: 14,
-    marginLeft: 50,
-    marginBottom: 10,
-    color: '#555',
+    fontWeight: '700',
+    // marginLeft: 50,
+    // marginBottom: 10,
   },
   revelation: {
     marginTop: 2,
     fontSize: 14,
     marginLeft: 40,
-    color: '#555',
   },
   surah: {
     marginTop: 10,
@@ -354,13 +356,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     elevation: 20,
     borderRadius: 10,
-    // justifyContent: 'space-between',
   },
   number: {
-    //   return (
-    //       <Tab.Screen name="Home" component={HomeScreen} />
-    //       <Tab.Screen name="Settings" component={SettingsScreen} />
-    //     </Tab.Navigator>
-    //   );
+    // backgroundColor: 'pink'
   },
 });
+
+// export default Quran;
+// export default function App() {
+//   return (
+//     <Tab.Navigator>
+//       <Tab.Screen name="Home" component={HomeScreen} />
+//       <Tab.Screen name="Settings" component={SettingsScreen} />
+//     </Tab.Navigator>
+//   );
+// }
