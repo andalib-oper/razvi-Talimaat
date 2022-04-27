@@ -39,32 +39,20 @@ const ArabicAyahs = ({route, navigation}) => {
 
   const storage = new MMKV();
 
-  // const getSurahsAyahs = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `http://api.alquran.cloud/v1/surah/${route.params.code}`,
-  //     );
-  //     const json = await response.json();
-  //     setData(json.data.ayahs);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   useEffect(() => {
     const quran = JSON.parse(storage.getString('quran'));
-    const currentSurah = quran.filter(
-      surah => surah.number === route.params.code,
-    )[0];
-    setData(currentSurah);
-    setQuran(quran);
+    const new_quran = quran
+      .map(surah => surah.ayahs.map(ayah => ({...ayah, surah: surah.name})))
+      .flat();
+    // const currentSurah = quran.filter(
+    //   surah => surah.number === route.params.code,
+    // )[0];
+    // setData(currentSurah);
+    setQuran(new_quran);
     setLoading(false);
   }, []);
   var page = 1;
 
-  const [focused, setFocused] = useState('');
   return (
     <View style={{flex: 1, padding: 0}}>
       <View style={styles.topnav}>
@@ -86,80 +74,41 @@ const ArabicAyahs = ({route, navigation}) => {
           // message="Loading... 😀😀😀"
         />
       ) : (
-        // <ScrollView>
-
-        // <FlatList
-        //   data={data.ayahs}
-        //   keyExtractor={({number}, index) => number}
-        //   renderItem={({item}) => (
-        //     <View style={styles.surah}>
-        //       <Text style={styles.number}>{item.number}.</Text>
-        //       <Text style={styles.surahArabic}>{item.text}</Text>
-        //       {/* <Image
-        //         style={styles.image}
-        //         source={require('../../images/quran.png')}/> */}
-        //       <Text
-        //         style={{
-        //           marginLeft: 200,
-        //           marginTop: 10,
-        //           fontSize: normalize(14),
-        //           fontWeight: '600',
-        //           color: '#555',
-        //         }}>
-        //         Number in Surah: {item.numberInSurah}
-        //       </Text>
-        //       <Text
-        //         style={{
-        //           marginLeft: 200,
-        //           marginTop: 5,
-        //           fontSize: normalize(14),
-        //           fontWeight: '600',
-        //           color: '#555',
-        //         }}>
-        //         Ruku: {item.ruku}
-        //       </Text>
-        //       {item.sajda ? (
-        //         <>
-        //           <Text
-        //             style={{
-        //               marginLeft: 250,
-        //             }}>
-        //             Sajda
-        //           </Text>
-        //         </>
-        //       ) : null}
-        //     </View>
-        //   )}
-        // />
-        //</ScrollView>
-        <ScrollView>
-          {quran.map(surah => {
-            return surah.ayahs.map(ayah => {
-              if (page === ayah.page) {
+        <FlatList
+          data={quran}
+          keyExtractor={it => it.number}
+          renderItem={({item}) => {
+            if (page === item.page) {
+              if (item.numberInSurah === 1) {
                 return (
-                  <Text
-                    key={Math.random() * 10000}
-                    style={{fontSize: 20, paddingHorizontal: normalize(10)}}>
-                    {ayah.text}
-                  </Text>
-                );
-              } else {
-                return (
-                  <View key={Math.random() * 10000}>
-                    <Text
-                      style={{fontSize: 18, paddingHorizontal: normalize(10)}}>
-                      {page++}
-                    </Text>
-                    <Text
-                      style={{fontSize: 20, paddingHorizontal: normalize(10)}}>
-                      {ayah.text}
-                    </Text>
+                  <View>
+                    <Text style={{color: '#ff0000'}}>{item.surah}</Text>
+                    <Text>{item.text}</Text>
                   </View>
                 );
               }
-            });
-          })}
-        </ScrollView>
+              return <Text>{item.text}</Text>;
+            } else {
+              page = item.page;
+              return (
+                <View>
+                  <Text
+                    style={{fontSize: 18, paddingHorizontal: normalize(10)}}>
+                    {page}
+                  </Text>
+                  {item.numberInSurah === 1 ? (
+                    <View>
+                      <Text style={{color: '#ff0000'}}>{item.surah}</Text>
+                      <Text>{item.text}</Text>
+                    </View>
+                  ) : (
+                    <Text>{item.text}</Text>
+                  )}
+                </View>
+              );
+            }
+          }}
+        />
       )}
     </View>
   );
