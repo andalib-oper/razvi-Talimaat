@@ -25,16 +25,10 @@ import {hasPermission} from '../Hooks/LocationPermission';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // import RNLocation from 'react-native-location';
-
 import LocationEnabler from 'react-native-location-enabler';
 import axios from 'axios';
 
 import {MMKV} from 'react-native-mmkv';
-
-const {
-  PRIORITIES: {HIGH_ACCURACY},
-  useLocationSettings,
-} = LocationEnabler;
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -60,14 +54,14 @@ const Home = ({navigation}) => {
   const [date, setDate] = useState({});
   const [locPermission, setLocPermission] = useState(false);
   const [locLoading, setLocLoading] = useState(true);
-  const [enabled, requestResolution] = useLocationSettings(
-    {
-      priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
-      alwaysShow: true, // default false
-      needBle: true, // default false
-    },
-    false /* optional: default undefined */,
-  );
+  // const [enabled, requestResolution] = useLocationSettings(
+  //   {
+  //     priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
+  //     alwaysShow: true, // default false
+  //     needBle: true, // default false
+  //   },
+  //   false /* optional: default undefined */,
+  // );
 
   const storage = new MMKV();
 
@@ -168,6 +162,39 @@ const Home = ({navigation}) => {
 
   // console.log(prayerTimes);
 
+  const {
+    useLocationSettings,
+    PRIORITIES: {HIGH_ACCURACY},
+  } = LocationEnabler;
+
+  const [enabled, requestResolution] = useLocationSettings({
+    priority: HIGH_ACCURACY, // optional: default BALANCED_POWER_ACCURACY
+    alwaysShow: true, // optional: default false
+    needBle: true, // optional: default false
+  });
+
+  console.log(`Location are ${enabled ? 'enabled' : 'disabled'}`);
+
+  // ...
+  if (!enabled) {
+    requestResolution();
+  }
+
+  const noOfPic = 4;
+  const imgMap = {
+    0: 'https://images.pexels.com/photos/36704/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    1: 'https://images.pexels.com/photos/2233416/pexels-photo-2233416.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    2: 'https://images.pexels.com/photos/2236674/pexels-photo-2236674.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    3: 'https://images.pexels.com/photos/318451/pexels-photo-318451.jpeg?auto=compress&cs=tinysrgb&w=600',
+    4: 'https://images.pexels.com/photos/40992/man-iraq-men-portrait-40992.jpeg?auto=compress&cs=tinysrgb&w=600',
+  };
+
+  // function getRandomPic() {
+  const random = Math.floor(Math.random() * Math.floor(noOfPic));
+  // return imgMap[random];
+  // }
+
+  console.log(random);
   return (
     <View style={styles.container}>
       {/* <View>
@@ -211,64 +238,7 @@ const Home = ({navigation}) => {
                     : 0.45
                 }
                 style={styles.image}
-                source={
-                  prayerLoading || Object.keys(prayerTimes).length < 9
-                    ? null
-                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
-                        new Date(
-                          moment()
-                            .set('hour', prayerTimes.Isha.hr)
-                            .set('minute', prayerTimes.Isha.min)
-                            .set('second', 0)
-                            .set('millisecond', 0),
-                        ).getTime() ||
-                      new Date('2022-04-26T15:50:39+05:30').getTime() <
-                        new Date(
-                          moment()
-                            .set('hour', prayerTimes.Fajr.hr)
-                            .set('minute', prayerTimes.Fajr.min)
-                            .set('second', 0)
-                            .set('millisecond', 0),
-                        ).getTime()
-                    ? require('../../images/isha.png')
-                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
-                      new Date(
-                        moment()
-                          .set('hour', prayerTimes.Maghrib.hr)
-                          .set('minute', prayerTimes.Maghrib.min)
-                          .set('second', 0)
-                          .set('millisecond', 0),
-                      ).getTime()
-                    ? require('../../images/maghrib.png')
-                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
-                      new Date(
-                        moment()
-                          .set('hour', prayerTimes.Asr.hr)
-                          .set('minute', prayerTimes.Asr.min)
-                          .set('second', 0)
-                          .set('millisecond', 0),
-                      ).getTime()
-                    ? require('../../images/asr.png')
-                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
-                      new Date(
-                        moment()
-                          .set('hour', prayerTimes.Dhuhr.hr)
-                          .set('minute', prayerTimes.Dhuhr.min)
-                          .set('second', 0)
-                          .set('millisecond', 0),
-                      ).getTime()
-                    ? require('../../images/dhuhr.png')
-                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
-                      new Date(
-                        moment()
-                          .set('hour', prayerTimes.Fajr.hr)
-                          .set('minute', prayerTimes.Fajr.min)
-                          .set('second', 0)
-                          .set('millisecond', 0),
-                      ).getTime()
-                    ? require('../../images/fajr.png')
-                    : null
-                }>
+                source={{uri: imgMap[random]}}>
                 {/* <View style={{backgroundColor: 'pink'}}></View> */}
                 <>
                   <View style={{backgroundColor: 'pink'}}>
