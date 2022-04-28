@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -19,9 +19,9 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const NUM_OF_LINES = 4;
 import Geolocation from '@react-native-community/geolocation';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
-import {SkypeIndicator} from 'react-native-indicators';
+import { SkypeIndicator } from 'react-native-indicators';
 import moment from 'moment';
-import {hasPermission} from '../Hooks/LocationPermission';
+import { hasPermission } from '../Hooks/LocationPermission';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // import RNLocation from 'react-native-location';
@@ -29,10 +29,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import LocationEnabler from 'react-native-location-enabler';
 import axios from 'axios';
 
-import {MMKV} from 'react-native-mmkv';
+import { MMKV } from 'react-native-mmkv';
 
 const {
-  PRIORITIES: {HIGH_ACCURACY},
+  PRIORITIES: { HIGH_ACCURACY },
   useLocationSettings,
 } = LocationEnabler;
 
@@ -50,7 +50,7 @@ function normalize(size) {
   }
 }
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const [isLoading, setLoading] = useState(true);
   const [prayerLoading, setPrayerLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -118,7 +118,7 @@ const Home = ({navigation}) => {
           setLocPermission(false);
           setLocLoading(false);
         },
-        {enableHighAccuracy: true, timeout: 500000, maximumAge: 10000},
+        { enableHighAccuracy: true, timeout: 500000, maximumAge: 10000 },
       );
     }
   });
@@ -141,10 +141,10 @@ const Home = ({navigation}) => {
           const resp = res.data.data.timings;
           Object.keys(resp).forEach(
             key =>
-              (resp[key] = {
-                hr: resp[key].split(' ')[0].split(':')[0],
-                min: resp[key].split(' ')[0].split(':')[1],
-              }),
+            (resp[key] = {
+              hr: resp[key].split(' ')[0].split(':')[0],
+              min: resp[key].split(' ')[0].split(':')[1],
+            }),
           );
           setPrayerTimes(resp);
           setDate(res.data.data.date);
@@ -192,73 +192,14 @@ const Home = ({navigation}) => {
                   prayerLoading || Object.keys(prayerTimes).length < 9
                     ? 0.2
                     : new Date('2022-04-26T15:50:39+05:30').getTime() >=
-                        new Date(
-                          moment()
-                            .set('hour', prayerTimes.Maghrib.hr)
-                            .set('minute', prayerTimes.Maghrib.min)
-                            .set('second', 0)
-                            .set('millisecond', 0),
-                        ).getTime() ||
-                      new Date('2022-04-26T15:50:39+05:30').getTime() <
-                        new Date(
-                          moment()
-                            .set('hour', prayerTimes.Fajr.hr)
-                            .set('minute', prayerTimes.Fajr.min)
-                            .set('second', 0)
-                            .set('millisecond', 0),
-                        ).getTime()
-                    ? 0.25
-                    : 0.45
-                }
-                style={styles.image}
-                source={
-                  prayerLoading || Object.keys(prayerTimes).length < 9
-                    ? null
-                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
-                        new Date(
-                          moment()
-                            .set('hour', prayerTimes.Isha.hr)
-                            .set('minute', prayerTimes.Isha.min)
-                            .set('second', 0)
-                            .set('millisecond', 0),
-                        ).getTime() ||
-                      new Date('2022-04-26T15:50:39+05:30').getTime() <
-                        new Date(
-                          moment()
-                            .set('hour', prayerTimes.Fajr.hr)
-                            .set('minute', prayerTimes.Fajr.min)
-                            .set('second', 0)
-                            .set('millisecond', 0),
-                        ).getTime()
-                    ? require('../../images/isha.png')
-                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
                       new Date(
                         moment()
                           .set('hour', prayerTimes.Maghrib.hr)
                           .set('minute', prayerTimes.Maghrib.min)
                           .set('second', 0)
                           .set('millisecond', 0),
-                      ).getTime()
-                    ? require('../../images/maghrib.png')
-                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
-                      new Date(
-                        moment()
-                          .set('hour', prayerTimes.Asr.hr)
-                          .set('minute', prayerTimes.Asr.min)
-                          .set('second', 0)
-                          .set('millisecond', 0),
-                      ).getTime()
-                    ? require('../../images/asr.png')
-                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
-                      new Date(
-                        moment()
-                          .set('hour', prayerTimes.Dhuhr.hr)
-                          .set('minute', prayerTimes.Dhuhr.min)
-                          .set('second', 0)
-                          .set('millisecond', 0),
-                      ).getTime()
-                    ? require('../../images/dhuhr.png')
-                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
+                      ).getTime() ||
+                      new Date('2022-04-26T15:50:39+05:30').getTime() <
                       new Date(
                         moment()
                           .set('hour', prayerTimes.Fajr.hr)
@@ -266,12 +207,71 @@ const Home = ({navigation}) => {
                           .set('second', 0)
                           .set('millisecond', 0),
                       ).getTime()
-                    ? require('../../images/fajr.png')
-                    : null
+                      ? 0.25
+                      : 0.45
+                }
+                style={styles.image}
+                source={
+                  prayerLoading || Object.keys(prayerTimes).length < 9
+                    ? null
+                    : new Date('2022-04-26T15:50:39+05:30').getTime() >=
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes.Isha.hr)
+                          .set('minute', prayerTimes.Isha.min)
+                          .set('second', 0)
+                          .set('millisecond', 0),
+                      ).getTime() ||
+                      new Date('2022-04-26T15:50:39+05:30').getTime() <
+                      new Date(
+                        moment()
+                          .set('hour', prayerTimes.Fajr.hr)
+                          .set('minute', prayerTimes.Fajr.min)
+                          .set('second', 0)
+                          .set('millisecond', 0),
+                      ).getTime()
+                      ? require('../../images/isha.png')
+                      : new Date('2022-04-26T15:50:39+05:30').getTime() >=
+                        new Date(
+                          moment()
+                            .set('hour', prayerTimes.Maghrib.hr)
+                            .set('minute', prayerTimes.Maghrib.min)
+                            .set('second', 0)
+                            .set('millisecond', 0),
+                        ).getTime()
+                        ? require('../../images/maghrib.png')
+                        : new Date('2022-04-26T15:50:39+05:30').getTime() >=
+                          new Date(
+                            moment()
+                              .set('hour', prayerTimes.Asr.hr)
+                              .set('minute', prayerTimes.Asr.min)
+                              .set('second', 0)
+                              .set('millisecond', 0),
+                          ).getTime()
+                          ? require('../../images/asr.png')
+                          : new Date('2022-04-26T15:50:39+05:30').getTime() >=
+                            new Date(
+                              moment()
+                                .set('hour', prayerTimes.Dhuhr.hr)
+                                .set('minute', prayerTimes.Dhuhr.min)
+                                .set('second', 0)
+                                .set('millisecond', 0),
+                            ).getTime()
+                            ? require('../../images/dhuhr.png')
+                            : new Date('2022-04-26T15:50:39+05:30').getTime() >=
+                              new Date(
+                                moment()
+                                  .set('hour', prayerTimes.Fajr.hr)
+                                  .set('minute', prayerTimes.Fajr.min)
+                                  .set('second', 0)
+                                  .set('millisecond', 0),
+                              ).getTime()
+                              ? require('../../images/fajr.png')
+                              : null
                 }>
                 {/* <View style={{backgroundColor: 'pink'}}></View> */}
                 <>
-                  <View style={{backgroundColor: 'pink'}}>
+                  <View style={{ backgroundColor: 'pink' }}>
                     <Text
                       style={{
                         textAlign: 'center',
@@ -317,59 +317,14 @@ const Home = ({navigation}) => {
                         {prayerLoading || Object.keys(prayerTimes).length < 9
                           ? 'Loading...'
                           : new Date().getTime() >=
-                              new Date(
-                                moment()
-                                  .set('hour', prayerTimes.Isha.hr)
-                                  .set('minute', prayerTimes.Isha.min)
-                                  .set('second', 0)
-                                  .set('millisecond', 0),
-                              ).getTime() ||
+                            new Date(
+                              moment()
+                                .set('hour', prayerTimes.Isha.hr)
+                                .set('minute', prayerTimes.Isha.min)
+                                .set('second', 0)
+                                .set('millisecond', 0),
+                            ).getTime() ||
                             new Date().getTime() <
-                              new Date(
-                                moment()
-                                  .set('hour', prayerTimes.Fajr.hr)
-                                  .set('minute', prayerTimes.Fajr.min)
-                                  .set('second', 0)
-                                  .set('millisecond', 0),
-                              ).getTime()
-                          ? 'Isha'
-                          : new Date().getTime() >=
-                            new Date(
-                              moment()
-                                .set('hour', prayerTimes.Maghrib.hr)
-                                .set('minute', prayerTimes.Maghrib.min)
-                                .set('second', 0)
-                                .set('millisecond', 0),
-                            ).getTime()
-                          ? 'Maghrib'
-                          : new Date().getTime() >=
-                            new Date(
-                              moment()
-                                .set('hour', prayerTimes.Asr.hr)
-                                .set('minute', prayerTimes.Asr.min)
-                                .set('second', 0)
-                                .set('millisecond', 0),
-                            ).getTime()
-                          ? 'Asr'
-                          : new Date().getTime() >=
-                            new Date(
-                              moment()
-                                .set('hour', prayerTimes.Dhuhr.hr)
-                                .set('minute', prayerTimes.Dhuhr.min)
-                                .set('second', 0)
-                                .set('millisecond', 0),
-                            ).getTime()
-                          ? 'Dhuhr'
-                          : new Date().getTime() >=
-                            new Date(
-                              moment()
-                                .set('hour', prayerTimes.Sunrise.hr)
-                                .set('minute', prayerTimes.Sunrise.min)
-                                .set('second', 0)
-                                .set('millisecond', 0),
-                            ).getTime()
-                          ? 'Sunrise'
-                          : new Date().getTime() >=
                             new Date(
                               moment()
                                 .set('hour', prayerTimes.Fajr.hr)
@@ -377,8 +332,53 @@ const Home = ({navigation}) => {
                                 .set('second', 0)
                                 .set('millisecond', 0),
                             ).getTime()
-                          ? 'Fajr'
-                          : null}
+                            ? 'Isha'
+                            : new Date().getTime() >=
+                              new Date(
+                                moment()
+                                  .set('hour', prayerTimes.Maghrib.hr)
+                                  .set('minute', prayerTimes.Maghrib.min)
+                                  .set('second', 0)
+                                  .set('millisecond', 0),
+                              ).getTime()
+                              ? 'Maghrib'
+                              : new Date().getTime() >=
+                                new Date(
+                                  moment()
+                                    .set('hour', prayerTimes.Asr.hr)
+                                    .set('minute', prayerTimes.Asr.min)
+                                    .set('second', 0)
+                                    .set('millisecond', 0),
+                                ).getTime()
+                                ? 'Asr'
+                                : new Date().getTime() >=
+                                  new Date(
+                                    moment()
+                                      .set('hour', prayerTimes.Dhuhr.hr)
+                                      .set('minute', prayerTimes.Dhuhr.min)
+                                      .set('second', 0)
+                                      .set('millisecond', 0),
+                                  ).getTime()
+                                  ? 'Dhuhr'
+                                  : new Date().getTime() >=
+                                    new Date(
+                                      moment()
+                                        .set('hour', prayerTimes.Sunrise.hr)
+                                        .set('minute', prayerTimes.Sunrise.min)
+                                        .set('second', 0)
+                                        .set('millisecond', 0),
+                                    ).getTime()
+                                    ? 'Sunrise'
+                                    : new Date().getTime() >=
+                                      new Date(
+                                        moment()
+                                          .set('hour', prayerTimes.Fajr.hr)
+                                          .set('minute', prayerTimes.Fajr.min)
+                                          .set('second', 0)
+                                          .set('millisecond', 0),
+                                      ).getTime()
+                                      ? 'Fajr'
+                                      : null}
                       </Text>
                       <Text
                         style={{
@@ -405,56 +405,56 @@ const Home = ({navigation}) => {
                         {prayerLoading || Object.keys(prayerTimes).length < 9
                           ? 'Loading...'
                           : new Date().getTime() >=
-                              new Date(
-                                moment()
-                                  .set('hour', prayerTimes?.Isha?.hr)
-                                  .set('minute', prayerTimes?.Isha?.min),
-                              ).getTime() ||
+                            new Date(
+                              moment()
+                                .set('hour', prayerTimes?.Isha?.hr)
+                                .set('minute', prayerTimes?.Isha?.min),
+                            ).getTime() ||
                             new Date().getTime() <
+                            new Date(
+                              moment()
+                                .set('hour', prayerTimes?.Fajr?.hr)
+                                .set('minute', prayerTimes?.Fajr?.min),
+                            ).getTime()
+                            ? 'Fajr'
+                            : new Date().getTime() >=
                               new Date(
                                 moment()
-                                  .set('hour', prayerTimes?.Fajr?.hr)
-                                  .set('minute', prayerTimes?.Fajr?.min),
+                                  .set('hour', prayerTimes?.Maghrib?.hr)
+                                  .set('minute', prayerTimes?.Maghrib?.min),
                               ).getTime()
-                          ? 'Fajr'
-                          : new Date().getTime() >=
-                            new Date(
-                              moment()
-                                .set('hour', prayerTimes?.Maghrib?.hr)
-                                .set('minute', prayerTimes?.Maghrib?.min),
-                            ).getTime()
-                          ? 'Isha'
-                          : new Date().getTime() >=
-                            new Date(
-                              moment()
-                                .set('hour', prayerTimes?.Asr?.hr)
-                                .set('minute', prayerTimes?.Asr?.min),
-                            ).getTime()
-                          ? 'Maghrib'
-                          : new Date().getTime() >=
-                            new Date(
-                              moment()
-                                .set('hour', prayerTimes?.Dhuhr?.hr)
-                                .set('minute', prayerTimes?.Dhuhr?.min),
-                            ).getTime()
-                          ? 'Asr'
-                          : new Date().getTime() >=
-                            new Date(
-                              moment()
-                                .set('hour', prayerTimes?.Fajr.hr)
-                                .set('minute', prayerTimes?.Fajr.min),
-                            ).getTime()
-                          ? 'Dhuhr'
-                          : new Date().getTime() >=
-                            new Date(
-                              moment()
-                                .set('hour', prayerTimes.Sunrise.hr)
-                                .set('minute', prayerTimes.Sunrise.min)
-                                .set('second', 0)
-                                .set('millisecond', 0),
-                            ).getTime()
-                          ? 'Sunrise'
-                          : null}
+                              ? 'Isha'
+                              : new Date().getTime() >=
+                                new Date(
+                                  moment()
+                                    .set('hour', prayerTimes?.Asr?.hr)
+                                    .set('minute', prayerTimes?.Asr?.min),
+                                ).getTime()
+                                ? 'Maghrib'
+                                : new Date().getTime() >=
+                                  new Date(
+                                    moment()
+                                      .set('hour', prayerTimes?.Dhuhr?.hr)
+                                      .set('minute', prayerTimes?.Dhuhr?.min),
+                                  ).getTime()
+                                  ? 'Asr'
+                                  : new Date().getTime() >=
+                                    new Date(
+                                      moment()
+                                        .set('hour', prayerTimes?.Fajr.hr)
+                                        .set('minute', prayerTimes?.Fajr.min),
+                                    ).getTime()
+                                    ? 'Dhuhr'
+                                    : new Date().getTime() >=
+                                      new Date(
+                                        moment()
+                                          .set('hour', prayerTimes.Sunrise.hr)
+                                          .set('minute', prayerTimes.Sunrise.min)
+                                          .set('second', 0)
+                                          .set('millisecond', 0),
+                                      ).getTime()
+                                      ? 'Sunrise'
+                                      : null}
                       </Text>
                       <Text
                         style={{
@@ -469,74 +469,74 @@ const Home = ({navigation}) => {
                         {prayerLoading || Object.keys(prayerTimes).length < 9
                           ? 'Loading...'
                           : new Date().getTime() >=
-                              new Date(
-                                moment()
-                                  .set('hour', prayerTimes?.Isha?.hr)
-                                  .set('minute', prayerTimes?.Isha?.min),
-                              ).getTime() ||
+                            new Date(
+                              moment()
+                                .set('hour', prayerTimes?.Isha?.hr)
+                                .set('minute', prayerTimes?.Isha?.min),
+                            ).getTime() ||
                             new Date().getTime() <
-                              new Date(
-                                moment()
-                                  .set('hour', prayerTimes?.Fajr?.hr)
-                                  .set('minute', prayerTimes?.Fajr?.min),
-                              ).getTime()
-                          ? moment()
+                            new Date(
+                              moment()
+                                .set('hour', prayerTimes?.Fajr?.hr)
+                                .set('minute', prayerTimes?.Fajr?.min),
+                            ).getTime()
+                            ? moment()
                               .set('hour', prayerTimes?.Fajr?.hr)
                               .set('minute', prayerTimes?.Fajr?.min)
                               .format('h:mm A')
-                          : new Date().getTime() >=
-                            new Date(
-                              moment()
-                                .set('hour', prayerTimes?.Maghrib?.hr)
-                                .set('minute', prayerTimes?.Maghrib?.min),
-                            ).getTime()
-                          ? moment()
-                              .set('hour', prayerTimes?.Isha?.hr)
-                              .set('minute', prayerTimes?.Isha?.min)
-                              .format('h:mm A')
-                          : new Date().getTime() >=
-                            new Date(
-                              moment()
-                                .set('hour', prayerTimes?.Asr?.hr)
-                                .set('minute', prayerTimes?.Asr?.min),
-                            ).getTime()
-                          ? moment()
-                              .set('hour', prayerTimes?.Maghrib?.hr)
-                              .set('minute', prayerTimes?.Maghrib?.min)
-                              .format('h:mm A')
-                          : new Date().getTime() >=
-                            new Date(
-                              moment()
-                                .set('hour', prayerTimes?.Dhuhr?.hr)
-                                .set('minute', prayerTimes?.Dhuhr?.min),
-                            ).getTime()
-                          ? moment()
-                              .set('hour', prayerTimes?.Asr?.hr)
-                              .set('minute', prayerTimes?.Asr?.min)
-                              .format('h:mm A')
-                          : new Date().getTime() >=
-                            new Date(
-                              moment()
-                                .set('hour', prayerTimes.Sunrise.hr)
-                                .set('minute', prayerTimes.Sunrise.min)
-                                .set('second', 0)
-                                .set('millisecond', 0),
-                            ).getTime()
-                          ? moment()
-                              .set('hour', prayerTimes?.Dhuhr?.hr)
-                              .set('minute', prayerTimes?.Dhuhr?.min)
-                              .format('h:mm A')
-                          : new Date().getTime() >=
-                            new Date(
-                              moment()
-                                .set('hour', prayerTimes?.Fajr.hr)
-                                .set('minute', prayerTimes?.Fajr.min),
-                            ).getTime()
-                          ? moment()
-                              .set('hour', prayerTimes?.Sunrise?.hr)
-                              .set('minute', prayerTimes?.Sunrise?.min)
-                              .format('h:mm A')
-                          : null}
+                            : new Date().getTime() >=
+                              new Date(
+                                moment()
+                                  .set('hour', prayerTimes?.Maghrib?.hr)
+                                  .set('minute', prayerTimes?.Maghrib?.min),
+                              ).getTime()
+                              ? moment()
+                                .set('hour', prayerTimes?.Isha?.hr)
+                                .set('minute', prayerTimes?.Isha?.min)
+                                .format('h:mm A')
+                              : new Date().getTime() >=
+                                new Date(
+                                  moment()
+                                    .set('hour', prayerTimes?.Asr?.hr)
+                                    .set('minute', prayerTimes?.Asr?.min),
+                                ).getTime()
+                                ? moment()
+                                  .set('hour', prayerTimes?.Maghrib?.hr)
+                                  .set('minute', prayerTimes?.Maghrib?.min)
+                                  .format('h:mm A')
+                                : new Date().getTime() >=
+                                  new Date(
+                                    moment()
+                                      .set('hour', prayerTimes?.Dhuhr?.hr)
+                                      .set('minute', prayerTimes?.Dhuhr?.min),
+                                  ).getTime()
+                                  ? moment()
+                                    .set('hour', prayerTimes?.Asr?.hr)
+                                    .set('minute', prayerTimes?.Asr?.min)
+                                    .format('h:mm A')
+                                  : new Date().getTime() >=
+                                    new Date(
+                                      moment()
+                                        .set('hour', prayerTimes.Sunrise.hr)
+                                        .set('minute', prayerTimes.Sunrise.min)
+                                        .set('second', 0)
+                                        .set('millisecond', 0),
+                                    ).getTime()
+                                    ? moment()
+                                      .set('hour', prayerTimes?.Dhuhr?.hr)
+                                      .set('minute', prayerTimes?.Dhuhr?.min)
+                                      .format('h:mm A')
+                                    : new Date().getTime() >=
+                                      new Date(
+                                        moment()
+                                          .set('hour', prayerTimes?.Fajr.hr)
+                                          .set('minute', prayerTimes?.Fajr.min),
+                                      ).getTime()
+                                      ? moment()
+                                        .set('hour', prayerTimes?.Sunrise?.hr)
+                                        .set('minute', prayerTimes?.Sunrise?.min)
+                                        .format('h:mm A')
+                                      : null}
                       </Text>
                     </View>
                     <View
@@ -704,17 +704,75 @@ const Home = ({navigation}) => {
           );
         })} */}
 
-        <View style={{flex: 1, padding: 2}}>
+        <View style={{ flex: 1, padding: 2 }}>
           {isLoading || (locPermission && prayerLoading) || locLoading ? (
             <OrientationLoadingOverlay
               visible={true}
               color="white"
               indicatorSize="large"
               messageFontSize={24}
-              // message="Loading... 😀😀😀"
+            // message="Loading... 😀😀😀"
             />
           ) : (
             <View>
+              <View style={{
+                backgroundColor: 'white',
+                width: windowWidth / 1.1,
+                height: 'auto',
+                margin: 10,
+                elevation: 5,
+                alignSelf: 'center',
+                borderRadius: 2,
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 3,
+                },
+                shadowOpacity: 0.27,
+                shadowRadius: 4.65,
+                borderRadius: 20,
+              }}>
+                <Text style={{
+                  fontSize: normalize(18),
+                  fontWeight: '600',
+                  color: 'black',
+                  marginLeft: 10,
+                  marginTop: 10,
+                }}>Verses</Text>
+                <Text
+                  style={{
+                    fontSize: normalize(14),
+                    fontWeight: '400',
+                    color: 'blue',
+                    marginLeft: 10,
+                    // flexWrap: 'wrap',
+                  }}>
+                  by cool & cool
+                </Text>
+                <Text
+                  style={{
+                    fontSize: normalize(14),
+                    fontWeight: '400',
+                    color: 'black',
+                    marginLeft: 10,
+                    // flexWrap: 'wrap',
+                  }}>
+                  surat-un-nissa[4-60]
+                </Text>
+                <Text
+                  style={{
+                    fontSize: normalize(14),
+                    fontWeight: '400',
+                    color: 'black',
+                    marginLeft: 10,
+                    marginTop: 10,
+                    paddingHorizontal: normalize(10),
+                    paddingVertical: normalize(10)
+                    // flexWrap: 'wrap',
+                  }}>
+                  وَءَاتُوا۟ ٱلْيَتَـٰمَىٰٓ أَمْوَٰلَهُمْ ۖ وَلَا تَتَبَدَّلُوا۟ ٱلْخَبِيثَ بِٱلطَّيِّبِ ۖ وَلَا تَأْكُلُوٓا۟ أَمْوَٰلَهُمْ إِلَىٰٓ أَمْوَٰلِكُمْ ۚ إِنَّهُۥ كَانَ حُوبًا كَبِيرًا
+                </Text>
+              </View>
               {data.map(item => {
                 return (
                   <View style={styles.umrah} key={item._id}>

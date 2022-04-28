@@ -16,6 +16,7 @@ import {
 import {SkypeIndicator} from 'react-native-indicators';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {MMKV} from 'react-native-mmkv';
 
 const windowWidth = Dimensions.get('window').width;
@@ -39,32 +40,20 @@ const ArabicAyahs = ({route, navigation}) => {
 
   const storage = new MMKV();
 
-  // const getSurahsAyahs = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `http://api.alquran.cloud/v1/surah/${route.params.code}`,
-  //     );
-  //     const json = await response.json();
-  //     setData(json.data.ayahs);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   useEffect(() => {
     const quran = JSON.parse(storage.getString('quran'));
-    const currentSurah = quran.filter(
-      surah => surah.number === route.params.code,
-    )[0];
-    setData(currentSurah);
-    setQuran(quran);
+    const new_quran = quran
+      .map(surah => surah.ayahs.map(ayah => ({...ayah, surah: surah.name})))
+      .flat();
+    // const currentSurah = quran.filter(
+    //   surah => surah.number === route.params.code,
+    // )[0];
+    // setData(currentSurah);
+    setQuran(new_quran);
     setLoading(false);
   }, []);
   var page = 1;
 
-  const [focused, setFocused] = useState('');
   return (
     <View style={{flex: 1, padding: 0}}>
       <View style={styles.topnav}>
@@ -86,80 +75,102 @@ const ArabicAyahs = ({route, navigation}) => {
           // message="Loading... 😀😀😀"
         />
       ) : (
-        // <ScrollView>
-
-        // <FlatList
-        //   data={data.ayahs}
-        //   keyExtractor={({number}, index) => number}
-        //   renderItem={({item}) => (
-        //     <View style={styles.surah}>
-        //       <Text style={styles.number}>{item.number}.</Text>
-        //       <Text style={styles.surahArabic}>{item.text}</Text>
-        //       {/* <Image
-        //         style={styles.image}
-        //         source={require('../../images/quran.png')}/> */}
-        //       <Text
-        //         style={{
-        //           marginLeft: 200,
-        //           marginTop: 10,
-        //           fontSize: normalize(14),
-        //           fontWeight: '600',
-        //           color: '#555',
-        //         }}>
-        //         Number in Surah: {item.numberInSurah}
-        //       </Text>
-        //       <Text
-        //         style={{
-        //           marginLeft: 200,
-        //           marginTop: 5,
-        //           fontSize: normalize(14),
-        //           fontWeight: '600',
-        //           color: '#555',
-        //         }}>
-        //         Ruku: {item.ruku}
-        //       </Text>
-        //       {item.sajda ? (
-        //         <>
-        //           <Text
-        //             style={{
-        //               marginLeft: 250,
-        //             }}>
-        //             Sajda
-        //           </Text>
-        //         </>
-        //       ) : null}
-        //     </View>
-        //   )}
-        // />
-        //</ScrollView>
-        <ScrollView>
-          {quran.map(surah => {
-            return surah.ayahs.map(ayah => {
-              if (page === ayah.page) {
+        <FlatList
+        // style={styles.surah}
+          data={quran}
+          keyExtractor={it => it.number}
+          renderItem={({item}) => {
+            if (page === item.page) {
+              if (item.numberInSurah === 1) {
                 return (
-                  <Text
-                    key={Math.random() * 10000}
-                    style={{fontSize: 20, paddingHorizontal: normalize(10)}}>
-                    {ayah.text}
-                  </Text>
-                );
-              } else {
-                return (
-                  <View key={Math.random() * 10000}>
-                    <Text
-                      style={{fontSize: 18, paddingHorizontal: normalize(10)}}>
-                      {page++}
-                    </Text>
-                    <Text
-                      style={{fontSize: 20, paddingHorizontal: normalize(10)}}>
-                      {ayah.text}
-                    </Text>
+                  <View 
+                  style={styles.surah}
+                  >
+                    <Text style={{color: '#ff0000', 
+                    fontSize: 20,
+                    alignSelf:'center'
+                    }}>{item.surah}</Text>
+                    <Text>{item.text}</Text>
                   </View>
                 );
               }
-            });
-          })}
-        </ScrollView>
+              return <View 
+              style={styles.pageStyle2}
+              >
+                <Text style={{
+                color: '#000000',
+                alignSelf: 'center',
+                fontSize: 20,
+                paddingHorizontal: normalize(20),
+              }}>{item.text}, 
+              <View style={{
+                backgroundColor: 'white',
+                // alignItems: 'center',
+                borderRadius: 10,
+                borderWidth: 1,
+                borderColor: '#000',
+                alignContent: 'flex-end'
+              }}>
+              {/* <MaterialCommunityIcon name='circle-outline'> */}
+                <Text style={{
+                fontSize: 14,
+                fontWeight: '600',
+                alignItems: 'center',
+              }} >
+                {item.numberInSurah}
+                </Text>
+              {/* </MaterialCommunityIcon> */}
+                </View>
+                </Text>
+              </View>;
+            } else {
+              page = item.page;
+              return (
+                <View 
+                style={styles.pageStyle}
+                >
+                  <Text
+                    style={{fontSize: 18, 
+                    paddingHorizontal: normalize(10),
+                    alignSelf: 'center',
+                    color: '#05d944',
+                    paddingVertical: normalize(10)}}>
+                    {page}
+                  </Text>
+                  {item.numberInSurah === 1 ? (
+                    <View 
+                    style={styles.pageStyle1}
+                    >
+                      <Text style={{color: '#05d944', 
+                      fontSize: 20,
+                      alignSelf: 'center'
+                      }}>{item.surah}</Text>
+                      <Text style={{
+                        alignSelf: 'center',
+                        fontSize: 18,
+                        color: '#05d944',
+                        paddingHorizontal: normalize(10)
+                      }}>{item.text}</Text>
+                    </View>
+                  ) : (
+                    // <View
+                    // // style={styles.pageStyle}
+                    // >
+                    // <Text 
+                    // style={{
+                    //   color: '#000000',
+                    //   fontSize: 16,
+                    //   alignSelf: 'center',
+                    //   paddingHorizontal: normalize(20)
+                    // }}>{item.text}{item.numberInSurah}</Text>
+                    // </View>
+                    null
+                  )}
+                </View>
+              );
+            }
+          }}
+        />
       )}
     </View>
   );
@@ -181,21 +192,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: normalize(22),
     color: 'white',
-  },
-  icon: {
-    marginLeft: 20,
-    marginTop: 10,
-  },
-  image: {
-    marginTop: 50,
-    marginRight: 120,
-    height: 30,
-    width: 25,
-    backgroundColor: 'grey',
-    alignContent: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'center',
   },
   surah: {
     marginTop: 10,
@@ -253,42 +249,42 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
   },
-  title: {
-    fontSize: 32,
-    color: '#555',
-  },
-  English: {
-    marginTop: 20,
-    marginLeft: 15,
-    height: 30,
-    width: 100,
-    backgroundColor: 'blue',
-    borderRadius: 20,
-    borderColor: 'blue',
-    borderWidth: 1,
-    color: '#555',
-  },
-  Hindi: {
-    marginTop: -29,
-    marginLeft: 155,
-    height: 30,
-    width: 100,
+  pageStyle:{
     backgroundColor: 'white',
-    borderRadius: 20,
-    borderColor: 'blue',
-    borderWidth: 1,
-    color: '#555',
+    marginTop: 10,
+    width: windowWidth/1.1,
+    alignSelf: 'center',
+    padding: 10,
+   marginLeft: 10,
+   marginRight: 10,
+  //  elevation: 5,
+
   },
-  Urdu: {
-    marginTop: -31,
-    marginLeft: 295,
-    height: 30,
-    width: 100,
+  pageStyle1:{
     backgroundColor: 'white',
-    borderRadius: 20,
-    borderColor: 'blue',
-    borderWidth: 1,
-    color: '#555',
+    // marginTop: 10,
+    // flexDirection: 'row',
+    alignItems: 'flex-start',
+    width: windowWidth/1.1,
+    // elevation: 2,
+    alignSelf: 'center',
+  //   padding: 10,
+    marginLeft: 10,
+   marginRight: 10,
+  //  marginBottom: 10,
+  },
+  pageStyle2:{
+    backgroundColor: 'white',
+    // marginTop: 10,
+    // flexDirection: 'row',
+    alignItems: 'flex-start',
+    width: windowWidth/1.1,
+    // elevation: 2,
+    alignSelf: 'center',
+  //   padding: 10,
+    marginLeft: 10,
+   marginRight: 10,
+  //  marginBottom: 10,
   },
 });
 
