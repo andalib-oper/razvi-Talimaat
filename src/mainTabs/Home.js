@@ -762,6 +762,64 @@ const Home = ({navigation}) => {
             />
           ) : (
             <View>
+              <View style={{
+                backgroundColor: 'white',
+                width: windowWidth / 1.1,
+                height: 'auto',
+                margin: 10,
+                elevation: 5,
+                alignSelf: 'center',
+                borderRadius: 2,
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 3,
+                },
+                shadowOpacity: 0.27,
+                shadowRadius: 4.65,
+                borderRadius: 20,
+              }}>
+                <Text style={{
+                  fontSize: normalize(18),
+                  fontWeight: '600',
+                  color: 'black',
+                  marginLeft: 10,
+                  marginTop: 10,
+                }}>Verses</Text>
+                <Text
+                  style={{
+                    fontSize: normalize(14),
+                    fontWeight: '400',
+                    color: 'blue',
+                    marginLeft: 10,
+                    // flexWrap: 'wrap',
+                  }}>
+                  by cool & cool
+                </Text>
+                <Text
+                  style={{
+                    fontSize: normalize(14),
+                    fontWeight: '400',
+                    color: 'black',
+                    marginLeft: 10,
+                    // flexWrap: 'wrap',
+                  }}>
+                  surat-un-nissa[4-60]
+                </Text>
+                <Text
+                  style={{
+                    fontSize: normalize(14),
+                    fontWeight: '400',
+                    color: 'black',
+                    marginLeft: 10,
+                    marginTop: 10,
+                    paddingHorizontal: normalize(10),
+                    paddingVertical: normalize(10)
+                    // flexWrap: 'wrap',
+                  }}>
+                  وَءَاتُوا۟ ٱلْيَتَـٰمَىٰٓ أَمْوَٰلَهُمْ ۖ وَلَا تَتَبَدَّلُوا۟ ٱلْخَبِيثَ بِٱلطَّيِّبِ ۖ وَلَا تَأْكُلُوٓا۟ أَمْوَٰلَهُمْ إِلَىٰٓ أَمْوَٰلِكُمْ ۚ إِنَّهُۥ كَانَ حُوبًا كَبِيرًا
+                </Text>
+              </View>
               {data.map(item => {
                 return (
                   <View style={styles.umrah} key={item._id}>

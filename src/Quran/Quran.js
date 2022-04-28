@@ -41,17 +41,17 @@ function Arabic({navigation}) {
 
   const storage = new MMKV();
 
-  const getSurahs = async () => {
-    try {
-      const response = await fetch('http://api.alquran.cloud/v1/surah');
-      const json = await response.json();
-      setData(json.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getSurahs = async () => {
+  //   try {
+  //     const response = await fetch('http://api.alquran.cloud/v1/surah');
+  //     const json = await response.json();
+  //     setData(json.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
     // storage.clearAll();
@@ -60,7 +60,7 @@ function Arabic({navigation}) {
       : [];
     if (quran.length === 0) {
       axios
-        .get('http://api.alquran.cloud/v1/quran/quran-unicode')
+        // .get('http://api.alquran.cloud/v1/quran/quran-unicode')
         .then(res => {
           setData(res.data.data.surahs);
           storage.set('quran', JSON.stringify(res.data.data.surahs));
@@ -94,7 +94,8 @@ function Arabic({navigation}) {
                   navigation.navigate('arabicAyahs', {
                     code: item.number,
                   })
-                }>
+                }
+                >
                 <View style={styles.surah}>
                   <Text style={styles.number}>{item.number}.</Text>
                   <View>
@@ -116,7 +117,7 @@ function Arabic({navigation}) {
                         marginTop: 0,
                       }}>
                       <Text style={styles.versesArabic}>
-                        Verses {item.numberOfAyahs}
+                        Verses {item.ayahs.length}
                       </Text>
                     </View>
                   </View>
