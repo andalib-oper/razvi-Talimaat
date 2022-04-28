@@ -81,28 +81,75 @@ const ArabicAyahs = ({route, navigation}) => {
             if (page === item.page) {
               if (item.numberInSurah === 1) {
                 return (
-                  <View>
-                    <Text style={{color: '#ff0000'}}>{item.surah}</Text>
-                    <Text>{item.text}</Text>
+                  <View style={{
+                    // backgroundColor: 'white',
+                    // marginBottom: 10,
+                  }}>
+                    {/* <Text style={{color: '#ff0000'}}>{item.surah}</Text>
+                    <Text style={{
+                      backgroundColor: 'grey'
+                    }}>{item.text}</Text> */}
                   </View>
                 );
               }
-              return <Text>{item.text}</Text>;
+              return <Text style={{backgroundColor: 'white',
+              alignSelf: 'center',
+              width: windowWidth/1.1,
+              textAlign: 'center',
+              fontSize: 18,
+              flexWrap: 'wrap',
+              // marginTop: 5,
+              paddingHorizontal: normalize(10),
+            }}>{item.text}.{item.numberInSurah}</Text>;
             } else {
               page = item.page;
               return (
-                <View>
+                <View style={{
+                  // backgroundColor: 'white',
+                  alignSelf: 'center',
+                  width: windowWidth/1.1
+                }}>
                   <Text
-                    style={{fontSize: 18, paddingHorizontal: normalize(10)}}>
+                    style={{fontSize: 18, 
+                      marginTop: 20,
+                      paddingVertical: normalize(10),
+                      width: windowWidth/1.1,
+                      backgroundColor: 'white',
+                      color: '#05d944',
+                      textAlign: 'center',
+                      flexWrap: 'wrap'
+                    // paddingHorizontal: normalize(10)
+                    }}>
                     {page}
                   </Text>
                   {item.numberInSurah === 1 ? (
-                    <View>
-                      <Text style={{color: '#ff0000'}}>{item.surah}</Text>
-                      <Text>{item.text}</Text>
+                    <View style={{
+                      backgroundColor: 'white',
+                      // flexWrap: 'wrap',
+                      paddingHorizontal: normalize(10)
+                    }}>
+                      <Text style={{
+                        color: '#05d944',
+                        fontSize: 18,
+                        alignSelf: 'center',
+                        textAlign: 'center'
+                        
+                        }}>{item.surah}</Text>
+                      <Text style={{
+                        color: '#05d944',
+                        fontSize: 18,
+                        alignSelf: 'center',
+                        textAlign: 'center'
+                        }}>{item.text}</Text>
                     </View>
                   ) : (
-                    <Text>{item.text}</Text>
+                    <Text style={{
+                      backgroundColor: 'white',
+                      fontSize: 18,
+                      paddingHorizontal: normalize(20),
+                      textAlign: 'center'
+                      // alignSelf: 'center',
+                  }}>{item.text}</Text>
                   )}
                 </View>
               );
@@ -164,80 +211,11 @@ const styles = StyleSheet.create({
     fontSize: normalize(12),
     color: '#555',
   },
-  surahArabic: {
-    marginTop: -20,
-    marginRight: 20,
-    marginLeft: 40,
-    fontSize: normalize(16),
-    fontWeight: '600',
-    color: '#555',
-    // width: 200
-  },
-  surahEnglish: {
-    marginTop: 2,
-    marginLeft: 40,
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#555',
-  },
-  verses: {
-    marginTop: 2,
-    fontSize: 14,
-    marginLeft: 40,
-    color: '#555',
-  },
-  revelation: {
-    marginTop: 2,
-    fontSize: 14,
-    marginLeft: 40,
-    color: '#555',
-  },
-  iconheart: {
-    marginLeft: 330,
-    marginTop: -51,
-  },
   item: {
     backgroundColor: '#f9c2ff',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
-    color: '#555',
-  },
-  English: {
-    marginTop: 20,
-    marginLeft: 15,
-    height: 30,
-    width: 100,
-    backgroundColor: 'blue',
-    borderRadius: 20,
-    borderColor: 'blue',
-    borderWidth: 1,
-    color: '#555',
-  },
-  Hindi: {
-    marginTop: -29,
-    marginLeft: 155,
-    height: 30,
-    width: 100,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    borderColor: 'blue',
-    borderWidth: 1,
-    color: '#555',
-  },
-  Urdu: {
-    marginTop: -31,
-    marginLeft: 295,
-    height: 30,
-    width: 100,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    borderColor: 'blue',
-    borderWidth: 1,
-    color: '#555',
   },
 });
 
