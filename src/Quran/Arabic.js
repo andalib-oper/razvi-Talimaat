@@ -15,6 +15,7 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {SkypeIndicator} from 'react-native-indicators';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
+import axios from 'axios';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -36,9 +37,8 @@ const Arabic = ({navigation}) => {
 
   const getSurahs = async () => {
     try {
-      const response = await fetch('http://api.alquran.cloud/v1/surah');
-      const json = await response.json();
-      setData(json.data);
+      const response = await axios.get('http://api.alquran.cloud/v1/surah');
+      setData(response.data.data);
     } catch (error) {
       console.error(error);
     } finally {
