@@ -216,9 +216,9 @@ android {
     signingConfigs {
         release {
             storeFile file('my_key.keystore')
-            storePassword 'anasalam786'
+            storePassword 'Andalib14'
             keyAlias 'app_key'
-            keyPassword 'anasalam786'
+            keyPassword 'Andalib14'
         }
         debug {
             storeFile file('debug.keystore')

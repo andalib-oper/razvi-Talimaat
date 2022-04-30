@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,10 +13,10 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import {SkypeIndicator} from 'react-native-indicators';
+import { SkypeIndicator } from 'react-native-indicators';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {MMKV} from 'react-native-mmkv';
+import { MMKV } from 'react-native-mmkv';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -32,7 +32,7 @@ function normalize(size) {
   }
 }
 
-const Page = ({pageContent}) => {
+const Page = ({ pageContent }) => {
   // console.log(pageContent);
 
   const toArabic = number => {
@@ -44,70 +44,152 @@ const Page = ({pageContent}) => {
   };
 
   return (
-    <View>
-      <Text>{pageContent[0].page}</Text>
-      <Text
+    <View style={{
+      // backgroundColor: 'green',
+      // flexDirection: 'column',
+      paddingVertical: normalize(10),
+      backgroundColor: 'white',
+      width: windowWidth / 1.1,
+      height: 'auto',
+      margin: 10,
+      elevation: 2,
+      alignSelf: 'center',
+      borderRadius: 2,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 3,
+      },
+      shadowOpacity: 0.27,
+      shadowRadius: 4.65,
+      borderRadius: 2,
+    }}>
+      <Image
+        source={require('../../images/borderquran2.jpg')}
         style={{
+          height: 'auto',
+        paddingVertical: normalize(25),
+        paddingHorizontal: normalize(15),
+          width: windowWidth/2,
+          alignSelf: 'center'
+        }}/>
+        <View style={{
+          // backgroundColor: 'purple',
           flexDirection: 'row',
-          flexWrap: 'wrap',
-          alignContent: 'center',
-          // textAlign: 'justify',
-          // direction: 'rtl',
-          // width: '100%',
-        }}
-        adjustsFontSizeToFit>
-        {pageContent.map((content, idx) => {
-          return (
-            <>
-              {content.numberInSurah === 1 && (
-                <View style={{width: windowWidth}}>
-                  <Text
-                    key={`${content.number + 8000}.${idx}`}
-                    style={{
-                      color: '#05d944',
-                      fontSize: 18,
-                      // jus: 'center',
-                      // flex: 1,
-                      textAlign: 'center',
-                      // backgroundColor: 'pink',
-                    }}>
-                    {content.surah}
-                    {/* {'\n'} */}
+          alignItems: 'center',
+          height:'auto'
+        }}>
+          <Text style={{
+            // flexDirection: 'row',
+            // backgroundColor: 'red',
+            color: 'blue',
+            fontSize: 16,
+            margin: 10,
+            paddingVertical: normalize(10),
+            textAlign: 'center',
+            backgroundColor: 'yellow'
+          }}>
+          </Text>
+          <Text style={{
+            flexDirection: 'row',
+            // backgroundColor: 'red',
+            color: 'blue',
+            fontSize: 18,
+            marginLeft: 70,
+            width: '50%',
+            // paddingHorizontal: normalize(5),
+            justifyContent: 'space-between',
+            alignContent: 'center',
+            alignItems: 'center',
+            alignSelf: 'center',
+            // paddingVertical: normalize(10),
+            textAlign: 'center',
+          }}>{pageContent[0].page}
+          </Text>
+        </View>
+        <Text
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            alignContent: 'center',
+            alignSelf: 'center',
+            textAlign: 'center',
+            marginBottom: 20,
+            paddingHorizontal: normalize(10),
+            // backgroundColor: 'green'
+            // textAlign: 'justify',
+            // direction: 'rtl',
+            // width: '100%',
+          }}
+          adjustsFontSizeToFit>
+          {pageContent.map((content, idx) => {
+            return (
+              <>
+                {content.numberInSurah === 1 && (
+                  <View style={{
+                    width: windowWidth / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: normalize(5),
+                    // backgroundColor: 'orange',
+                    marginTop: 5,
+                    // marginLeft: 20,
+                  }}>
+                    <Text
+                      key={`${content.number + 8000}.${idx}`}
+                      style={{
+                        color: 'blue',
+                        fontSize: 18,
+                        // margin: 10,
+                        // jus: 'center',
+                        // flex: 1,
+                        paddingVertical: normalize(10),
+                        alignSelf: 'center',
+                        textAlign: 'center',
+                        // backgroundColor: 'black',
+                      }}>
+                      {content.surah}
+                      {/* {'\n'} */}
+                    </Text>
+                  </View>
+                )}
+                <Text
+                  key={`${content.page}.${idx}`}
+                  style={{
+                    // color: '#05d944',
+                    // backgroundColor: 'grey',
+                    alignSelf: 'center',
+                    paddingHorizontal: normalize(10),
+                    paddingVertical: normalize(15),
+                    fontSize: 18,
+                    marginTop: 10,
+                    textAlign: 'center',
+                    width:
+                      content.surah === 'سُورَةُ ٱلْفَاتِحَةِ' &&
+                        content.numberInSurah === 1
+                        ? windowWidth
+                        : null,
+                    // flexWrap: 'wrap',
+                    borderBottomColor: '#ccc',
+                    borderBottomWidth: 2,
+                  }}
+                  allowFontScaling={false}
+                  selectable={true}>
+                  {content.text}
+                  <Text style={styles.number2}>
+                    {toArabic(`${content.numberInSurah}`)}&#1757;
                   </Text>
-                </View>
-              )}
-              <Text
-                key={`${content.page}.${idx}`}
-                style={{
-                  // color: '#05d944',
-                  fontSize: 18,
-                  textAlign: 'center',
-                  width:
-                    content.surah === 'سُورَةُ ٱلْفَاتِحَةِ' &&
-                    content.numberInSurah === 1
-                      ? windowWidth
-                      : null,
-                  // flexWrap: 'wrap',
-                  borderBottomColor: '#ccc',
-                  borderBottomWidth: 2,
-                }}
-                allowFontScaling={false}
-                selectable={true}>
-                {content.text}
-                <Text style={styles.number2}>
-                  {toArabic(`${content.numberInSurah}`)}&#1757;
                 </Text>
-              </Text>
-            </>
-          );
-        })}
-      </Text>
+              </>
+            );
+          })}
+        </Text>
+      {/* </Image> */}
       {/* <Text>{pageContent.page}</Text> */}
     </View>
   );
 };
 
-const ArabicAyahs = ({route, navigation}) => {
+const ArabicAyahs = ({ route, navigation }) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [quran, setQuran] = useState([]);
@@ -120,7 +202,7 @@ const ArabicAyahs = ({route, navigation}) => {
     if (!storage.contains('pagewise_quran')) {
       const quran = JSON.parse(storage.getString('quran'));
       const new_quran = quran
-        .map(surah => surah.ayahs.map(ayah => ({...ayah, surah: surah.name})))
+        .map(surah => surah.ayahs.map(ayah => ({ ...ayah, surah: surah.name })))
         .flat();
       new_quran.forEach(ayah => {
         page_quran[ayah.page] = Object.keys(page_quran).includes(`${ayah.page}`)
@@ -137,7 +219,7 @@ const ArabicAyahs = ({route, navigation}) => {
   }, []);
 
   return (
-    <View style={{flex: 1, padding: 0}}>
+    <View style={{ flex: 1, padding: 0 }}>
       <View style={styles.topnav}>
         <MaterialIcons
           name="arrow-back"
@@ -154,110 +236,15 @@ const ArabicAyahs = ({route, navigation}) => {
           color="white"
           indicatorSize="large"
           messageFontSize={24}
-          // message="Loading... 😀😀😀"
+        // message="Loading... 😀😀😀"
         />
       ) : (
         <FlatList
           data={Object.keys(quran).sort((a, b) => a - b)}
           keyExtractor={it => it}
-          renderItem={({item}) => {
+          renderItem={({ item }) => {
             return <Page pageContent={quran[item]} />;
-            // if (page === item.page) {
-            //   if (item.numberInSurah === 1) {
-            //     return (
-            //       <View
-            //         style={
-            //           {
-            //             // backgroundColor: 'white',
-            //             // marginBottom: 10,
-            //           }
-            //         }>
-            //         {/* <Text style={{color: '#ff0000'}}>{item.surah}</Text>
-            //         <Text style={{
-            //           backgroundColor: 'grey'
-            //         }}>{item.text}</Text> */}
-            //       </View>
-            //     );
-            //   }
-            //   return (
-            //     <Text
-            //       style={{
-            //         backgroundColor: 'white',
-            //         alignSelf: 'center',
-            //         width: windowWidth / 1.1,
-            //         textAlign: 'center',
-            //         fontSize: 18,
-            //         flexWrap: 'wrap',
-            //         // marginTop: 5,
-            //         paddingHorizontal: normalize(10),
-            //       }}>
-            //       {item.text}.{item.numberInSurah}
-            //     </Text>
-            //   );
-            // } else {
-            //   page = item.page;
-            //   return (
-            //     <View
-            //       style={{
-            //         // backgroundColor: 'white',
-            //         alignSelf: 'center',
-            //         width: windowWidth / 1.1,
-            //       }}>
-            //       <Text
-            //         style={{
-            //           fontSize: 18,
-            //           marginTop: 20,
-            //           paddingVertical: normalize(10),
-            //           width: windowWidth / 1.1,
-            //           backgroundColor: 'white',
-            //           color: '#05d944',
-            //           textAlign: 'center',
-            //           flexWrap: 'wrap',
-            //           // paddingHorizontal: normalize(10)
-            //         }}>
-            //         {page}
-            //       </Text>
-            //       {item.numberInSurah === 1 ? (
-            //         <View
-            //           style={{
-            //             backgroundColor: 'white',
-            //             // flexWrap: 'wrap',
-            //             paddingHorizontal: normalize(10),
-            //           }}>
-            //           <Text
-            //             style={{
-            //               color: '#05d944',
-            //               fontSize: 18,
-            //               alignSelf: 'center',
-            //               textAlign: 'center',
-            //             }}>
-            //             {item.surah}
-            //           </Text>
-            //           <Text
-            //             style={{
-            // color: '#05d944',
-            // fontSize: 18,
-            // alignSelf: 'center',
-            // textAlign: 'center',
-            //             }}>
-            //             {item.text}
-            //           </Text>
-            //         </View>
-            //       ) : (
-            //         <Text
-            //           style={{
-            //             backgroundColor: 'white',
-            //             fontSize: 18,
-            //             paddingHorizontal: normalize(20),
-            //             textAlign: 'center',
-            //             // alignSelf: 'center',
-            //           }}>
-            //           {item.text}
-            //         </Text>
-            //       )}
-            //     </View>
-            //   );
-            // }
+
           }}
         />
       )}
