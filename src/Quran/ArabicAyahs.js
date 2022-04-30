@@ -70,7 +70,7 @@ const Page = ({ pageContent }) => {
           height: 'auto',
         paddingVertical: normalize(25),
         paddingHorizontal: normalize(15),
-          width: windowWidth/2,
+          width: windowWidth/2.2,
           alignSelf: 'center'
         }}/>
         <View style={{
@@ -83,20 +83,21 @@ const Page = ({ pageContent }) => {
             // flexDirection: 'row',
             // backgroundColor: 'red',
             color: 'blue',
+            width: '40%',
             fontSize: 16,
             margin: 10,
             paddingVertical: normalize(10),
-            textAlign: 'center',
-            backgroundColor: 'yellow'
-          }}>
+            textAlign: 'left',
+            // backgroundColor: 'yellow'
+          }}>{pageContent[pageContent.length-1].surah}
           </Text>
           <Text style={{
             flexDirection: 'row',
             // backgroundColor: 'red',
             color: 'blue',
             fontSize: 18,
-            marginLeft: 70,
-            width: '50%',
+            marginLeft: 10,
+            width: '10%',
             // paddingHorizontal: normalize(5),
             justifyContent: 'space-between',
             alignContent: 'center',
@@ -105,6 +106,9 @@ const Page = ({ pageContent }) => {
             // paddingVertical: normalize(10),
             textAlign: 'center',
           }}>{pageContent[0].page}
+          {/* <Text>
+            {pageContent[pageContent.length-1].surah}
+          </Text> */}
           </Text>
         </View>
         <Text
@@ -171,6 +175,7 @@ const Page = ({ pageContent }) => {
                     // flexWrap: 'wrap',
                     borderBottomColor: '#ccc',
                     borderBottomWidth: 2,
+                    margin: '5px'
                   }}
                   allowFontScaling={false}
                   selectable={true}>
@@ -310,6 +315,7 @@ const styles = StyleSheet.create({
   },
   number2: {
     fontSize: 18,
+    margin: '5px'
     // flexDirection: 'row-reverse',
     // alignItems: 'center',
     // justifyContent: 'center',
