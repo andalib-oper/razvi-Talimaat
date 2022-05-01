@@ -64,15 +64,6 @@ const Page = ({ pageContent }) => {
       shadowRadius: 4.65,
       borderRadius: 2,
     }}>
-      <Image
-        source={require('../../images/borderquran2.jpg')}
-        style={{
-          height: 'auto',
-        paddingVertical: normalize(25),
-        paddingHorizontal: normalize(15),
-          width: windowWidth/2.2,
-          alignSelf: 'center'
-        }}/>
         <View style={{
           // backgroundColor: 'purple',
           flexDirection: 'row',
@@ -84,7 +75,7 @@ const Page = ({ pageContent }) => {
             // backgroundColor: 'red',
             color: 'blue',
             width: '40%',
-            fontSize: 16,
+            fontSize: 14,
             margin: 10,
             paddingVertical: normalize(10),
             textAlign: 'left',
@@ -95,7 +86,7 @@ const Page = ({ pageContent }) => {
             flexDirection: 'row',
             // backgroundColor: 'red',
             color: 'blue',
-            fontSize: 18,
+            fontSize: 14,
             marginLeft: 10,
             width: '10%',
             // paddingHorizontal: normalize(5),
@@ -111,6 +102,15 @@ const Page = ({ pageContent }) => {
           </Text> */}
           </Text>
         </View>
+      <Image
+        source={require('../../images/borderquran2.jpg')}
+        style={{
+          height: 'auto',
+        paddingVertical: normalize(25),
+        paddingHorizontal: normalize(15),
+          width: windowWidth/2.2,
+          alignSelf: 'center'
+        }}/>
         <Text
           style={{
             flexDirection: 'row',
