@@ -334,7 +334,10 @@ const ArabicAyahs = ({route, navigation}) => {
   useEffect(() => {
     var page_quran = {};
     // storage.delete('pagewise_quran');
-    if (!storage.contains('pagewise_quran')) {
+    if (
+      !storage.contains('pagewise_quran') ||
+      !storage.contains('ayah_quran')
+    ) {
       const quran = JSON.parse(storage.getString('quran'));
       const new_quran = quran
         .map(surah =>
@@ -413,12 +416,12 @@ const ArabicAyahs = ({route, navigation}) => {
         // </ScrollView>
         <FlatList
           data={Object.keys(quran).sort((a, b) => a - b)}
-          keyExtractor={(it, idx) => `${Math.random() * 1000}.${it}`}
+          keyExtractor={(it, idx) => `${Math.random() * 1000}`}
           ref={flatListRef}
           renderItem={({item}) => {
             return <Page pageContent={quran[item]} />;
           }}
-          onScrollToIndexFailed={err => scrollToIndexFailed(err)}
+          // onScrollToIndexFailed={err => scrollToIndexFailed(err)}
         />
       )}
     </View>

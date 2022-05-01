@@ -69,18 +69,6 @@ const CalendarScreen = ({navigation}) => {
   const storage = new MMKV();
 
   useEffect(() => {
-    init_func();
-  }, []);
-
-  const clear_all = async () => {
-    try {
-      await AsyncStorage.clear();
-    } catch (e) {
-      console.log(err);
-    }
-  };
-
-  const init_func = async () => {
     const calendar_data = storage.contains('calendar')
       ? JSON.parse(storage.getString('calendar'))
       : [];
@@ -108,25 +96,7 @@ const CalendarScreen = ({navigation}) => {
       );
       setLoading(false);
     }
-  };
-
-  // const init_func = async () => {
-  //   await Promise.all(
-  //     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(async num => {
-  //       const res = await fetch(
-  //         `http://api.aladhan.com/v1/gToHCalendar/${num}/${new Date().getFullYear()}`,
-  //       );
-  //       return res.json();
-  //     }),
-  //   )
-  //     .then(res => {
-  //       res.forEach(el => {
-  //         setAll_years(prev => [...prev, ...el.data]);
-  //       });
-  //       if (res.length >= 12) setLoading(false);
-  //     })
-  //     .catch(err => console.log(err));
-  // };
+  }, []);
 
   const monthChangeForward = () => {
     if (monthIndex === 11) {
@@ -137,7 +107,9 @@ const CalendarScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    const local_calendar = JSON.parse(storage.getString('calendar'));
+    const local_calendar = storage.contains('calendar')
+      ? JSON.parse(storage.getString('calendar'))
+      : [];
     setCurrentMonth(
       local_calendar.filter(
         day => day.gregorian.month.en === months[monthIndex],
@@ -154,15 +126,10 @@ const CalendarScreen = ({navigation}) => {
   };
 
   var counter = 0;
-  var limit = currentMonth.length;
+  var limit = currentMonth?.length;
   return (
     <View style={styles.container}>
       <View style={styles.topnav}>
-        {/* <MaterialIcons name="arrow-back"
-                    size={30}
-                    color='white'
-                    style={styles.icon}
-                    onPress={() => navigation.goBack()} /> */}
         <Text style={styles.topnavtext}>Calendar</Text>
       </View>
       {isLoading ? (
@@ -171,32 +138,9 @@ const CalendarScreen = ({navigation}) => {
           color="white"
           indicatorSize="large"
           messageFontSize={24}
-          // message="Loading... 😀😀😀"
         />
       ) : (
         <ScrollView>
-          {/* {[
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December',
-          ].map(month => {
-            var counter = 0;
-            // const currentMonth = all_years.filter(
-            //   day => day.gregorian.month.en === month,
-            // );
-            var limit = currentMonth.length;
-            // console.log(month, currentMonth);
-            // if (month.includes(current_hijri_year)) {
-            return ( */}
           <View
             style={{
               padding: 15,
@@ -210,7 +154,7 @@ const CalendarScreen = ({navigation}) => {
               size={24}
               color="black"
               // style={}
-              onPress={monthChangeBackward}
+              onPress={() => monthChangeBackward()}
             />
             <Text style={{fontSize: 20, color: '#333', fontWeight: 'bold'}}>
               {moment().format('YYYY')}
@@ -220,7 +164,7 @@ const CalendarScreen = ({navigation}) => {
               size={24}
               color="black"
               // style={}
-              onPress={monthChangeForward}
+              onPress={() => monthChangeForward()}
             />
           </View>
           <View
@@ -268,7 +212,6 @@ const CalendarScreen = ({navigation}) => {
             </View>
             <View>
               {[0, 1, 2, 3, 4, 5].map(i => {
-                // toggler *= -1;
                 return (
                   <View key={Math.random() * 1000} style={styles.weekRow}>
                     {[0, 1, 2, 3, 4, 5, 6].map(j => {
@@ -281,7 +224,6 @@ const CalendarScreen = ({navigation}) => {
                             ]
                           ]
                       ) {
-                        // counter += 1;
                         return (
                           <View
                             key={Math.random() * 1000}
@@ -299,7 +241,6 @@ const CalendarScreen = ({navigation}) => {
                           </View>
                         );
                       } else if (i === 5 && counter >= limit) {
-                        // console.log(counter);
                         return null;
                       } else if (i === 0 || counter >= limit) {
                         return (
@@ -310,7 +251,6 @@ const CalendarScreen = ({navigation}) => {
                           </View>
                         );
                       } else {
-                        // counter += 1;
                         return (
                           <View
                             key={Math.random() * 1000}
