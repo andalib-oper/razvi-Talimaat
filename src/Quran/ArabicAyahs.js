@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -176,6 +176,7 @@ const Page = ({pageContent}) => {
           alignItems: 'center',
           justifyContent: 'space-between',
           // height: 'auto',
+          marginBottom: normalize(20),
           width: '60%',
           alignSelf: 'center',
         }}>
@@ -183,7 +184,7 @@ const Page = ({pageContent}) => {
           style={{
             // flexDirection: 'row',
             // backgroundColor: 'red',
-            color: 'blue',
+            color: '#d79c03',
             width: '40%',
             fontSize: 12,
             // marginVertical: 10,
@@ -197,7 +198,7 @@ const Page = ({pageContent}) => {
           style={{
             flexDirection: 'row',
             // backgroundColor: 'red',
-            color: '#333',
+            color: '#d79c03',
             fontSize: 14,
             fontWeight: 'bold',
             width: '20%',
@@ -215,13 +216,15 @@ const Page = ({pageContent}) => {
         </Text>
         <Text
           style={{
-            color: 'blue',
-            fontSize: 14,
+            color: '#d79c03',
+            fontSize: 12,
             textAlign: 'right',
+            flexDirection: 'row',
+            alignItems: 'center',
             width: '40%',
           }}>
-          {pageContent[0].juz}
-          {Juz[pageContent[0].juz]}
+          {pageContent[0].juz}{' '}
+          <Text style={{fontSize: 14}}>{Juz[pageContent[0].juz]}</Text>
         </Text>
       </View>
       <Text
@@ -231,7 +234,7 @@ const Page = ({pageContent}) => {
           alignContent: 'center',
           alignSelf: 'center',
           textAlign: 'center',
-          marginBottom: 20,
+          // marginBottom: 20,
           marginTop: 10,
           paddingHorizontal: normalize(15),
           paddingBottom: normalize(20),
@@ -247,20 +250,22 @@ const Page = ({pageContent}) => {
               {content.numberInSurah === 1 && (
                 <View
                   style={{
-                    width: windowWidth / 1.1,
+                    width: windowWidth,
                     alignSelf: 'center',
                     // paddingVertical: normalize(5),
                     marginBottom: normalize(10),
+                    // marginTop: normalize(30),
                     // backgroundColor: 'orange',
                     // marginTop: 5,
                     // marginLeft: 20,
-                  }}>
+                    // backgroundColor: 'pink',
+                  }}
+                  key={`${content.number + 8000}.${idx}`}>
                   <Text
-                    key={`${content.number + 8000}.${idx}`}
                     style={{
-                      color: 'blue',
-                      fontSize: 18,
-                      // margin: 10,
+                      color: '#d79c03',
+                      fontSize: 22,
+                      marginBottom: normalize(10),
                       // jus: 'center',
                       // flex: 1,
                       paddingVertical: normalize(10),
@@ -281,25 +286,30 @@ const Page = ({pageContent}) => {
                   alignSelf: 'center',
                   paddingHorizontal: normalize(10),
                   paddingVertical: normalize(15),
-                  fontSize: 18,
+                  fontSize: 20,
                   marginTop: 10,
                   textAlign: 'center',
+                  // color: '#115be2',
+                  color: '#696761',
+                  // color: '#037735',
                   width:
                     content.surah === 'سُورَةُ ٱلْفَاتِحَةِ' &&
                     content.numberInSurah === 1
                       ? windowWidth
                       : null,
                   // flexWrap: 'wrap',
-                  borderBottomColor: '#ccc',
-                  borderBottomWidth: 2,
+                  // borderBottomColor: '#ccc',
+                  // borderBottomWidth: 2,
                   marginRight: 5,
-                  lineHeight: 30,
+                  // paddingBottom: normalize(10),
+                  lineHeight: 32,
                 }}
                 allowFontScaling={false}
                 selectable={true}>
                 {content.text}
                 <Text style={styles.number2}>
                   {toArabic(`${content.numberInSurah}`)}&#1757;
+                  {pageContent[idx + 1]?.numberInSurah === 1 ? '\n\n' : null}
                 </Text>
               </Text>
             </>
@@ -316,6 +326,8 @@ const ArabicAyahs = ({route, navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [quran, setQuran] = useState([]);
+  const [scrollIndex, setScrollIndex] = useState(0);
+  const flatListRef = useRef(null);
 
   const storage = new MMKV();
 
@@ -325,32 +337,63 @@ const ArabicAyahs = ({route, navigation}) => {
     if (!storage.contains('pagewise_quran')) {
       const quran = JSON.parse(storage.getString('quran'));
       const new_quran = quran
-        .map(surah => surah.ayahs.map(ayah => ({...ayah, surah: surah.name})))
+        .map(surah =>
+          surah.ayahs.map(ayah => ({
+            ...ayah,
+            surah: surah.name,
+            surahNumber: surah.number,
+          })),
+        )
         .flat();
       new_quran.forEach(ayah => {
         page_quran[ayah.page] = Object.keys(page_quran).includes(`${ayah.page}`)
           ? [...page_quran[`${ayah.page}`], ayah]
           : [ayah];
       });
+      setScrollIndex(
+        new_quran.findIndex(ayah => ayah.surahNumber === route.params.code),
+      );
       storage.set('pagewise_quran', JSON.stringify(page_quran));
+      storage.set('ayah_quran', JSON.stringify(new_quran));
     } else {
       page_quran = JSON.parse(storage.getString('pagewise_quran'));
+      const new_quran = JSON.parse(storage.getString('ayah_quran'));
+      setScrollIndex(
+        new_quran.findIndex(ayah => ayah.surahNumber === route.params.code),
+      );
     }
     setQuran(page_quran);
     setLoading(false);
+    // this.flatListRef.scrollToIndex({
+    //   animated: true,
+    //   index: itemIndex,
+    // });
+    // setTimeout(() => {
+    //   console.log(JSON.parse(storage.getString('ayah_quran'))[scrollIndex]);
+    //   flatListRef?.current?.scrollToIndex({index: scrollIndex});
+    // }, 500);
   }, []);
+
+  // const scrollToIndexFailed = err => {
+  //   const offset = err.averageItemLength * err.index;
+  //   flatListRef?.current?.scrollToOffset({offset});
+  //   setTimeout(
+  //     () => flatListRef?.current?.scrollToIndex({index: err.index}),
+  //     100,
+  //   );
+  // };
 
   return (
     <View style={{flex: 1, padding: 0}}>
       <View style={styles.topnav}>
         <MaterialIcons
-          name="arrow-back"
-          size={30}
+          name="arrow-back-ios"
+          size={24}
           color="white"
           style={styles.icon}
           onPress={() => navigation.goBack()}
         />
-        <Text style={styles.topnavtext}>Ayahs</Text>
+        {/* <Text style={styles.topnavtext}>Ayahs</Text> */}
       </View>
       {isLoading ? (
         <OrientationLoadingOverlay
@@ -361,12 +404,21 @@ const ArabicAyahs = ({route, navigation}) => {
           // message="Loading... 😀😀😀"
         />
       ) : (
+        // <ScrollView>
+        //   {Object.keys(quran)
+        //     .sort((a, b) => a - b)
+        //     .map((item, idx) => {
+        //       return <Page pageContent={quran[item]} key={idx} />;
+        //     })}
+        // </ScrollView>
         <FlatList
           data={Object.keys(quran).sort((a, b) => a - b)}
-          keyExtractor={it => it}
+          keyExtractor={(it, idx) => `${Math.random() * 1000}.${it}`}
+          ref={flatListRef}
           renderItem={({item}) => {
             return <Page pageContent={quran[item]} />;
           }}
+          onScrollToIndexFailed={err => scrollToIndexFailed(err)}
         />
       )}
     </View>
@@ -380,8 +432,10 @@ const styles = StyleSheet.create({
   topnav: {
     marginTop: 0,
     height: 60,
-    width: windowWidth / 1,
-    backgroundColor: '#4b7bf2',
+    flexDirection: 'row',
+    alignItems: 'center',
+    // width: windowWidth / 1,
+    backgroundColor: '#4169E1',
   },
   topnavtext: {
     marginTop: -35,
@@ -391,8 +445,8 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   icon: {
-    marginLeft: 20,
-    marginTop: 10,
+    marginLeft: 15,
+    // marginTop: 10,
   },
   image: {
     marginTop: 50,
@@ -430,9 +484,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   number2: {
-    fontSize: 18,
-    margin: '5px',
-    marginLeft: 5,
+    fontSize: 15,
+    marginRight: 5,
     // flexDirection: 'row-reverse',
     // alignItems: 'center',
     // justifyContent: 'center',

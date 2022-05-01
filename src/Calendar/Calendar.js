@@ -49,6 +49,22 @@ const CalendarScreen = ({navigation}) => {
     Friday: 5,
     Saturday: 6,
   };
+  const [monthIndex, setMonthIndex] = useState(0);
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  const [currentMonth, setCurrentMonth] = useState([]);
 
   const storage = new MMKV();
 
@@ -65,7 +81,6 @@ const CalendarScreen = ({navigation}) => {
   };
 
   const init_func = async () => {
-    clear_all();
     const calendar_data = storage.contains('calendar')
       ? JSON.parse(storage.getString('calendar'))
       : [];
@@ -75,12 +90,22 @@ const CalendarScreen = ({navigation}) => {
         .then(async res => {
           const processed_data = res.data.map(item => item.days).flat();
           setAll_years(processed_data);
+          setCurrentMonth(
+            processed_data.filter(
+              day => day.gregorian.month.en === months[monthIndex],
+            ),
+          );
           storage.set('calendar', JSON.stringify(processed_data));
           if (res.data.length > 11) setLoading(false);
         })
         .catch(err => console.log(err));
     } else {
       setAll_years(calendar_data);
+      setCurrentMonth(
+        calendar_data.filter(
+          day => day.gregorian.month.en === months[monthIndex],
+        ),
+      );
       setLoading(false);
     }
   };
@@ -103,6 +128,33 @@ const CalendarScreen = ({navigation}) => {
   //     .catch(err => console.log(err));
   // };
 
+  const monthChangeForward = () => {
+    if (monthIndex === 11) {
+      setMonthIndex(0);
+    } else {
+      setMonthIndex(monthIndex + 1);
+    }
+  };
+
+  useEffect(() => {
+    const local_calendar = JSON.parse(storage.getString('calendar'));
+    setCurrentMonth(
+      local_calendar.filter(
+        day => day.gregorian.month.en === months[monthIndex],
+      ),
+    );
+  }, [monthIndex]);
+
+  const monthChangeBackward = () => {
+    if (monthIndex === 0) {
+      setMonthIndex(11);
+    } else {
+      setMonthIndex(monthIndex - 1);
+    }
+  };
+
+  var counter = 0;
+  var limit = currentMonth.length;
   return (
     <View style={styles.container}>
       <View style={styles.topnav}>
@@ -123,7 +175,7 @@ const CalendarScreen = ({navigation}) => {
         />
       ) : (
         <ScrollView>
-          {[
+          {/* {[
             'January',
             'February',
             'March',
@@ -138,199 +190,150 @@ const CalendarScreen = ({navigation}) => {
             'December',
           ].map(month => {
             var counter = 0;
-            const currentMonth = all_years.filter(
-              day => day.gregorian.month.en === month,
-            );
+            // const currentMonth = all_years.filter(
+            //   day => day.gregorian.month.en === month,
+            // );
             var limit = currentMonth.length;
             // console.log(month, currentMonth);
             // if (month.includes(current_hijri_year)) {
-            return (
-              <View key={month} style={styles.monthContainer}>
-                {/* {month} */}
-                <View
-                  style={{
-                    marginBottom: 20,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Text
-                    style={{...styles.monthContainerText, fontWeight: '700'}}>
-                    {month}{' '}
-                  </Text>
-                  <Text
-                    style={{
-                      ...styles.monthContainerText,
-                      fontSize: normalize(14),
-                      width: '50%',
-                      fontWeight: '900',
-                      color: '#CC5500',
-                    }}>
-                    {currentMonth?.[0]?.hijri?.month?.number ===
-                    currentMonth?.[currentMonth?.length - 1]?.hijri?.month
-                      ?.number
-                      ? `${currentMonth?.[0]?.hijri?.month?.en}, ${currentMonth?.[0]?.hijri?.year}`
-                      : `(${currentMonth?.[0]?.hijri?.month?.en}/${
-                          currentMonth?.[currentMonth?.length - 1]?.hijri?.month
-                            ?.en
-                        }), ${currentMonth?.[0]?.hijri?.year}`}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    ...styles.weekRow,
-                    backgroundColor: '#ffffff',
-                    borderRadius: 10,
-                  }}>
-                  <Text
-                    style={{
-                      width: `${100 / 7}%`,
-                      textAlign: 'center',
-                      fontSize: normalize(14),
-                      color: '#444',
-                      fontWeight: 'bold',
-                    }}>
-                    Sun
-                  </Text>
-                  <Text
-                    style={{
-                      width: `${100 / 7}%`,
-                      textAlign: 'center',
-                      fontSize: normalize(14),
-                      color: '#444',
-                      fontWeight: 'bold',
-                    }}>
-                    Mon
-                  </Text>
-                  <Text
-                    style={{
-                      width: `${100 / 7}%`,
-                      textAlign: 'center',
-                      fontSize: normalize(14),
-                      color: '#444',
-                      fontWeight: 'bold',
-                    }}>
-                    Tue
-                  </Text>
-                  <Text
-                    style={{
-                      width: `${100 / 7}%`,
-                      textAlign: 'center',
-                      fontSize: normalize(14),
-                      color: '#444',
-                      fontWeight: 'bold',
-                    }}>
-                    Wed
-                  </Text>
-                  <Text
-                    style={{
-                      width: `${100 / 7}%`,
-                      textAlign: 'center',
-                      fontSize: normalize(14),
-                      color: '#444',
-                      fontWeight: 'bold',
-                    }}>
-                    Thu
-                  </Text>
-                  <Text
-                    style={{
-                      width: `${100 / 7}%`,
-                      textAlign: 'center',
-                      fontSize: normalize(14),
-                      color: '#444',
-                      fontWeight: 'bold',
-                    }}>
-                    Fri
-                  </Text>
-                  <Text
-                    style={{
-                      width: `${100 / 7}%`,
-                      textAlign: 'center',
-                      fontSize: normalize(14),
-                      color: '#444',
-                      fontWeight: 'bold',
-                    }}>
-                    Sat
-                  </Text>
-                </View>
-                <View>
-                  {[0, 1, 2, 3, 4, 5].map(i => {
-                    // toggler *= -1;
-                    return (
-                      <View key={Math.random() * 1000} style={styles.weekRow}>
-                        {[0, 1, 2, 3, 4, 5, 6].map(j => {
-                          if (
-                            i === 0 &&
-                            j >=
-                              weekdays[
-                                currentMonth?.[0]?.['gregorian']?.['weekday']?.[
-                                  'en'
+            return ( */}
+          <View
+            style={{
+              padding: 15,
+              paddingHorizontal: normalize(20),
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <MaterialIcons
+              name="arrow-back-ios"
+              size={24}
+              color="black"
+              // style={}
+              onPress={monthChangeBackward}
+            />
+            <Text style={{fontSize: 20, color: '#333', fontWeight: 'bold'}}>
+              {moment().format('YYYY')}
+            </Text>
+            <MaterialIcons
+              name="arrow-forward-ios"
+              size={24}
+              color="black"
+              // style={}
+              onPress={monthChangeForward}
+            />
+          </View>
+          <View
+            key={currentMonth[0].gregorian.month.en}
+            style={styles.monthContainer}>
+            {/* {month} */}
+            <View
+              style={{
+                marginBottom: 20,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <Text style={{...styles.monthContainerText, fontWeight: '700'}}>
+                {currentMonth[0].gregorian.month.en}{' '}
+              </Text>
+              <Text
+                style={{
+                  ...styles.monthContainerText,
+                  fontSize: normalize(14),
+                  width: '50%',
+                  fontWeight: '900',
+                  color: '#CC5500',
+                }}>
+                {currentMonth?.[0]?.hijri?.month?.number ===
+                currentMonth?.[currentMonth?.length - 1]?.hijri?.month?.number
+                  ? `${currentMonth?.[0]?.hijri?.month?.en}, ${currentMonth?.[0]?.hijri?.year}`
+                  : `(${currentMonth?.[0]?.hijri?.month?.en}/${
+                      currentMonth?.[currentMonth?.length - 1]?.hijri?.month?.en
+                    }), ${currentMonth?.[0]?.hijri?.year}`}
+              </Text>
+            </View>
+            <View
+              style={{
+                ...styles.weekRow,
+                backgroundColor: '#ffffff',
+                borderRadius: 10,
+              }}>
+              <Text style={styles.weekDay}>Sun</Text>
+              <Text style={styles.weekDay}>Mon</Text>
+              <Text style={styles.weekDay}>Tue</Text>
+              <Text style={styles.weekDay}>Wed</Text>
+              <Text style={styles.weekDay}>Thu</Text>
+              <Text style={styles.weekDay}>Fri</Text>
+              <Text style={styles.weekDay}>Sat</Text>
+            </View>
+            <View>
+              {[0, 1, 2, 3, 4, 5].map(i => {
+                // toggler *= -1;
+                return (
+                  <View key={Math.random() * 1000} style={styles.weekRow}>
+                    {[0, 1, 2, 3, 4, 5, 6].map(j => {
+                      if (
+                        i === 0 &&
+                        j >=
+                          weekdays[
+                            currentMonth?.[0]?.['gregorian']?.['weekday']?.[
+                              'en'
+                            ]
+                          ]
+                      ) {
+                        // counter += 1;
+                        return (
+                          <View
+                            key={Math.random() * 1000}
+                            style={styles.weekText}>
+                            <Text style={styles.weekText2}>
+                              {currentMonth?.[counter]?.['hijri']?.['day']}
+                            </Text>
+                            <Text style={styles.weekTextHijri}>
+                              {
+                                currentMonth?.[counter++]?.['gregorian']?.[
+                                  'day'
                                 ]
-                              ]
-                          ) {
-                            // counter += 1;
-                            return (
-                              <View
-                                key={Math.random() * 1000}
-                                style={styles.weekText}>
-                                <Text style={styles.weekText2}>
-                                  {
-                                    currentMonth?.[counter]?.['gregorian']?.[
-                                      'day'
-                                    ]
-                                  }
-                                </Text>
-                                <Text style={styles.weekTextHijri}>
-                                  {
-                                    currentMonth?.[counter++]?.['hijri']?.[
-                                      'day'
-                                    ]
-                                  }
-                                </Text>
-                              </View>
-                            );
-                          } else if (i === 5 && counter >= limit) {
-                            // console.log(counter);
-                            return null;
-                          } else if (i === 0 || counter >= limit) {
-                            return (
-                              <View
-                                key={Math.random() * 1000}
-                                style={styles.weekText}>
-                                <Text style={styles.weekText2} />
-                              </View>
-                            );
-                          } else {
-                            // counter += 1;
-                            return (
-                              <View
-                                key={Math.random() * 1000}
-                                style={styles.weekText}>
-                                <Text style={styles.weekText2}>
-                                  {
-                                    currentMonth?.[counter]?.['gregorian']?.[
-                                      'day'
-                                    ]
-                                  }
-                                </Text>
-                                <Text style={styles.weekTextHijri}>
-                                  {
-                                    currentMonth?.[counter++]?.['hijri']?.[
-                                      'day'
-                                    ]
-                                  }
-                                </Text>
-                              </View>
-                            );
-                          }
-                        })}
-                      </View>
-                    );
-                  })}
-                </View>
-              </View>
-            );
-            // }
-          })}
+                              }
+                            </Text>
+                          </View>
+                        );
+                      } else if (i === 5 && counter >= limit) {
+                        // console.log(counter);
+                        return null;
+                      } else if (i === 0 || counter >= limit) {
+                        return (
+                          <View
+                            key={Math.random() * 1000}
+                            style={styles.weekText}>
+                            <Text style={styles.weekText2} />
+                          </View>
+                        );
+                      } else {
+                        // counter += 1;
+                        return (
+                          <View
+                            key={Math.random() * 1000}
+                            style={styles.weekText}>
+                            <Text style={styles.weekText2}>
+                              {currentMonth?.[counter]?.['hijri']?.['day']}
+                            </Text>
+                            <Text style={styles.weekTextHijri}>
+                              {
+                                currentMonth?.[counter++]?.['gregorian']?.[
+                                  'day'
+                                ]
+                              }
+                            </Text>
+                          </View>
+                        );
+                      }
+                    })}
+                  </View>
+                );
+              })}
+            </View>
+          </View>
         </ScrollView>
       )}
     </View>
@@ -420,6 +423,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
+  },
+  weekDay: {
+    width: `${100 / 7}%`,
+    textAlign: 'center',
+    fontSize: normalize(14),
+    color: '#444',
+    fontWeight: 'bold',
   },
 });
 
