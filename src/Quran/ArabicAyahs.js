@@ -184,7 +184,7 @@ const Page = ({pageContent}) => {
             // flexDirection: 'row',
             // backgroundColor: 'red',
             color: 'blue',
-            // width: '40%',
+            width: '40%',
             fontSize: 12,
             // marginVertical: 10,
             paddingVertical: normalize(10),
@@ -197,8 +197,10 @@ const Page = ({pageContent}) => {
           style={{
             flexDirection: 'row',
             // backgroundColor: 'red',
-            color: 'blue',
+            color: '#333',
             fontSize: 14,
+            fontWeight: 'bold',
+            width: '20%',
             // marginLeft: 10,
             // width: '10%',
             // paddingHorizontal: normalize(5),
@@ -211,7 +213,13 @@ const Page = ({pageContent}) => {
           }}>
           {pageContent[0].page}
         </Text>
-        <Text style={{color: 'blue', fontSize: 14}}>
+        <Text
+          style={{
+            color: 'blue',
+            fontSize: 14,
+            textAlign: 'right',
+            width: '40%',
+          }}>
           {pageContent[0].juz}
           {Juz[pageContent[0].juz]}
         </Text>
@@ -225,7 +233,7 @@ const Page = ({pageContent}) => {
           textAlign: 'center',
           marginBottom: 20,
           marginTop: 10,
-          paddingHorizontal: normalize(13),
+          paddingHorizontal: normalize(15),
           paddingBottom: normalize(20),
           // backgroundColor: 'green'
           // textAlign: 'justify',
@@ -284,7 +292,7 @@ const Page = ({pageContent}) => {
                   // flexWrap: 'wrap',
                   borderBottomColor: '#ccc',
                   borderBottomWidth: 2,
-                  margin: '5px',
+                  marginRight: 5,
                   lineHeight: 30,
                 }}
                 allowFontScaling={false}
@@ -328,7 +336,6 @@ const ArabicAyahs = ({route, navigation}) => {
     } else {
       page_quran = JSON.parse(storage.getString('pagewise_quran'));
     }
-    console.log(page_quran['1']);
     setQuran(page_quran);
     setLoading(false);
   }, []);
@@ -425,6 +432,7 @@ const styles = StyleSheet.create({
   number2: {
     fontSize: 18,
     margin: '5px',
+    marginLeft: 5,
     // flexDirection: 'row-reverse',
     // alignItems: 'center',
     // justifyContent: 'center',
