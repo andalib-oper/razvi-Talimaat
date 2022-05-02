@@ -60,10 +60,10 @@ const Home = ({navigation}) => {
   const [dataVerse, setDataVerse] = useState([]);
 
   const fetchData = async () => {
-    const resp = await fetch(
+    const resp = await axios.get(
       'https://api.quran.com/api/v4/verses/random?language=ara&fields=text_uthmani&words=true',
     );
-    const data = await resp.json();
+    const data = await resp.data;
     setDataVerse(data.verse);
     setLoadingVerse(false);
   };
@@ -85,9 +85,13 @@ const Home = ({navigation}) => {
   const storage = new MMKV();
 
   useEffect(() => {
-    fetch('https://razvitalimat.herokuapp.com/api/content')
-      .then(response => response.json())
-      .then(json => setData(json))
+    axios
+      .get('https://razvitalimat.herokuapp.com/api/content')
+      // .then(response => response.json())
+      .then(res => {
+        setData(res.data);
+        console.log('INLOADING');
+      })
       .catch(error => console.error(error))
       .finally(() => setLoading(false));
   }, []);
@@ -133,6 +137,9 @@ const Home = ({navigation}) => {
         },
         {enableHighAccuracy: true, timeout: 500000, maximumAge: 10000},
       );
+      // }
+    } else {
+      setLocLoading(false);
     }
   });
 
@@ -157,6 +164,8 @@ const Home = ({navigation}) => {
     // if (city) {
     if (!enabled && locationPermission === true) {
       requestResolution();
+    } else {
+      setLocLoading(false);
     }
     init_time();
   }, [lagitude, longitude]);
@@ -165,6 +174,7 @@ const Home = ({navigation}) => {
     const storage_data = storage.contains('prayerTimes')
       ? JSON.parse(storage.getString('prayerTimes'))
       : {};
+    console.log('what');
     if (storage_data.date?.gregorian.date !== moment().format('DD-MM-YYYY')) {
       axios
         .get(
@@ -188,14 +198,19 @@ const Home = ({navigation}) => {
               date: res.data.data.date,
             }),
           );
+          console.log('Processed');
         })
         .catch(error => console.error(error))
-        .finally(() => setPrayerLoading(false));
+        .finally(() => {
+          setPrayerLoading(false);
+          console.log('IN 2');
+        });
       // }
     } else {
       setPrayerTimes(storage_data?.data);
       setDate(storage_data?.date);
       setPrayerLoading(false);
+      console.log('IN 2');
     }
   };
 
@@ -215,12 +230,12 @@ const Home = ({navigation}) => {
   // return imgMap[random];
   // }
 
-  console.log(random);
-
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: 'Please check this out.',
+        message: `${dataVerse.text_uthmani}
+          Surah No. - ${dataVerse.verse_key}
+        `,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -742,7 +757,9 @@ const Home = ({navigation}) => {
                   },
                   shadowOpacity: 0.27,
                   shadowRadius: 4.65,
-                  borderRadius: 20,
+                  borderRadius: 10,
+                  padding: normalize(10),
+                  paddingBottom: normalize(25),
                 }}>
                 <Text
                   style={{
@@ -750,9 +767,9 @@ const Home = ({navigation}) => {
                     fontWeight: '600',
                     color: 'black',
                     marginLeft: 10,
-                    marginTop: 10,
+                    marginTop: 5,
                   }}>
-                  Verses
+                  Ayah of the day
                 </Text>
                 <Image
                   source={require('../../images/corner.png')}
@@ -790,7 +807,7 @@ const Home = ({navigation}) => {
                     ],
                   }}
                 />
-                <Text
+                {/* <Text
                   style={{
                     fontSize: normalize(14),
                     fontWeight: '400',
@@ -799,44 +816,67 @@ const Home = ({navigation}) => {
                     // flexWrap: 'wrap',
                   }}>
                   Ayas of the day
-                </Text>
+                </Text> */}
                 <Text
                   style={{
-                    fontSize: normalize(14),
+                    fontSize: normalize(12),
                     fontWeight: '400',
-                    color: 'black',
+                    color: '#777',
                     marginLeft: 10,
+                    marginTop: 5,
                     // flexWrap: 'wrap',
                   }}>
-                  verse no - {dataVerse.verse_number}
+                  Surah No - {dataVerse.verse_key}
                 </Text>
 
                 <Text
                   style={{
-                    fontSize: normalize(14),
+                    fontSize: normalize(16),
                     fontWeight: '400',
-                    color: 'black',
-                    marginLeft: 10,
-                    marginTop: 10,
+                    color: '#222',
+                    // marginLeft: 10,
+                    marginTop: 20,
                     paddingHorizontal: normalize(10),
-                    paddingVertical: normalize(10),
+                    // paddingRight: normalize(10),
                     // flexWrap: 'wrap',
                   }}>
                   {dataVerse.text_uthmani}
                 </Text>
-                <View>
+                <FontAwesome
+                  name="share-alt"
+                  size={normalize(20)}
+                  color="grey"
+                  style={{
+                    height: normalize(30),
+                    width: normalize(30),
+                    // paddingVertical: normalize(25),
+                    // paddingHorizontal: normalize(15),
+                    alignSelf: 'center',
+                    // position: 'absolute',
+                    position: 'absolute',
+                    top: 25,
+                    right: 35,
+                    // transform: [
+                    //   {
+                    //     // rotateY: '180deg',
+                    //   },
+                    // ],
+                  }}
+                  onPress={onShare}
+                />
+                {/* <View>
                   {/* <Button
                     onPress={onShare}
                     title="Share"
                     style={{borderRadius: 2}}
                   /> */}
-                  <FontAwesome
+                {/* <FontAwesome
                     name="bookmark"
                     size={normalize(30)}
-                    color="black"
+                    color="grey"
                     style={{
-                      height: normalize(50),
-                      width: normalize(50),
+                      height: normalize(30),
+                      width: normalize(30),
                       // paddingVertical: normalize(25),
                       // paddingHorizontal: normalize(15),
                       alignSelf: 'center',
@@ -850,29 +890,9 @@ const Home = ({navigation}) => {
                       ],
                     }}
                     // onPress={onShare}
-                  />
-                  <FontAwesome
-                    name="share"
-                    size={normalize(30)}
-                    color="black"
-                    style={{
-                      height: normalize(50),
-                      width: normalize(50),
-                      // paddingVertical: normalize(25),
-                      // paddingHorizontal: normalize(15),
-                      alignSelf: 'center',
-                      // position: 'absolute',
-                      top: 5,
-                      left: 130,
-                      transform: [
-                        {
-                          rotateY: '180deg',
-                        },
-                      ],
-                    }}
-                    onPress={onShare}
-                  />
-                </View>
+                  /> 
+                  
+                </View> */}
               </View>
               {data.map(item => {
                 return (

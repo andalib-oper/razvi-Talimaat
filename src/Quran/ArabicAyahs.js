@@ -260,7 +260,7 @@ const Page = ({pageContent}) => {
                     // marginLeft: 20,
                     // backgroundColor: 'pink',
                   }}
-                  key={`${content.number + 8000}.${idx}`}>
+                  key={`${Math.random() * 100000}`}>
                   <Text
                     style={{
                       color: '#d79c03',
@@ -279,7 +279,7 @@ const Page = ({pageContent}) => {
                 </View>
               )}
               <Text
-                key={`${content.page}.${idx}`}
+                key={`${Math.random() * 100000}`}
                 style={{
                   // color: '#05d944',
                   // backgroundColor: 'grey',
@@ -371,10 +371,10 @@ const ArabicAyahs = ({route, navigation}) => {
     //   animated: true,
     //   index: itemIndex,
     // });
-    setTimeout(() => {
-      console.log(JSON.parse(storage.getString('ayah_quran'))[scrollIndex]);
-      flatListRef?.current?.scrollToIndex({index: scrollIndex});
-    }, 500);
+    // setTimeout(() => {
+    //   console.log(JSON.parse(storage.getString('ayah_quran'))[scrollIndex]);
+    //   flatListRef?.current?.scrollToIndex({index: scrollIndex});
+    // }, 500);
   }, []);
 
   const scrollToIndexFailed = err => {
@@ -418,12 +418,12 @@ const ArabicAyahs = ({route, navigation}) => {
           data={Object.keys(quran).sort((a, b) => a - b)}
           // keyExtractor={(it, idx) => `${Math.random() * 1000}`}
           // keyExtractor={quran[it].number}
-          keyExtractor={(it, idx) => quran[it].number-1}
+          keyExtractor={(it, idx) => quran[it][0].number}
           ref={flatListRef}
           renderItem={({item}) => {
             return <Page pageContent={quran[item]} />;
           }}
-          onScrollToIndexFailed={err => scrollToIndexFailed(err)}
+          // onScrollToIndexFailed={err => scrollToIndexFailed(err)}
         />
       )}
     </View>
