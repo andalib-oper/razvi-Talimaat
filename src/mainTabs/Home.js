@@ -220,8 +220,7 @@ const Home = ({navigation}) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message:
-          'React Native | A framework for building native apps using React',
+        message: 'Please check this out.',
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -755,6 +754,42 @@ const Home = ({navigation}) => {
                   }}>
                   Verses
                 </Text>
+                <Image
+                  source={require('../../images/corner.png')}
+                  style={{
+                    height: normalize(50),
+                    width: normalize(50),
+                    // paddingVertical: normalize(25),
+                    // paddingHorizontal: normalize(15),
+                    alignSelf: 'center',
+                    position: 'absolute',
+                    top: 5,
+                    right: 5,
+                    transform: [
+                      {
+                        rotateY: '180deg',
+                      },
+                    ],
+                  }}
+                />
+                <Image
+                  source={require('../../images/corner.png')}
+                  style={{
+                    height: normalize(50),
+                    width: normalize(50),
+                    // paddingVertical: normalize(25),
+                    // paddingHorizontal: normalize(15),
+                    alignSelf: 'center',
+                    position: 'absolute',
+                    bottom: 5,
+                    left: 5,
+                    transform: [
+                      {
+                        rotateX: '180deg',
+                      },
+                    ],
+                  }}
+                />
                 <Text
                   style={{
                     fontSize: normalize(14),
@@ -789,11 +824,53 @@ const Home = ({navigation}) => {
                   }}>
                   {dataVerse.text_uthmani}
                 </Text>
-                <View style={{marginTop: 50}}>
-                  <Button
+                <View>
+                  {/* <Button
                     onPress={onShare}
                     title="Share"
                     style={{borderRadius: 2}}
+                  /> */}
+                  <FontAwesome
+                    name="bookmark"
+                    size={normalize(30)}
+                    color="black"
+                    style={{
+                      height: normalize(50),
+                      width: normalize(50),
+                      // paddingVertical: normalize(25),
+                      // paddingHorizontal: normalize(15),
+                      alignSelf: 'center',
+                      // position: 'absolute',
+                      top: 65,
+                      left: 75,
+                      transform: [
+                        {
+                          rotateY: '180deg',
+                        },
+                      ],
+                    }}
+                    // onPress={onShare}
+                  />
+                  <FontAwesome
+                    name="share"
+                    size={normalize(30)}
+                    color="black"
+                    style={{
+                      height: normalize(50),
+                      width: normalize(50),
+                      // paddingVertical: normalize(25),
+                      // paddingHorizontal: normalize(15),
+                      alignSelf: 'center',
+                      // position: 'absolute',
+                      top: 5,
+                      left: 130,
+                      transform: [
+                        {
+                          rotateY: '180deg',
+                        },
+                      ],
+                    }}
+                    onPress={onShare}
                   />
                 </View>
               </View>
