@@ -45,6 +45,10 @@ function normalize(size) {
   }
 }
 
+const {
+  PRIORITIES: {HIGH_ACCURACY},
+  useLocationSettings,
+} = LocationEnabler;
 const Home = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [prayerLoading, setPrayerLoading] = useState(true);
@@ -115,49 +119,36 @@ const Home = ({navigation}) => {
     setShowMore(e.nativeEvent.lines.length > NUM_OF_LINES);
   }, []);
 
-  var locationPermission = hasPermission();
-  locationPermission.then(res => {
-    if (res) {
-      Geolocation.getCurrentPosition(
-        position => {
-          setLagitude(position.coords.latitude);
-          setLongitude(position.coords.longitude);
-          setLocPermission(true);
-          setLocLoading(false);
-        },
-        error => {
-          // See error code charts below.
-          console.warn('Error ' + error.code, error.message);
-          setLocPermission(false);
-          setLocLoading(false);
-        },
-        {enableHighAccuracy: true, timeout: 500000, maximumAge: 10000},
-      );
+  useEffect(() => {
+    async function fetchMyAPI() {
+      var locationPermission = hasPermission();
+      locationPermission.then(res => {
+        if (res) {
+          Geolocation.getCurrentPosition(
+            position => {
+              setLagitude(position.coords.latitude);
+              setLongitude(position.coords.longitude);
+              setLocPermission(true);
+              setLocLoading(false);
+            },
+            error => {
+              // See error code charts below.
+              console.warn('Error ' + error.code, error.message);
+              setLocPermission(false);
+              setLocLoading(false);
+            },
+            {enableHighAccuracy: true, timeout: 500000, maximumAge: 10000},
+          );
+        }
+      });
     }
-  });
 
-  const {
-    useLocationSettings,
-    PRIORITIES: {HIGH_ACCURACY},
-  } = LocationEnabler;
+    fetchMyAPI();
+  }, []);
 
-  const [enabled, requestResolution] = useLocationSettings({
-    priority: HIGH_ACCURACY, // optional: default BALANCED_POWER_ACCURACY
-    alwaysShow: true, // optional: default false
-    needBle: true, // optional: default false
-  });
-
-  console.log(`Location are ${enabled ? 'enabled' : 'disabled'}`);
-
-  // // ...
-  // useEffect(() => {
-
-  // }, []);
   useEffect(() => {
     // if (city) {
-    if (!enabled && locationPermission === true) {
-      requestResolution();
-    }
+
     init_time();
   }, [lagitude, longitude]);
 
@@ -220,7 +211,12 @@ const Home = ({navigation}) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: 'Please check this out.',
+        message: `verse no - ${dataVerse.verse_number}
+                  ${dataVerse.text_uthmani}
+                  Download Razvi Talimat
+                  Application
+                  http://example/jkhkef
+        `,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -235,6 +231,27 @@ const Home = ({navigation}) => {
       alert(error.message);
     }
   };
+
+  const [enabled, requestResolution] = useLocationSettings(
+    {
+      priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
+      alwaysShow: true, // default false
+      needBle: true, // default false
+    },
+    false /* optional: default undefined */,
+  );
+
+  console.log(`Location are ${enabled ? 'enabled' : 'disabled'}`);
+
+  // // ...
+  console.log(locPermission);
+  useEffect(() => {
+    if (!enabled) {
+      requestResolution();
+    }
+  }, []);
+
+  // console.log(window.location.href);
 
   return (
     <View style={styles.container}>
