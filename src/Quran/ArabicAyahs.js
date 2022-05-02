@@ -260,7 +260,7 @@ const Page = ({pageContent}) => {
                     // marginLeft: 20,
                     // backgroundColor: 'pink',
                   }}
-                  key={`${content.number + 8000}.${idx}`}>
+                  key={`${Math.random() * 100000}`}>
                   <Text
                     style={{
                       color: '#d79c03',
@@ -279,7 +279,7 @@ const Page = ({pageContent}) => {
                 </View>
               )}
               <Text
-                key={`${content.page}.${idx}`}
+                key={`${Math.random() * 100000}`}
                 style={{
                   // color: '#05d944',
                   // backgroundColor: 'grey',
@@ -377,14 +377,14 @@ const ArabicAyahs = ({route, navigation}) => {
     // }, 500);
   }, []);
 
-  // const scrollToIndexFailed = err => {
-  //   const offset = err.averageItemLength * err.index;
-  //   flatListRef?.current?.scrollToOffset({offset});
-  //   setTimeout(
-  //     () => flatListRef?.current?.scrollToIndex({index: err.index}),
-  //     100,
-  //   );
-  // };
+  const scrollToIndexFailed = err => {
+    const offset = err.averageItemLength * err.index;
+    flatListRef?.current?.scrollToOffset({offset});
+    setTimeout(
+      () => flatListRef?.current?.scrollToIndex({index: err.index}),
+      100,
+    );
+  };
 
   return (
     <View style={{flex: 1, padding: 0}}>
@@ -416,7 +416,9 @@ const ArabicAyahs = ({route, navigation}) => {
         // </ScrollView>
         <FlatList
           data={Object.keys(quran).sort((a, b) => a - b)}
-          keyExtractor={(it, idx) => `${Math.random() * 1000}`}
+          // keyExtractor={(it, idx) => `${Math.random() * 1000}`}
+          // keyExtractor={quran[it].number}
+          keyExtractor={(it, idx) => quran[it][0].number}
           ref={flatListRef}
           renderItem={({item}) => {
             return <Page pageContent={quran[item]} />;

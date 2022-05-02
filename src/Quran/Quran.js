@@ -333,6 +333,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 14,
     fontWeight: '700',
+    color: '#777',
     // marginLeft: 50,
     // marginBottom: 10,
   },
@@ -359,7 +360,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   number: {
-    // backgroundColor: 'pink'
+    fontWeight: 'bold',
+    color: '#777',
+    // backgroundColor: 'pink',
   },
 });
 
