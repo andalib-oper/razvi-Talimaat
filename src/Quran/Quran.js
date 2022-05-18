@@ -90,10 +90,12 @@ function Arabic({navigation}) {
             renderItem={({item}) => (
               // <View style={styles.topnav}>
               <Pressable
-                onPress={() =>
+                onPress={() =>{
                   navigation.navigate('arabicAyahs', {
-                    code: item.number,
+                    code: item.name,
+                    surahIndex: item.number
                   })
+                }
                 }>
                 <View style={styles.surah}>
                   <Text style={styles.number}>{item.number}.</Text>

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo} from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -11,10 +11,10 @@ import {
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
-import {SkypeIndicator} from 'react-native-indicators';
+import { SkypeIndicator } from 'react-native-indicators';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {MMKV} from 'react-native-mmkv';
+import { MMKV } from 'react-native-mmkv';
 import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -38,7 +38,7 @@ function normalize(size) {
   }
 }
 
-const CalendarScreen = ({navigation}) => {
+const CalendarScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [all_years, setAll_years] = useState([]);
   const [isLoading, setLoading] = useState(true);
@@ -169,10 +169,12 @@ const CalendarScreen = ({navigation}) => {
             <LinearGradient
               colors={[
                 // '#0d7fb6',
-                '#48c3eb',
-                '#718edd',
+                '#aa8f08',
+                '#f4bf4d',
               ]}
-              style={{flex: 1}}>
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={{ flex: 1 }}>
               <View style={styles.topnav}>
                 <Text style={styles.topnavtext}>Calendar</Text>
               </View>
@@ -193,14 +195,13 @@ const CalendarScreen = ({navigation}) => {
                   // style={}
                   onPress={() => monthChangeBackward()}
                 />
-                <Text style={{fontSize: 16, color: '#fff', fontWeight: 'bold'}}>
+                <Text style={{ fontSize: 16, color: '#fff', fontWeight: 'bold' }}>
                   {currentMonth?.[0]?.hijri?.month?.number ===
-                  currentMonth?.[currentMonth?.length - 1]?.hijri?.month?.number
+                    currentMonth?.[currentMonth?.length - 1]?.hijri?.month?.number
                     ? `${currentMonth?.[0]?.hijri?.month?.en}, ${currentMonth?.[0]?.hijri?.year}`
-                    : `(${currentMonth?.[0]?.hijri?.month?.en}/${
-                        currentMonth?.[currentMonth?.length - 1]?.hijri?.month
-                          ?.en
-                      }), ${currentMonth?.[0]?.hijri?.year}`}
+                    : `(${currentMonth?.[0]?.hijri?.month?.en}/${currentMonth?.[currentMonth?.length - 1]?.hijri?.month
+                      ?.en
+                    }), ${currentMonth?.[0]?.hijri?.year}`}
                   {/* {moment().format('YYYY')} */}
                 </Text>
                 <MaterialIcons
@@ -224,7 +225,7 @@ const CalendarScreen = ({navigation}) => {
                     // backgroundColor: 'yellow'
                   }}>
                   <Text
-                    style={{...styles.monthContainerText, fontWeight: '700'}}>
+                    style={{ ...styles.monthContainerText, fontWeight: '700' }}>
                     {currentMonth[0]?.gregorian.month.en} {''}
                   </Text>
                   <Text
@@ -243,7 +244,7 @@ const CalendarScreen = ({navigation}) => {
                 <View
                   style={{
                     ...styles.weekRow1,
-                    backgroundColor: '#29539b',
+                    backgroundColor: '#ccc4a8',
                     borderRadius: 1,
                     paddingVertical: normalize(7),
                   }}>
@@ -263,18 +264,18 @@ const CalendarScreen = ({navigation}) => {
                           if (
                             i === 0 &&
                             j >=
-                              weekdays[
-                                currentMonth?.[0]?.['gregorian']?.['weekday']?.[
-                                  'en'
-                                ]
-                              ]
+                            weekdays[
+                            currentMonth?.[0]?.['gregorian']?.['weekday']?.[
+                            'en'
+                            ]
+                            ]
                           ) {
                             return (
                               <View
                                 key={Math.random() * 1000}
                                 style={
                                   currentMonth?.[counter]?.gregorian?.date ===
-                                  moment().format('DD-MM-YYYY')
+                                    moment().format('DD-MM-YYYY')
                                     ? styles.weekTextHighLight
                                     : styles.weekText
                                 }>
@@ -285,7 +286,7 @@ const CalendarScreen = ({navigation}) => {
                                 <Text style={styles.weekTextHijri}>
                                   {
                                     currentMonth?.[counter++]?.['gregorian']?.[
-                                      'day'
+                                    'day'
                                     ]
                                   }
                                 </Text>
@@ -307,7 +308,7 @@ const CalendarScreen = ({navigation}) => {
                                 key={Math.random() * 1000}
                                 style={
                                   currentMonth?.[counter]?.gregorian?.date ===
-                                  moment().format('DD-MM-YYYY')
+                                    moment().format('DD-MM-YYYY')
                                     ? styles.weekTextHighLight
                                     : styles.weekText
                                 }>
@@ -317,7 +318,7 @@ const CalendarScreen = ({navigation}) => {
                                 <Text style={styles.weekTextHijri}>
                                   {
                                     currentMonth?.[counter++]?.['gregorian']?.[
-                                      'day'
+                                    'day'
                                     ]
                                   }
                                 </Text>
@@ -332,7 +333,7 @@ const CalendarScreen = ({navigation}) => {
               </View>
               <View
                 style={{
-                  backgroundColor: '#29539b',
+                  backgroundColor: '#b5a772',
                   alignSelf: 'center',
                   flexDirection: 'row',
                   marginTop: 25,
@@ -414,7 +415,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingHorizontal: 0,
     marginBottom: 2,
-    // backgroundColor: 'grey',
+    // backgroundColor: 'pink',
     // borderWidth: 1,
     // borderColor: 'black'
   },
@@ -423,7 +424,7 @@ const styles = StyleSheet.create({
     height: 50,
     textAlign: 'center',
     fontSize: normalize(16),
-    fontWeight: 'bold',
+    fontWeight: '600',
     color: '#fff',
     borderWidth: 0.5,
     borderColor: '#ccc',
@@ -434,20 +435,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: normalize(16),
     fontWeight: 'bold',
-    color: '#fff',
+    color: '#cbbf91',
     borderWidth: 1,
     borderTopWidth: 2,
     borderColor: '#000',
   },
   weekText2: {
     textAlign: 'center',
-    fontSize: normalize(14),
+    fontSize: normalize(16),
     color: '#fff',
-    fontWeight: '600',
+    fontWeight: '700',
   },
   weekTextHijri: {
     fontSize: normalize('12'),
-    color: '#333',
+    color: '#edebe6',
     textAlign: 'right',
     marginRight: 10,
   },
