@@ -188,6 +188,16 @@ const CalendarScreen = ({ navigation }) => {
                   // color: '#ffffff'
                   // backgroundColor: 'pink'
                 }}>
+                  <View style={{
+                    flexDirection: 'row',
+                    // backgroundColor: 'grey',
+                    alignItems: 'center',
+                    alignContent: 'center'
+                  }}>
+                  <View style={{
+                    width: '15%',
+                    // backgroundColor: 'pink'
+                  }}>
                 <MaterialIcons
                   name="arrow-back-ios"
                   size={24}
@@ -195,7 +205,12 @@ const CalendarScreen = ({ navigation }) => {
                   // style={}
                   onPress={() => monthChangeBackward()}
                 />
-                <Text style={{ fontSize: 16, color: '#fff', fontWeight: 'bold' }}>
+                  </View>
+                  <View style={{
+                    // backgroundColor: 'red',
+                    width: '70%',
+                  }}>
+                <Text style={{ fontSize: 16, color: '#fff', fontWeight: 'bold', textAlign: 'center'}}>
                   {currentMonth?.[0]?.hijri?.month?.number ===
                     currentMonth?.[currentMonth?.length - 1]?.hijri?.month?.number
                     ? `${currentMonth?.[0]?.hijri?.month?.en}, ${currentMonth?.[0]?.hijri?.year}`
@@ -204,13 +219,22 @@ const CalendarScreen = ({ navigation }) => {
                     }), ${currentMonth?.[0]?.hijri?.year}`}
                   {/* {moment().format('YYYY')} */}
                 </Text>
+                  </View>
+                  <View style={{
+                    // backgroundColor: 'orange',
+                    width: '15%',
+                  }}>
                 <MaterialIcons
                   name="arrow-forward-ios"
                   size={24}
                   color="white"
-                  // style={}
+                  style={{
+                    textAlign: 'right'
+                  }}
                   onPress={() => monthChangeForward()}
                 />
+                  </View>
+                  </View>
               </View>
               <View
                 key={currentMonth[0]?.gregorian.month.en}

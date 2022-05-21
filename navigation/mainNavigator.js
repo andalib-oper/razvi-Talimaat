@@ -87,7 +87,7 @@ const mainNavigator = () => {
           },
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="ramzan"
         component={Ramzan}
         options={{
@@ -105,7 +105,7 @@ const mainNavigator = () => {
             fontWeight: 'bold',
           },
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };
