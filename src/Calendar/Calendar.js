@@ -167,13 +167,14 @@ const CalendarScreen = ({ navigation }) => {
               // flex: 1,
             }}>
             <LinearGradient
-              colors={[
-                // '#0d7fb6',
-                '#aa8f08',
-                '#f4bf4d',
-              ]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
+              // colors={[
+              //   // '#0d7fb6',
+              //   '#aa8f08',
+              //   '#aa8f08',
+              // ]}
+              colors={['#7c5d03', '#946f03', '#e3aa0b']}
+              // start={{ x: 0, y: 0 }}
+              // end={{ x: 1, y: 1 }}
               style={{ flex: 1 }}>
               <View style={styles.topnav}>
                 <Text style={styles.topnavtext}>Calendar</Text>
@@ -396,6 +397,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  background: {
+    backgroundColor: '#4B59F7',
+    height: windowHeight/1,
+    width: windowWidth/1,
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    borderRadius: 5,
+  },
   topnav: {
     height: 60,
     width: windowWidth / 1,
@@ -462,7 +473,10 @@ const styles = StyleSheet.create({
     color: '#cbbf91',
     borderWidth: 1,
     borderTopWidth: 2,
-    borderColor: '#000',
+    borderLeftWidth: 2,
+    borderRightWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: '#fad364',
   },
   weekText2: {
     textAlign: 'center',
