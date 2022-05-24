@@ -17,6 +17,7 @@ import {SkypeIndicator} from 'react-native-indicators';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {MMKV} from 'react-native-mmkv';
+import data from '../../data/Chapters.json';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -32,7 +33,7 @@ function normalize(size) {
   }
 }
 
-const Page = ({pageContent}) => {
+const Page = ({pageContent, index}) => {
   // console.log(pageContent);
 
   const toArabic = number => {
@@ -245,8 +246,9 @@ const Page = ({pageContent}) => {
         }}
         adjustsFontSizeToFit>
         {pageContent.map((content, idx) => {
+          // console.log(content);
           return (
-            <>
+            <Text key={content.number * 100000000}>
               {content.numberInSurah === 1 && (
                 <View
                   style={{
@@ -259,8 +261,7 @@ const Page = ({pageContent}) => {
                     // marginTop: 5,
                     // marginLeft: 20,
                     // backgroundColor: 'pink',
-                  }}
-                  key={`${Math.random() * 100000}`}>
+                  }}>
                   <Text
                     style={{
                       color: '#d79c03',
@@ -279,7 +280,7 @@ const Page = ({pageContent}) => {
                 </View>
               )}
               <Text
-                key={`${Math.random() * 100000}`}
+                // key={`${Math.random() * 100000}`}
                 style={{
                   // color: '#05d944',
                   // backgroundColor: 'grey',
@@ -312,7 +313,7 @@ const Page = ({pageContent}) => {
                   {pageContent[idx + 1]?.numberInSurah === 1 ? '\n\n' : null}
                 </Text>
               </Text>
-            </>
+            </Text>
           );
         })}
       </Text>
@@ -323,58 +324,40 @@ const Page = ({pageContent}) => {
 };
 
 const ArabicAyahs = ({route, navigation}) => {
-  const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  // const [isLoading, setLoading] = useState(true);
+  // const [data, setData] = useState([]);
   const [quran, setQuran] = useState([]);
   const [scrollIndex, setScrollIndex] = useState(0);
   const flatListRef = useRef(null);
-
-  const storage = new MMKV();
+  // const scrollIntoView = useScrollIntoView();
+  // const viewRef = useRef();
 
   useEffect(() => {
     var page_quran = {};
-    // storage.delete('pagewise_quran');
-    if (
-      !storage.contains('pagewise_quran') ||
-      !storage.contains('ayah_quran')
-    ) {
-      const quran = JSON.parse(storage.getString('quran'));
-      const new_quran = quran
-        .map(surah =>
-          surah.ayahs.map(ayah => ({
-            ...ayah,
-            surah: surah.name,
-            surahNumber: surah.number,
-          })),
-        )
-        .flat();
-      new_quran.forEach(ayah => {
-        page_quran[ayah.page] = Object.keys(page_quran).includes(`${ayah.page}`)
-          ? [...page_quran[`${ayah.page}`], ayah]
-          : [ayah];
-      });
-      setScrollIndex(
-        new_quran.findIndex(ayah => ayah.surahNumber === route.params.code),
-      );
-      storage.set('pagewise_quran', JSON.stringify(page_quran));
-      storage.set('ayah_quran', JSON.stringify(new_quran));
-    } else {
-      page_quran = JSON.parse(storage.getString('pagewise_quran'));
-      const new_quran = JSON.parse(storage.getString('ayah_quran'));
-      setScrollIndex(
-        new_quran.findIndex(ayah => ayah.surahNumber === route.params.code),
-      );
-    }
+    const new_quran = data.surahs
+      .map(surah =>
+        surah.ayahs.map(ayah => ({
+          ...ayah,
+          surah: surah.name,
+          surahNumber: surah.number,
+        })),
+      )
+      .flat();
+    new_quran.forEach(ayah => {
+      page_quran[ayah.page] = Object.keys(page_quran).includes(`${ayah.page}`)
+        ? [...page_quran[`${ayah.page}`], ayah]
+        : [ayah];
+    });
+
+    const sIndex =
+      new_quran.find(ayah => ayah.surahNumber === route.params.surahIndex)
+        .page - 1;
+    setScrollIndex(sIndex);
+    // scrollIntoView(viewRef.current);
     setQuran(page_quran);
-    setLoading(false);
-    // this.flatListRef.scrollToIndex({
-    //   animated: true,
-    //   index: itemIndex,
-    // });
-    // setTimeout(() => {
-    //   console.log(JSON.parse(storage.getString('ayah_quran'))[scrollIndex]);
-    //   flatListRef?.current?.scrollToIndex({index: scrollIndex});
-    // }, 500);
+    setTimeout(() => {
+      flatListRef?.current?.scrollToIndex({index: sIndex});
+    }, 500);
   }, []);
 
   const scrollToIndexFailed = err => {
@@ -396,36 +379,25 @@ const ArabicAyahs = ({route, navigation}) => {
           style={styles.icon}
           onPress={() => navigation.goBack()}
         />
-        {/* <Text style={styles.topnavtext}>Ayahs</Text> */}
       </View>
-      {isLoading ? (
-        <OrientationLoadingOverlay
-          visible={true}
-          color="white"
-          indicatorSize="large"
-          messageFontSize={24}
-          // message="Loading... 😀😀😀"
-        />
-      ) : (
-        // <ScrollView>
-        //   {Object.keys(quran)
-        //     .sort((a, b) => a - b)
-        //     .map((item, idx) => {
-        //       return <Page pageContent={quran[item]} key={idx} />;
-        //     })}
-        // </ScrollView>
-        <FlatList
-          data={Object.keys(quran).sort((a, b) => a - b)}
-          // keyExtractor={(it, idx) => `${Math.random() * 1000}`}
-          // keyExtractor={quran[it].number}
-          keyExtractor={(it, idx) => quran[it][0].number}
-          ref={flatListRef}
-          renderItem={({item}) => {
-            return <Page pageContent={quran[item]} />;
-          }}
-          // onScrollToIndexFailed={err => scrollToIndexFailed(err)}
-        />
-      )}
+      <FlatList
+        data={Object.keys(quran)}
+        // keyExtractor={(it, idx) => `${Math.random() * 1000}`}
+        // keyExtractor={quran[it].number}
+        keyExtractor={(it, idx) => {
+          return it * 10000;
+        }}
+        ref={flatListRef}
+        renderItem={({item}) => {
+          return <Page pageContent={quran[item]} index={item} />;
+        }}
+        onScrollToIndexFailed={err => scrollToIndexFailed(err)}
+      />
+      {/* <ScrollIntoView scrollIntoViewKey={scrollIndex} ref={viewRef}>
+        {Object.keys(quran).map(item => (
+          <Page pageContent={quran[item]} key={item} />
+        ))}
+      </ScrollIntoView> */}
     </View>
   );
 };

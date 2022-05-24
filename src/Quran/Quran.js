@@ -20,6 +20,7 @@ import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay'
 import {MMKV} from 'react-native-mmkv';
 import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
+import data from '../../data/Chapters.json';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -36,11 +37,11 @@ function normalize(size) {
 }
 
 function Arabic({navigation}) {
-  const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  // const [isLoading, setLoading] = useState(true);
+  // const [data, setData] = useState([]);
 
   const storage = new MMKV();
-
+  // console.log(data);
   // const getSurahs = async () => {
   //   try {
   //     const response = await fetch('http://api.alquran.cloud/v1/surah');
@@ -53,28 +54,28 @@ function Arabic({navigation}) {
   //   }
   // };
 
-  useEffect(() => {
-    // storage.clearAll();
-    const quran = storage.contains('quran')
-      ? JSON.parse(storage.getString('quran'))
-      : [];
-    if (quran.length === 0) {
-      axios
-        .get('http://api.alquran.cloud/v1/quran/quran-unicode')
-        .then(res => {
-          setData(res.data.data.surahs);
-          storage.set('quran', JSON.stringify(res.data.data.surahs));
-          setLoading(false);
-        })
-        .catch(err => console.log(err));
-    } else {
-      setData(quran);
-      setLoading(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   // storage.clearAll();
+  //   const quran = storage.contains('quran')
+  //     ? JSON.parse(storage.getString('quran'))
+  //     : [];
+  //   if (quran.length === 0) {
+  //     axios
+  //       .get('http://api.alquran.cloud/v1/quran/quran-unicode')
+  //       .then(res => {
+  //         // setData(res.data.data.surahs);
+  //         storage.set('quran', JSON.stringify(res.data.data.surahs));
+  //         setLoading(false);
+  //       })
+  //       .catch(err => console.log(err));
+  //   } else {
+  //     setData(quran);
+  //     setLoading(false);
+  //   }
+  // }, []);
   return (
     <>
-      {isLoading ? (
+      {/* {isLoading ? (
         <OrientationLoadingOverlay
           visible={true}
           color="white"
@@ -83,51 +84,50 @@ function Arabic({navigation}) {
           // message="Loading... 😀😀😀"
         />
       ) : (
-        <>
-          <FlatList
-            data={data}
-            keyExtractor={({number}, index) => number}
-            renderItem={({item}) => (
-              // <View style={styles.topnav}>
-              <Pressable
-                onPress={() =>{
-                  navigation.navigate('arabicAyahs', {
-                    code: item.name,
-                    surahIndex: item.number
-                  })
-                }
-                }>
-                <View style={styles.surah}>
-                  <Text style={styles.number}>{item.number}.</Text>
-                  <View>
-                    <View
-                      style={{
-                        // backgroundColor: 'pink',
-                        alignContent: 'center',
-                        alignSelf: 'center',
-                        // marginTop: -10,
-                        // fontSize: 20,
-                      }}>
-                      <Text style={styles.surahArabic}>{item.name}</Text>
-                    </View>
-                    <View
-                      style={{
-                        width: normalize(60),
-                        // backgroundColor: 'pink',
-                        alignSelf: 'flex-end',
-                        marginTop: 0,
-                      }}>
-                      <Text style={styles.versesArabic}>
-                        Verses {item.ayahs.length}
-                      </Text>
-                    </View>
-                  </View>
+        <> */}
+      <FlatList
+        data={data.surahs}
+        keyExtractor={({number}, index) => number}
+        renderItem={({item}) => (
+          // <View style={styles.topnav}>
+          <Pressable
+            onPress={() => {
+              navigation.navigate('arabicAyahs', {
+                code: item.name,
+                surahIndex: item.number,
+              });
+            }}>
+            <View style={styles.surah}>
+              <Text style={styles.number}>{item.number}.</Text>
+              <View>
+                <View
+                  style={{
+                    // backgroundColor: 'pink',
+                    alignContent: 'center',
+                    alignSelf: 'center',
+                    // marginTop: -10,
+                    // fontSize: 20,
+                  }}>
+                  <Text style={styles.surahArabic}>{item.name}</Text>
                 </View>
-              </Pressable>
-            )}
-          />
-        </>
-      )}
+                <View
+                  style={{
+                    width: normalize(60),
+                    // backgroundColor: 'pink',
+                    alignSelf: 'flex-end',
+                    marginTop: 0,
+                  }}>
+                  <Text style={styles.versesArabic}>
+                    Verses {item.ayahs.length}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </Pressable>
+        )}
+      />
+      {/* </>
+      )} */}
     </>
   );
 }

@@ -8,7 +8,6 @@ import {
   Dimensions,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {req} from '../../redux/auth/actions';
 import LinearGradient from 'react-native-linear-gradient';
 

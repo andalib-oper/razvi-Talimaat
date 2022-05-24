@@ -21,7 +21,7 @@ const mainNavigator = () => {
         headerTitleAlign: 'center',
         tabBarStyle: {
           backgroundColor: 'white',
-          height: 70,
+          height: 60,
           paddingTop: 5,
           paddingBottom: 10,
           elevation: 10,
@@ -39,11 +39,11 @@ const mainNavigator = () => {
             <FontAwesome5
               name="home"
               color={focused ? '#090979' : '#808080'}
-              size={23}
+              size={20}
             />
           ),
           tabBarLabelStyle: {
-            fontSize: 15,
+            fontSize: 14,
             fontFamily: 'poppins',
             fontWeight: 'bold',
           },
@@ -58,11 +58,11 @@ const mainNavigator = () => {
             <FontAwesome5
               color={focused ? '#090979' : '#808080'}
               name="quran"
-              size={23}
+              size={20}
             />
           ),
           tabBarLabelStyle: {
-            fontSize: 15,
+            fontSize: 14,
             fontFamily: 'poppins',
             fontWeight: 'bold',
           },
@@ -77,11 +77,11 @@ const mainNavigator = () => {
             <FontAwesome5
               color={focused ? '#090979' : '#808080'}
               name="calendar-alt"
-              size={23}
+              size={20}
             />
           ),
           tabBarLabelStyle: {
-            fontSize: 15,
+            fontSize: 14,
             fontFamily: 'poppins',
             fontWeight: 'bold',
           },

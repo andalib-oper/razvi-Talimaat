@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {
   View,
   Text,
@@ -11,10 +11,9 @@ import {
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
-import { SkypeIndicator } from 'react-native-indicators';
+import {SkypeIndicator} from 'react-native-indicators';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MMKV } from 'react-native-mmkv';
+import {MMKV} from 'react-native-mmkv';
 import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -38,7 +37,7 @@ function normalize(size) {
   }
 }
 
-const CalendarScreen = ({ navigation }) => {
+const CalendarScreen = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [all_years, setAll_years] = useState([]);
   const [isLoading, setLoading] = useState(true);
@@ -172,10 +171,10 @@ const CalendarScreen = ({ navigation }) => {
               //   '#aa8f08',
               //   '#aa8f08',
               // ]}
-              colors={['#7c5d03', '#946f03', '#e3aa0b']}
+              colors={['#B78628', '#C69320', '#DBA514', '#EEB609', '#FCC201']}
               // start={{ x: 0, y: 0 }}
               // end={{ x: 1, y: 1 }}
-              style={{ flex: 1 }}>
+              style={{flex: 1}}>
               <View style={styles.topnav}>
                 <Text style={styles.topnavtext}>Calendar</Text>
               </View>
@@ -189,53 +188,65 @@ const CalendarScreen = ({ navigation }) => {
                   // color: '#ffffff'
                   // backgroundColor: 'pink'
                 }}>
-                  <View style={{
+                <View
+                  style={{
                     flexDirection: 'row',
                     // backgroundColor: 'grey',
                     alignItems: 'center',
-                    alignContent: 'center'
+                    alignContent: 'center',
                   }}>
-                  <View style={{
-                    width: '15%',
-                    // backgroundColor: 'pink'
-                  }}>
-                <MaterialIcons
-                  name="arrow-back-ios"
-                  size={24}
-                  color="white"
-                  // style={}
-                  onPress={() => monthChangeBackward()}
-                />
+                  <View
+                    style={{
+                      width: '15%',
+                      // backgroundColor: 'pink'
+                    }}>
+                    <MaterialIcons
+                      name="arrow-back-ios"
+                      size={24}
+                      color="white"
+                      // style={}
+                      onPress={() => monthChangeBackward()}
+                    />
                   </View>
-                  <View style={{
-                    // backgroundColor: 'red',
-                    width: '70%',
-                  }}>
-                <Text style={{ fontSize: 16, color: '#fff', fontWeight: 'bold', textAlign: 'center'}}>
-                  {currentMonth?.[0]?.hijri?.month?.number ===
-                    currentMonth?.[currentMonth?.length - 1]?.hijri?.month?.number
-                    ? `${currentMonth?.[0]?.hijri?.month?.en}, ${currentMonth?.[0]?.hijri?.year}`
-                    : `(${currentMonth?.[0]?.hijri?.month?.en}/${currentMonth?.[currentMonth?.length - 1]?.hijri?.month
-                      ?.en
-                    }), ${currentMonth?.[0]?.hijri?.year}`}
-                  {/* {moment().format('YYYY')} */}
-                </Text>
+                  <View
+                    style={{
+                      // backgroundColor: 'red',
+                      width: '70%',
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        color: '#fff',
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                      }}>
+                      {currentMonth?.[0]?.hijri?.month?.number ===
+                      currentMonth?.[currentMonth?.length - 1]?.hijri?.month
+                        ?.number
+                        ? `${currentMonth?.[0]?.hijri?.month?.en}, ${currentMonth?.[0]?.hijri?.year}`
+                        : `(${currentMonth?.[0]?.hijri?.month?.en}/${
+                            currentMonth?.[currentMonth?.length - 1]?.hijri
+                              ?.month?.en
+                          }), ${currentMonth?.[0]?.hijri?.year}`}
+                      {/* {moment().format('YYYY')} */}
+                    </Text>
                   </View>
-                  <View style={{
-                    // backgroundColor: 'orange',
-                    width: '15%',
-                  }}>
-                <MaterialIcons
-                  name="arrow-forward-ios"
-                  size={24}
-                  color="white"
-                  style={{
-                    textAlign: 'right'
-                  }}
-                  onPress={() => monthChangeForward()}
-                />
+                  <View
+                    style={{
+                      // backgroundColor: 'orange',
+                      width: '15%',
+                    }}>
+                    <MaterialIcons
+                      name="arrow-forward-ios"
+                      size={24}
+                      color="white"
+                      style={{
+                        textAlign: 'right',
+                      }}
+                      onPress={() => monthChangeForward()}
+                    />
                   </View>
-                  </View>
+                </View>
               </View>
               <View
                 key={currentMonth[0]?.gregorian.month.en}
@@ -250,7 +261,7 @@ const CalendarScreen = ({ navigation }) => {
                     // backgroundColor: 'yellow'
                   }}>
                   <Text
-                    style={{ ...styles.monthContainerText, fontWeight: '700' }}>
+                    style={{...styles.monthContainerText, fontWeight: '700'}}>
                     {currentMonth[0]?.gregorian.month.en} {''}
                   </Text>
                   <Text
@@ -269,8 +280,8 @@ const CalendarScreen = ({ navigation }) => {
                 <View
                   style={{
                     ...styles.weekRow1,
-                    backgroundColor: '#ccc4a8',
-                    borderRadius: 1,
+                    backgroundColor: '#a8a8a8',
+                    borderRadius: 5,
                     paddingVertical: normalize(7),
                   }}>
                   <Text style={styles.weekDay}>Sun</Text>
@@ -289,18 +300,18 @@ const CalendarScreen = ({ navigation }) => {
                           if (
                             i === 0 &&
                             j >=
-                            weekdays[
-                            currentMonth?.[0]?.['gregorian']?.['weekday']?.[
-                            'en'
-                            ]
-                            ]
+                              weekdays[
+                                currentMonth?.[0]?.['gregorian']?.['weekday']?.[
+                                  'en'
+                                ]
+                              ]
                           ) {
                             return (
                               <View
                                 key={Math.random() * 1000}
                                 style={
                                   currentMonth?.[counter]?.gregorian?.date ===
-                                    moment().format('DD-MM-YYYY')
+                                  moment().format('DD-MM-YYYY')
                                     ? styles.weekTextHighLight
                                     : styles.weekText
                                 }>
@@ -311,7 +322,7 @@ const CalendarScreen = ({ navigation }) => {
                                 <Text style={styles.weekTextHijri}>
                                   {
                                     currentMonth?.[counter++]?.['gregorian']?.[
-                                    'day'
+                                      'day'
                                     ]
                                   }
                                 </Text>
@@ -333,7 +344,7 @@ const CalendarScreen = ({ navigation }) => {
                                 key={Math.random() * 1000}
                                 style={
                                   currentMonth?.[counter]?.gregorian?.date ===
-                                    moment().format('DD-MM-YYYY')
+                                  moment().format('DD-MM-YYYY')
                                     ? styles.weekTextHighLight
                                     : styles.weekText
                                 }>
@@ -343,7 +354,7 @@ const CalendarScreen = ({ navigation }) => {
                                 <Text style={styles.weekTextHijri}>
                                   {
                                     currentMonth?.[counter++]?.['gregorian']?.[
-                                    'day'
+                                      'day'
                                     ]
                                   }
                                 </Text>
@@ -399,8 +410,8 @@ const styles = StyleSheet.create({
   },
   background: {
     backgroundColor: '#4B59F7',
-    height: windowHeight/1,
-    width: windowWidth/1,
+    height: windowHeight / 1,
+    width: windowWidth / 1,
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center',
@@ -456,17 +467,17 @@ const styles = StyleSheet.create({
   },
   weekText: {
     width: `${100 / 7}%`,
-    height: 50,
+    height: 55,
     textAlign: 'center',
     fontSize: normalize(16),
     fontWeight: '600',
     color: '#fff',
     borderWidth: 0.5,
-    borderColor: '#ccc',
+    borderColor: '#ddd',
   },
   weekTextHighLight: {
     width: `${100 / 7}%`,
-    height: 50,
+    height: 55,
     textAlign: 'center',
     fontSize: normalize(16),
     fontWeight: 'bold',
@@ -476,19 +487,21 @@ const styles = StyleSheet.create({
     borderLeftWidth: 2,
     borderRightWidth: 2,
     borderBottomWidth: 2,
-    borderColor: '#fad364',
+    borderColor: '#666',
   },
   weekText2: {
     textAlign: 'center',
     fontSize: normalize(16),
     color: '#fff',
     fontWeight: '700',
+    marginTop: 2,
   },
   weekTextHijri: {
     fontSize: normalize('12'),
     color: '#edebe6',
     textAlign: 'right',
-    marginRight: 10,
+    marginRight: 5,
+    marginTop: 2,
   },
   umrah: {
     marginTop: 20,
