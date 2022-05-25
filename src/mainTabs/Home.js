@@ -23,6 +23,7 @@ import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay'
 import {SkypeIndicator} from 'react-native-indicators';
 import moment from 'moment';
 import {hasPermission} from '../Hooks/LocationPermission';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // import RNLocation from 'react-native-location';
 import LocationEnabler from 'react-native-location-enabler';
@@ -44,10 +45,6 @@ function normalize(size) {
   }
 }
 
-const {
-  PRIORITIES: {HIGH_ACCURACY},
-  useLocationSettings,
-} = LocationEnabler;
 const Home = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [prayerLoading, setPrayerLoading] = useState(true);
@@ -58,34 +55,70 @@ const Home = ({navigation}) => {
   const [date, setDate] = useState({});
   const [locPermission, setLocPermission] = useState(false);
   const [locLoading, setLocLoading] = useState(true);
-
+  const [lagitude, setLagitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
   const [isLoadingVerse, setLoadingVerse] = useState(true);
   const [dataVerse, setDataVerse] = useState([]);
 
-  // const fetchData = async () => {
-  //   const resp = await
-  //   const data = await resp.json();
-  //   setDataVerse(data.verse);
-  //   setLoadingVerse(false);
-  // };
+  const {
+    PRIORITIES: {HIGH_ACCURACY},
+    useLocationSettings,
+  } = LocationEnabler;
+
+  useEffect(async () => {
+    var locationPermission = hasPermission();
+    await locationPermission.then(res => {
+      if (res) {
+       Geolocation.getCurrentPosition(
+          position => {
+            setLagitude(position.coords.latitude);
+            setLongitude(position.coords.longitude);
+            setLocPermission(true);
+            setLocLoading(false);
+          },
+          error => {
+            // See error code charts below.
+            console.warn('Error ' + error.code, error.message);
+            setLocPermission(false);
+            setLocLoading(false);
+          },
+          {enableHighAccuracy: true, timeout: 500000, maximumAge: 10000},
+        );
+      }
+    });
+  }, []);
+
+  if (locPermission === true && lagitude === 0) {
+    const [enabled, requestResolution] = useLocationSettings({
+      priority: HIGH_ACCURACY, // optional: default BALANCED_POWER_ACCURACY
+      alwaysShow: true, // optional: default false
+      needBle: true, // optional: default false
+    });
+    console.log("object");
+
+    console.log(`Location are ${enabled ? 'enabled' : 'disabled'}`);
+
+    // ...
+    useEffect(() => {
+      if (!enabled) {
+        requestResolution();
+      }
+    }, []);
+  }
+
+  const fetchData = async () => {
+    const resp = await fetch(
+      'https://api.quran.com/api/v4/verses/random?language=ara&fields=text_uthmani&words=true',
+    );
+    const data = await resp.json();
+    setDataVerse(data.verse);
+    setLoadingVerse(false);
+  };
 
   // console.log(dataVerse)
 
   useEffect(() => {
-    // fetchData();
-    Promise.all([
-      fetch(
-        'https://api.quran.com/api/v4/verses/random?language=ara&fields=text_uthmani&words=true',
-      ),
-      fetch('https://razvitalimat.herokuapp.com/api/content'),
-    ])
-      .then(res => Promise.all(res.map(res => res.json())))
-      .then(([res1, res2]) => {
-        setDataVerse(res1.verse);
-        setLoadingVerse(false);
-        setData(res2);
-        setLoading(false);
-      });
+    fetchData();
   }, []);
   // const [enabled, requestResolution] = useLocationSettings(
   //   {
@@ -98,13 +131,13 @@ const Home = ({navigation}) => {
 
   const storage = new MMKV();
 
-  // useEffect(() => {
-
-  //     .then(response => response.json())
-  //     .then(json => setData(json))
-  //     .catch(error => console.error(error))
-  //     .finally(() => setLoading(false));
-  // }, []);
+  useEffect(() => {
+    fetch('https://razvitalimat.herokuapp.com/api/content')
+      .then(response => response.json())
+      .then(json => setData(json))
+      .catch(error => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
 
   // console.log(data);
 
@@ -122,38 +155,9 @@ const Home = ({navigation}) => {
   }, [refreshing]);
 
   const [showMore, setShowMore] = useState(false);
-  const [lagitude, setLagitude] = useState(0);
-  const [longitude, setLongitude] = useState(0);
 
   const onTextLayout = useCallback(e => {
     setShowMore(e.nativeEvent.lines.length > NUM_OF_LINES);
-  }, []);
-
-  useEffect(() => {
-    async function fetchMyAPI() {
-      var locationPermission = hasPermission();
-      locationPermission.then(res => {
-        if (res) {
-          Geolocation.getCurrentPosition(
-            position => {
-              setLagitude(position.coords.latitude);
-              setLongitude(position.coords.longitude);
-              setLocPermission(true);
-              setLocLoading(false);
-            },
-            error => {
-              // See error code charts below.
-              console.warn('Error ' + error.code, error.message);
-              setLocPermission(false);
-              setLocLoading(false);
-            },
-            {enableHighAccuracy: true, timeout: 500000, maximumAge: 10000},
-          );
-        }
-      });
-    }
-
-    fetchMyAPI();
   }, []);
 
   useEffect(() => {
@@ -242,29 +246,8 @@ const Home = ({navigation}) => {
     }
   };
 
-  const [enabled, requestResolution] = useLocationSettings(
-    {
-      priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
-      alwaysShow: true, // default false
-      needBle: true, // default false
-    },
-    false /* optional: default undefined */,
-  );
-
-  console.log(`Location are ${enabled ? 'enabled' : 'disabled'}`);
-
-  // // ...
-  console.log(locPermission);
-  useEffect(() => {
-    if (!enabled) {
-      requestResolution();
-    }
-  }, []);
-
-  console.log(isLoading, prayerLoading, locLoading);
-
   // console.log(window.location.href);
-
+  console.log(locPermission);
   return (
     <View style={styles.container}>
       {/* <View>
@@ -645,7 +628,7 @@ const Home = ({navigation}) => {
                   alignSelf: 'center',
                   marginTop: -20,
                   borderColor: 'black',
-                  borderRadius: 15,
+                  borderRadius: 20,
                   // borderWidth: 2
                   elevation: 5,
                   shadowColor: '#000',
@@ -655,16 +638,12 @@ const Home = ({navigation}) => {
                   },
                   shadowOpacity: 0.27,
                   shadowRadius: 4.65,
-                  flexDirection: 'row-reverse',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
+                  borderRadius: 20,
                 }}>
                 <Text
                   style={{
-                    // marginHorizontal: 10,
+                    margin: 10,
                     textAlign: 'center',
-                    marginRight: 35,
-                    flex: 1,
                     fontSize: 20,
                     fontWeight: '600',
                     color: 'black',
@@ -678,7 +657,7 @@ const Home = ({navigation}) => {
                     borderRadius: 10,
                     marginLeft: 10,
                     // marginLeft: 10,
-                    // marginTop: -45,
+                    marginTop: -45,
                   }}
                   source={require('../../images/article.jpg')}
                 />
@@ -695,9 +674,9 @@ const Home = ({navigation}) => {
                 marginLeft: 20,
                 marginRight: 20,
                 alignSelf: 'center',
-                marginTop: -20,
+                marginTop: 10,
                 borderColor: 'black',
-                borderRadius: 15,
+                borderRadius: 20,
                 // borderWidth: 2
                 elevation: 5,
                 shadowColor: '#000',
@@ -707,16 +686,12 @@ const Home = ({navigation}) => {
                 },
                 shadowOpacity: 0.27,
                 shadowRadius: 4.65,
-                flexDirection: 'row-reverse',
-                alignItems: 'center',
-                justifyContent: 'space-between',
+                borderRadius: 20,
               }}>
               <Text
                 style={{
-                  // marginHorizontal: 10,
+                  margin: 10,
                   textAlign: 'center',
-                  marginRight: 35,
-                  flex: 1,
                   fontSize: 20,
                   fontWeight: '600',
                   color: 'black',
@@ -730,7 +705,7 @@ const Home = ({navigation}) => {
                   borderRadius: 10,
                   marginLeft: 10,
                   // marginLeft: 10,
-                  // marginTop: -45,
+                  marginTop: -45,
                 }}
                 source={require('../../images/article.jpg')}
               />
@@ -753,7 +728,7 @@ const Home = ({navigation}) => {
         })} */}
 
         <View style={{flex: 1, padding: 2}}>
-          {isLoading || (locPermission && prayerLoading) || locLoading ? (
+          {isLoading || (locPermission && prayerLoading) ? (
             <OrientationLoadingOverlay
               visible={true}
               color="white"
@@ -779,9 +754,7 @@ const Home = ({navigation}) => {
                   },
                   shadowOpacity: 0.27,
                   shadowRadius: 4.65,
-                  borderRadius: 10,
-                  padding: normalize(10),
-                  paddingBottom: normalize(25),
+                  borderRadius: 20,
                 }}>
                 <Text
                   style={{
@@ -789,9 +762,9 @@ const Home = ({navigation}) => {
                     fontWeight: '600',
                     color: 'black',
                     marginLeft: 10,
-                    marginTop: 5,
+                    marginTop: 10,
                   }}>
-                  Ayah of the day
+                  Verses
                 </Text>
                 <Image
                   source={require('../../images/corner.png')}
@@ -829,29 +802,7 @@ const Home = ({navigation}) => {
                     ],
                   }}
                 />
-                <FontAwesome
-                  name="share-alt"
-                  size={normalize(20)}
-                  color="grey"
-                  style={{
-                    height: normalize(30),
-                    width: normalize(30),
-                    // paddingVertical: normalize(25),
-                    // paddingHorizontal: normalize(15),
-                    alignSelf: 'center',
-                    // position: 'absolute',
-                    position: 'absolute',
-                    top: 30,
-                    right: 30,
-                    // transform: [
-                    //   {
-                    //     // rotateY: '180deg',
-                    //   },
-                    // ],
-                  }}
-                  onPress={onShare}
-                />
-                {/* <Text
+                <Text
                   style={{
                     fontSize: normalize(14),
                     fontWeight: '400',
@@ -860,28 +811,27 @@ const Home = ({navigation}) => {
                     // flexWrap: 'wrap',
                   }}>
                   Ayas of the day
-                </Text> */}
+                </Text>
                 <Text
                   style={{
-                    fontSize: normalize(12),
+                    fontSize: normalize(14),
                     fontWeight: '400',
-                    color: '#777',
+                    color: 'black',
                     marginLeft: 10,
-                    marginTop: 5,
                     // flexWrap: 'wrap',
                   }}>
-                  Surah No - {dataVerse.verse_key}
+                  verse no - {dataVerse.verse_number}
                 </Text>
 
                 <Text
                   style={{
-                    fontSize: normalize(16),
+                    fontSize: normalize(14),
                     fontWeight: '400',
-                    color: '#222',
-                    // marginLeft: 10,
-                    marginTop: 20,
+                    color: 'black',
+                    marginLeft: 10,
+                    marginTop: 10,
                     paddingHorizontal: normalize(10),
-                    // paddingVertical: normalize(10),
+                    paddingVertical: normalize(10),
                     // flexWrap: 'wrap',
                   }}>
                   {dataVerse.text_uthmani}
@@ -892,7 +842,7 @@ const Home = ({navigation}) => {
                     title="Share"
                     style={{borderRadius: 2}}
                   /> */}
-                  {/* <FontAwesome
+                  <FontAwesome
                     name="bookmark"
                     size={normalize(30)}
                     color="black"
@@ -912,7 +862,28 @@ const Home = ({navigation}) => {
                       ],
                     }}
                     // onPress={onShare}
-                  /> */}
+                  />
+                  <FontAwesome
+                    name="share"
+                    size={normalize(30)}
+                    color="black"
+                    style={{
+                      height: normalize(50),
+                      width: normalize(50),
+                      // paddingVertical: normalize(25),
+                      // paddingHorizontal: normalize(15),
+                      alignSelf: 'center',
+                      // position: 'absolute',
+                      top: 5,
+                      left: 130,
+                      transform: [
+                        {
+                          rotateY: '180deg',
+                        },
+                      ],
+                    }}
+                    onPress={onShare}
+                  />
                 </View>
               </View>
               {data.map(item => {
