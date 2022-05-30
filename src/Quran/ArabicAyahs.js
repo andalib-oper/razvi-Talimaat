@@ -356,7 +356,7 @@ const ArabicAyahs = ({route, navigation}) => {
     // scrollIntoView(viewRef.current);
     setQuran(page_quran);
     setTimeout(() => {
-      flatListRef?.current?.scrollToIndex({index: sIndex});
+      flatListRef?.current?.scrollToIndex({index: sIndex, animated: false});
     }, 500);
   }, []);
 
@@ -392,6 +392,7 @@ const ArabicAyahs = ({route, navigation}) => {
           return <Page pageContent={quran[item]} index={item} />;
         }}
         onScrollToIndexFailed={err => scrollToIndexFailed(err)}
+        initialNumToRender={60}
       />
       {/* <ScrollIntoView scrollIntoViewKey={scrollIndex} ref={viewRef}>
         {Object.keys(quran).map(item => (
