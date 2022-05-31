@@ -45,6 +45,14 @@ function normalize(size) {
   }
 }
 
+const {
+  PRIORITIES: {HIGH_ACCURACY},
+  useLocationSettings,
+  addListener,
+  checkSettings,
+  requestResolutionSettings,
+} = LocationEnabler;
+
 const Home = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [prayerLoading, setPrayerLoading] = useState(true);
@@ -60,52 +68,59 @@ const Home = ({navigation}) => {
   const [isLoadingVerse, setLoadingVerse] = useState(true);
   const [dataVerse, setDataVerse] = useState([]);
 
-  const {
-    PRIORITIES: {HIGH_ACCURACY},
-    useLocationSettings,
-  } = LocationEnabler;
+  useEffect(() => {
+    async function fetchMyAPI() {
+      var locationPermission = hasPermission();
+      await locationPermission.then(res => {
+        if (res) {
+          Geolocation.getCurrentPosition(
+            position => {
+              setLagitude(position.coords.latitude);
+              setLongitude(position.coords.longitude);
+              setLocPermission(true);
+              setLocLoading(false);
+            },
+            error => {
+              // See error code charts below.
+              console.warn('Error ' + error.code, error.message);
+              setLocPermission(false);
+              setLocLoading(false);
+            },
+            {enableHighAccuracy: true, timeout: 500000, maximumAge: 10000},
+          );
+        }
+      });
+    }
 
-  useEffect(async () => {
-    var locationPermission = hasPermission();
-    await locationPermission.then(res => {
-      if (res) {
-       Geolocation.getCurrentPosition(
-          position => {
-            setLagitude(position.coords.latitude);
-            setLongitude(position.coords.longitude);
-            setLocPermission(true);
-            setLocLoading(false);
-          },
-          error => {
-            // See error code charts below.
-            console.warn('Error ' + error.code, error.message);
-            setLocPermission(false);
-            setLocLoading(false);
-          },
-          {enableHighAccuracy: true, timeout: 500000, maximumAge: 10000},
-        );
-      }
-    });
+   fetchMyAPI();
   }, []);
 
-  if (locPermission === true && lagitude === 0) {
-    const [enabled, requestResolution] = useLocationSettings({
-      priority: HIGH_ACCURACY, // optional: default BALANCED_POWER_ACCURACY
-      alwaysShow: true, // optional: default false
-      needBle: true, // optional: default false
-    });
-    console.log("object");
+  const config = {
+    priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
+    alwaysShow: true, // default false
+    needBle: false, // default false
+  };
 
-    console.log(`Location are ${enabled ? 'enabled' : 'disabled'}`);
+  const listener = addListener(({locationEnabled}) =>
+    console.log(`Location are ${locationEnabled ? 'enabled' : 'disabled'}`),
+  );
+
+  useEffect(() => {
+    // if(locPermission){
+    // Check if location is enabled or not
+    checkSettings(config);
+
+    // If location is disabled, prompt the user to turn on device location
+
+    requestResolutionSettings(config);
 
     // ...
-    useEffect(() => {
-      if (!enabled) {
-        requestResolution();
-      }
-    }, []);
-  }
+    // Removes this subscription
+    listener.remove();
+    // }
+  }, []);
 
+  // }
   const fetchData = async () => {
     const resp = await fetch(
       'https://api.quran.com/api/v4/verses/random?language=ara&fields=text_uthmani&words=true',
@@ -220,7 +235,7 @@ const Home = ({navigation}) => {
   // return imgMap[random];
   // }
 
-  console.log(random);
+  // console.log(random);
 
   const onShare = async () => {
     try {
@@ -247,7 +262,7 @@ const Home = ({navigation}) => {
   };
 
   // console.log(window.location.href);
-  console.log(locPermission);
+  // console.log(locPermission);
   return (
     <View style={styles.container}>
       {/* <View>
