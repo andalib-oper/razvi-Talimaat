@@ -8,6 +8,8 @@ import {
   Platform,
   PixelRatio,
   Pressable,
+  SafeAreaView,
+  StatusBar,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
@@ -149,7 +151,7 @@ const CalendarScreen = ({navigation}) => {
   var counter = 0;
   var limit = currentMonth?.length;
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {isLoading ? (
         <OrientationLoadingOverlay
           visible={true}
@@ -400,13 +402,14 @@ const CalendarScreen = ({navigation}) => {
           </View>
         </ScrollView>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   background: {
     backgroundColor: '#4B59F7',

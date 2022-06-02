@@ -11,6 +11,8 @@ import {
   Dimensions,
   PixelRatio,
   Platform,
+  SafeAreaView,
+  StatusBar,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {SkypeIndicator} from 'react-native-indicators';
@@ -51,7 +53,7 @@ const Arabic = ({navigation}) => {
   }, []);
   const [focused, setFocused] = useState('');
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.topnav}>
         <MaterialIcons
           name="arrow-back"
@@ -110,13 +112,14 @@ const Arabic = ({navigation}) => {
           </ScrollView>
         )}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   topnav: {
     height: 60,

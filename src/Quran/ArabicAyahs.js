@@ -10,8 +10,8 @@ import {
   Dimensions,
   Platform,
   PixelRatio,
-  ActivityIndicator,
-  TouchableOpacity,
+  SafeAreaView,
+  StatusBar,
 } from 'react-native';
 import {SkypeIndicator} from 'react-native-indicators';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
@@ -370,7 +370,7 @@ const ArabicAyahs = ({route, navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, padding: 0}}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.topnav}>
         <MaterialIcons
           name="arrow-back-ios"
@@ -399,13 +399,14 @@ const ArabicAyahs = ({route, navigation}) => {
           <Page pageContent={quran[item]} key={item} />
         ))}
       </ScrollIntoView> */}
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   topnav: {
     marginTop: 0,
