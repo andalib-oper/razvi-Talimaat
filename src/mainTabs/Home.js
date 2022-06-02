@@ -354,7 +354,7 @@ const Home = ({navigation}) => {
               marginLeft: 20,
               marginRight: 20,
               alignSelf: 'center',
-              marginTop: locPermission ? -25 : 0,
+              marginTop: locPermission ? -25 : 5,
               borderColor: 'black',
               borderRadius: 15,
               // borderWidth: 2
