@@ -71,26 +71,47 @@ const Home = ({navigation}) => {
   const [isLoadingVerse, setLoadingVerse] = useState(true);
   const [dataVerse, setDataVerse] = useState([]);
 
+  const config = {
+    priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
+    alwaysShow: true, // default false
+    needBle: false, // default false
+  };
+
   useEffect(() => {
     async function fetchMyAPI() {
       var locationPermission = hasPermission();
       await locationPermission.then(res => {
+        console.log('res', res);
         if (res) {
-          Geolocation.getCurrentPosition(
-            position => {
-              setLagitude(position.coords.latitude);
-              setLongitude(position.coords.longitude);
-              setLocPermission(true);
-              setLocLoading(false);
-            },
-            error => {
-              // See error code charts below.
-              console.warn('Error ' + error.code, error.message);
-              setLocPermission(false);
-              setLocLoading(false);
-            },
-            {enableHighAccuracy: true, timeout: 500000, maximumAge: 10000},
-          );
+          checkSettings(config);
+          requestResolutionSettings(config);
+          addListener(({locationEnabled}) => {
+            if (locationEnabled) {
+              Geolocation.getCurrentPosition(
+                position => {
+                  setLagitude(position.coords.latitude);
+                  setLongitude(position.coords.longitude);
+                  setLocPermission(true);
+                  setLocLoading(false);
+                },
+                error => {
+                  // See error code charts below.
+                  console.warn('Error ' + error.code, error.message);
+                  setLocPermission(false);
+                  setLocLoading(false);
+                },
+                {
+                  enableHighAccuracy: true,
+                  timeout: 500000,
+                  maximumAge: 10000,
+                },
+              );
+            } else {
+              setPrayerLoading(false);
+            }
+          });
+        } else {
+          setPrayerLoading(false);
         }
       });
     }
@@ -100,34 +121,25 @@ const Home = ({navigation}) => {
 
   // console.log(locLoading);
 
-  const config = {
-    priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
-    alwaysShow: true, // default false
-    needBle: false, // default false
-  };
+  // const listener = addListener(({locationEnabled}) =>
+  //   console.log(`Location are ${locationEnabled ? 'enabled' : 'disabled'}`),
+  // );
 
-  const listener = addListener(({locationEnabled}) =>
-    console.log(`Location are ${locationEnabled ? 'enabled' : 'disabled'}`),
-  );
+  // useEffect(() => {
+  //   // if(locPermission){
+  //   // Check if location is enabled or not
+  //   console.log(locPermission);
+  //   if (locPermission === true) {
+  //     console.log('inside');
 
-  useEffect(() => {
-    // if(locPermission){
-    // Check if location is enabled or not
-    console.log(locPermission)
-    if (locPermission === true) {
-      console.log("inside");
-      checkSettings(config);
+  //     // If location is disabled, prompt the user to turn on device location
 
-      // If location is disabled, prompt the user to turn on device location
-
-      requestResolutionSettings(config);
-
-      // ...
-      // Removes this subscription
-      listener.remove();
-      // }
-    }
-  }, [locPermission]);
+  //     // ...
+  //     // Removes this subscription
+  //     // listener.remove();
+  //     // }
+  //   }
+  // }, [locPermission]);
 
   // }
   // const fetchData = async () => {
@@ -157,26 +169,8 @@ const Home = ({navigation}) => {
         setLoading(false);
       });
   }, []);
-  // const [enabled, requestResolution] = useLocationSettings(
-  //   {
-  //     priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
-  //     alwaysShow: true, // default false
-  //     needBle: true, // default false
-  //   },
-  //   false /* optional: default undefined */,
-  // );
 
   const storage = new MMKV();
-
-  // useEffect(() => {
-  //   fetch('https://razvitalimat.herokuapp.com/api/content')
-  //     .then(response => response.json())
-  //     .then(json => setData(json))
-  //     .catch(error => console.error(error))
-  //     .finally(() => setLoading(false));
-  // }, []);
-
-  // console.log(data);
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
@@ -241,13 +235,6 @@ const Home = ({navigation}) => {
     }
   };
 
-  // console.log(prayerTimes);
-
-  // return imgMap[random];
-  // }
-
-  // console.log(random);
-
   const onShare = async () => {
     try {
       const result = await Share.share({
@@ -272,8 +259,6 @@ const Home = ({navigation}) => {
     }
   };
 
-  // console.log(window.location.href);
-  // console.log(locPermission);
   return (
     <SafeAreaView style={styles.container}>
       {/* <View>
