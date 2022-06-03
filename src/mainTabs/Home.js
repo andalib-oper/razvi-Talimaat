@@ -98,6 +98,8 @@ const Home = ({navigation}) => {
     fetchMyAPI();
   }, []);
 
+  // console.log(locLoading);
+
   const config = {
     priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
     alwaysShow: true, // default false
@@ -111,17 +113,21 @@ const Home = ({navigation}) => {
   useEffect(() => {
     // if(locPermission){
     // Check if location is enabled or not
-    checkSettings(config);
+    console.log(locPermission)
+    if (locPermission === true) {
+      console.log("inside");
+      checkSettings(config);
 
-    // If location is disabled, prompt the user to turn on device location
+      // If location is disabled, prompt the user to turn on device location
 
-    requestResolutionSettings(config);
+      requestResolutionSettings(config);
 
-    // ...
-    // Removes this subscription
-    listener.remove();
-    // }
-  }, []);
+      // ...
+      // Removes this subscription
+      listener.remove();
+      // }
+    }
+  }, [locPermission]);
 
   // }
   // const fetchData = async () => {
